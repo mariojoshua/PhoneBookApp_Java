@@ -24,3 +24,6 @@ hs_err_pid*
 
 # mac desktop services store files
 .DS_Store
+
+# ignore .pb files in target subfolder
+target/*.pb
