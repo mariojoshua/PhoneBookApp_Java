@@ -1,4 +1,4 @@
-package com.uttara.mvc.contactsApp;
+package com.uttara.phone;
 
 import java.util.Objects;
 
