@@ -18,11 +18,11 @@ classDiagram
     ContactBean <-- Email
     class ContactBean{
         +Name name
-        +PhoneNumber[] phoneNumbers
+        +List~PhoneNumber~ phoneNumbers
+        +List~Address~ address 
+        +List~String~ tags 
+        +List~Email~ email 
         +Date dateOfBirth
-        +Address[] address 
-        +String[] tags 
-        +Email[] email 
         +equals()
         +hashcode()
         +toString()
