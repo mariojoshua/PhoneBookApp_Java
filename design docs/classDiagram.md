@@ -28,6 +28,7 @@ classDiagram
         +toString()
     }
     class Name {
+        Pronoun type
         String firstName
         String middleName
         String lastName
@@ -35,6 +36,13 @@ classDiagram
         +equals()
         +hashcode()
         +toString()
+    }
+    Name <-- Pronoun
+    class Pronoun {
+        <<Enumeration>>
+        he/him 
+        she/her
+        they/them
     }
     class PhoneNumber {
         PhoneType type
