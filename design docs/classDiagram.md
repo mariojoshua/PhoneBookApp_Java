@@ -1,22 +1,70 @@
 ```mermaid
 classDiagram
-    PhoneBookApp <-- PhoneBook
-    PhoneBookApp <-- PhonBookManager
-    PhoneBookApp <-- PhonBookService
+    PhoneBookApp 
+    PhoneBookApp *-- PhoneBookManager
+    PhoneBookManager *-- ContactBean
+    PhoneBookManager *-- PhoneBook
+    PhoneBookManager *-- PhoneBookService
+    class PhoneBookService {
 
+    }
+    PhoneBookService *-- IOService
+    class IOService {
+        <<Inteface>>
+    }
+    IOService <|-- TextIOService : implements
+    IOService <|-- DatabaseIOService : implements
+    TextIOService *-- PlainTextIOService
+    TextIOService *-- SerializedTextIOService
+    TextIOService *-- JSONTextIOService
+    DatabaseIOService <|-- MySQLService
+    class TextIOService {
 
-    PhoneBook <|-- ContactBean
+    }
+
+    class DatabaseIOService {
+
+    }
+
+    class PlainTextIOService {
+
+    }
+    class SerializedTextIOService {
+
+    }
+    class JSONTextIOService {
+
+    }
+    class DatabaseIOService {
+
+    }
+
+    
+    class PhoneBookApp {
+        +main()
+    }
+    class ContactBean {
+        <<Record>>
+        +Name name
+        +List~PhoneNumber~ phoneNumbers
+        +List~Address~ address 
+        +List~String~ tags 
+        +List~Email~ email 
+        +Date dateOfBirth
+    }
+    ContactBean <|-- Serializable : Implements
+    PhoneBook <|-- Contact
     PhoneBook : +int count
     PhoneBook : +String Category
     PhoneBook: +equals()
     PhoneBook: +hashcode()
     PhoneBook: +toString()
  
-    ContactBean <-- Name
-    ContactBean <-- PhoneNumber
-    ContactBean <-- Address
-    ContactBean <-- Email
-    class ContactBean{
+    Contact <-- Name
+    Contact <-- PhoneNumber
+    Contact <-- Address
+    Contact <-- Email
+    class Contact{
         +Name name
         +List~PhoneNumber~ phoneNumbers
         +List~Address~ address 
@@ -73,7 +121,7 @@ classDiagram
     }
     class Address{
         AddressType type
-        String homeNumber 
+        String buildingNumber 
         String streetAddress 
         String pincode 
         String city 

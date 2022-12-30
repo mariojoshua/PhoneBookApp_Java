@@ -1,4 +1,4 @@
-package com.uttara.mvc.contactsApp;
+package main.java.com.uttara.phone;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,9 +42,7 @@ public class PhoneBookService {
 	public List<String> readContactsFromFile(String phoneBook) {
 		List<String> contactFileArray = new ArrayList<String>();
 
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(phoneBook + ".pb"));
+		try(BufferedReader br = new BufferedReader(new FileReader(phoneBook + ".pb"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				contactFileArray.add(line);
@@ -55,21 +53,12 @@ public class PhoneBookService {
 			// we should throw a custom business exception here...for now I am returning
 			// null!
 			return null;
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 		}
 	}
 
 	public String writeContactsToFile(String phoneBookName, String contactLine) {
-		BufferedWriter bw = null;
-		try {
-			bw = new BufferedWriter(new FileWriter(phoneBookName + ".pb", true));
+		
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(phoneBookName + ".pb", true))) {
 			bw.write(contactLine);
 			bw.newLine();
 			return Constants.SUCCESS;
@@ -77,18 +66,7 @@ public class PhoneBookService {
 			e.printStackTrace();
 			return "Adding Contact Failed! " + e.getMessage();
 
-		} finally {
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
 		}
-
 	}
 
 	public List<ContactBean> listContacts(String phoneBook) {
