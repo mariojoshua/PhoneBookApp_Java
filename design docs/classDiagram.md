@@ -5,26 +5,36 @@ classDiagram
     PhoneBookManager *-- ContactBean
     PhoneBookManager *-- PhoneBook
     PhoneBookManager *-- PhoneBookService
+    class PhoneBookApp {
+        +main()
+    }
+    class PhoneBookManager {
+        +run()
+        +mainMenu()
+        +createContactsBookMenu()
+        +listContactsMenu()
+    }
     class PhoneBookService {
-
+        +searchContacts()
+        +createContactsBook()
+        +addContact()
+        +editContact()
+        +removeContact() 
     }
     PhoneBookService *-- IOService
     class IOService {
         <<Inteface>>
-    }
-    IOService <|-- TextIOService : implements
-    IOService <|-- DatabaseIOService : implements
-    TextIOService *-- PlainTextIOService
-    TextIOService *-- SerializedTextIOService
-    TextIOService *-- JSONTextIOService
-    DatabaseIOService <|-- MySQLService
-    class TextIOService {
-
+        +readContact()
+        +writeContact()
+        +updateContact()
+        +createContactBook
+        +deleteContact()
+        +deleteContactBook()
     }
 
-    class DatabaseIOService {
-
-    }
+    IOService *-- PlainTextIOService : implements
+    IOService *-- SerializedTextIOService : implements
+    IOService <|-- MySQLService : implements
 
     class PlainTextIOService {
 
@@ -32,17 +42,10 @@ classDiagram
     class SerializedTextIOService {
 
     }
-    class JSONTextIOService {
-
-    }
-    class DatabaseIOService {
+    class MySQLService {
 
     }
 
-    
-    class PhoneBookApp {
-        +main()
-    }
     class ContactBean {
         <<Record>>
         +Name name
@@ -52,7 +55,7 @@ classDiagram
         +List~Email~ email 
         +Date dateOfBirth
     }
-    ContactBean <|-- Serializable : Implements
+    Serializable <|-- ContactBean: Implements
     PhoneBook <|-- Contact
     PhoneBook : +int count
     PhoneBook : +String Category
@@ -61,15 +64,12 @@ classDiagram
     PhoneBook: +toString()
  
     Contact <-- Name
-    Contact <-- PhoneNumber
-    Contact <-- Address
-    Contact <-- Email
     class Contact{
         +Name name
-        +List~PhoneNumber~ phoneNumbers
-        +List~Address~ address 
+        +List~String~ phoneNumbers
+        +List~String~ address 
         +List~String~ tags 
-        +List~Email~ email 
+        +List~String~ email 
         +Date dateOfBirth
         +equals()
         +hashcode()
@@ -77,9 +77,7 @@ classDiagram
     }
     class Name {
         Pronoun type
-        String firstName
-        String middleName
-        String lastName
+        String fullName
         String petName
         +equals()
         +hashcode()
@@ -92,49 +90,5 @@ classDiagram
         she/her
         they/them
     }
-    class PhoneNumber {
-        PhoneType type
-        String number
-        +equals()
-        +hashcode()
-        +toString()
-    }
-    PhoneNumber <-- PhoneType
-    class PhoneType {
-        <<Enumeration>>
-        Mobile
-        Work
-        Home
-    }
-    class Email {
-        EmailType type
-        String email
-        +equals()
-        +hashcode()
-        +toString()
-    }
-    Email <-- EmailType
-    class EmailType {
-        <<Enumeration>>
-        Personal
-        Work
-    }
-    class Address{
-        AddressType type
-        String buildingNumber 
-        String streetAddress 
-        String pincode 
-        String city 
-        String state 
-        String country 
-        +equals()
-        +hashcode()
-        +toString()
-    }
-    Address <-- AddressType
-    class AddressType {
-        <<Enumeration>>
-        Home
-        Work
-    }
+
 ```    
