@@ -20,7 +20,7 @@ See [class diagram](https://github.com/mariojoshua/phone-book-app/blob/master/de
     1. Using String Class
     2. Using Regex (Yet to Implement)
 - Data Persistence
-    1. Storing and Retrieving from file system
+    1. Storing and Retrieving from serialized file
     2. Storing and Retreiving from Database using SQL and JDBC(Still to be Implemented)
 -  Maven - for Dependency management and Project Structure creation
 -  Junit - For Unit Testing(Yet to Implement)
