@@ -1,15 +1,18 @@
-package com.uttara.mvc.contactsApp;
+package main.java.com.uttara.phone;
 
 /**
  * Utility class only for input validations
  *@author mariojoshuaaugustine
  */
 import java.util.Date;
+import java.util.Scanner;
 
-public class PhoneUtil {
+public class PhoneHelper {
+	// This class contains all the static utility methods required by the app
+
 	/*
 	 * This method will validate the string given to check if it contains multiple
-	 * words or special chars. If yes, it returns an error message else it returns constant
+	 * words or special chars. If7 yes, it returns an error message else it returns constant
 	 * string success!
 	 */
 	public static String validateName(String n) {
@@ -29,7 +32,26 @@ public class PhoneUtil {
 		return Constants.SUCCESS;
 	}
 	
-	
+	public static int getUserNumberInput(String prompt) {
+		try(Scanner scanner = new Scanner(System.in)) {
+			System.out.print(prompt +  ": ");
+			return scanner.nextInt();
+		} catch(Exception ioEx) {
+			ioEx.printStackTrace();
+			return -1;
+		}	
+	}
+
+	public static String getUserStringInput(String prompt) {
+		try(Scanner scanner = new Scanner(System.in)) {
+			System.out.print(prompt +  ": ");
+			return scanner.nextLine();
+		} catch(Exception ioEx) {
+			ioEx.printStackTrace();
+			return "invalid String";
+		}	
+	}
+
 	public static String validateDate(String date) {
 		//Check if input date is before current date
 		//To validate current date and time
