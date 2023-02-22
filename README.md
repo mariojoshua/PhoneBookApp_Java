@@ -4,7 +4,7 @@ This is my java project for my full stack java development course
 
 ## Summary
 A simple console based desktop application for storing various categories of phone contacts like friends, family including other details like contact details,addresses,dob.
-See ![class diagram](https://github.com/mariojoshua/phone-book-app/blob/master/design%20docs/classDiagram.md) , [SQL Database Design](https://github.com/mariojoshua/phone-book-app/blob/master/design%20docs/MySQLDBDesign.md)
+See [class diagram](https://github.com/mariojoshua/phone-book-app/blob/master/design%20docs/classDiagram.md) , [SQL Database Design](https://github.com/mariojoshua/phone-book-app/blob/master/design%20docs/MySQLDBDesign.md)
 
 ## Objectives of this project are to learn
 - Core Java
