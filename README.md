@@ -1,5 +1,5 @@
 # PhoneBookApp
-# Phone Books Organizer Project
+# Contacts Organizer Project
 This is my java project for my full stack java development course
 
 ## Summary
