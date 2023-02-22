@@ -21,6 +21,6 @@ A simple console based desktop application for storing various categories of pho
 - Data Persistence
     1. Storing and Retrieving from file system
     2. Storing and Retreiving from Database using SQL and JDBC(Still to be Implemented)
--  Maven - for Dependency management from mvn repository
+-  Maven - for Dependency management and Project Structure creation
 -  Junit - For Unit Testing(Yet to Implement)
 -  Exception Handling (Business Exceptions to be created and Implemented)
