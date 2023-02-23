@@ -1,10 +1,11 @@
 ## Data Required to be persisted
-Name name,
-List\<String\> phoneNumbers,
-String address,
-List\<String\> tags,
-List\<String\> email,
-Date (dateOfBirth) 
+String phoneBook (1-n) <br>
+Name name, (1-1) <br>
+List\<String\> phoneNumbers,(1-n) <br>
+String address, (1-1) <br>
+List\<String\> tags,(m-n) <br>
+List\<String\> email, (1-n) <br>
+Date (dateOfBirth) (1-1) <br>
 
 ## Database Creation 
 `CREATE DATABASE contactAPP`
@@ -16,7 +17,7 @@ Date (dateOfBirth)
 ```sql
 CREATE TABLE phonebook_master (
 	ID integer PRIMARY KEY AUTO_INCREMENT
-	name varchar(100)
+	name varchar(100) NOT NULL
 )
 
 CREATE TABLE contacts (
@@ -29,23 +30,48 @@ CREATE TABLE contacts (
 	address varchar(120),
 	createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	FOREIGN KEY (phonebook_ID) REFERENCES phonebook_master(id);
 )
 
 CREATE TABLE tags (
 	ID integer PRIMARY KEY AUTO_INCREMENT,
-	contacts_ID integer,
 	tag varchar(25)
+)
+
+CREATE TABLE contacts_tags(
+	ID integer PRIMARY KEY AUTO_INCREMENT,
+	contacts_ID integer NOT NULL ,
+	tag_ID integer NOT NULL, 
+	FOREIGN KEY (contacts_id) REFERENCES contacts(ID),
+	FOREIGN KEY (tag_ID) REFERENCES tags(ID)
 )
 
 CREATE TABLE phonenumber (
 	ID integer PRIMARY KEY AUTO_INCREMENT,
 	contacts_ID integer,	
 	phoneNumber integer
+	FOREIGN KEY (contacts_ID) REFERENCES contacts(ID)
 )
 
 CREATE TABLE email (
 	ID integer PRIMARY KEY AUTO_INCREMENT,
 	contacts_ID,	
 	emailid varchar(40)
+	FOREIGN KEY (contacts_ID) REFERENCES contacts(ID)
 )
 ```
+
+## Alter Table
+
+```sql
+-- To add a constraint
+ALTER TABLE email
+ADD FOREIGN KEY (contacts_ID) REFERENCES contacts(ID);
+
+--To remove a column
+ALTER TABLE tags
+DROP contacts_ID
+
+--To add a constraint
+ALTER TABLE contactApp.phonebook_master
+MODIFY COLUMN name varchar(50) NOT NULL;
