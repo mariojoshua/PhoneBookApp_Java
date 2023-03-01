@@ -17,7 +17,7 @@ Date (dateOfBirth) (1-1) <br>
 ```sql
 CREATE TABLE phonebook_master (
 	ID integer PRIMARY KEY AUTO_INCREMENT
-	name varchar(100) NOT NULL
+	name varchar(100) UNIQUE NOT NULL
 )
 
 CREATE TABLE contacts (
@@ -31,11 +31,6 @@ CREATE TABLE contacts (
 	createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 	modifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	FOREIGN KEY (phonebook_ID) REFERENCES phonebook_master(id);
-)
-
-CREATE TABLE tags (
-	ID integer PRIMARY KEY AUTO_INCREMENT,
-	tag varchar(25)
 )
 
 CREATE TABLE contacts_tags(
@@ -56,7 +51,7 @@ CREATE TABLE phonenumber (
 CREATE TABLE email (
 	ID integer PRIMARY KEY AUTO_INCREMENT,
 	contacts_ID,	
-	emailid varchar(40)
+	emailid varchar(40) UNIQUE
 	FOREIGN KEY (contacts_ID) REFERENCES contacts(ID)
 )
 ```
@@ -75,3 +70,10 @@ DROP contacts_ID
 --To add a constraint
 ALTER TABLE contactApp.phonebook_master
 MODIFY COLUMN name varchar(50) NOT NULL;
+
+--To add unique contraint
+ALTER TABLE contactApp.phonebook_master
+MODIFY COLUMN name varchar(50) UNIQUE NOT NULL;
+
+ALTER TABLE contactApp.email
+MODIFY COLUMN emailid varchar(40) UNIQUE
