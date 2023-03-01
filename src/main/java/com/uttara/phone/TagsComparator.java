@@ -1,4 +1,4 @@
-package com.uttara.mvc.contactsApp;
+package main.java.com.uttara.phone;
 
 import java.util.Comparator;
 

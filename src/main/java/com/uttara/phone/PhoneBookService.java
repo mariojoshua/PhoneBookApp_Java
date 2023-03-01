@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -21,10 +23,12 @@ import java.util.Set;
  */
 public class PhoneBookService {
 
-	private static Date date;
-	private static String modifiedDate;
-	private static SimpleDateFormat simpleDateFormat;
-	private static PhoneBookService phoneBookService;
+	private Date date;
+	private String modifiedDate;
+	private SimpleDateFormat simpleDateFormat;
+	private String phoneBookName;
+	private IOService ioService = new SerializedTextIOService();
+
 
 	/*
 	 * BUSINESS LOGIC
@@ -39,35 +43,38 @@ public class PhoneBookService {
 	 * @return ArrayList of contactBean type elements
 	 */
 
-	public List<String> readContactsFromFile(String phoneBook) {
-		List<String> contactFileArray = new ArrayList<String>();
 
-		try(BufferedReader br = new BufferedReader(new FileReader(phoneBook + ".pb"))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				contactFileArray.add(line);
-			}
-			return contactFileArray;
-		} catch (IOException e) {
-			e.printStackTrace();
-			// we should throw a custom business exception here...for now I am returning
-			// null!
-			return null;
-		}
-	}
 
-	public String writeContactsToFile(String phoneBookName, String contactLine) {
+	public void createContactsBook() {
 		
-		try(BufferedWriter bw = new BufferedWriter(new FileWriter(phoneBookName + ".pb", true))) {
-			bw.write(contactLine);
-			bw.newLine();
-			return Constants.SUCCESS;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "Adding Contact Failed! " + e.getMessage();
 
-		}
 	}
+
+	// public void loadsContactsBook () {
+	// 	phoneBookService.getUserStringInput("Enter name of an existing phone book"):
+	// 	System.out.println();
+	// 	phoneBookName = stringScanner.nextLine();
+	// 	// input validations!
+	// 	result = PhoneUtil.validateName(phoneBookName);
+	// 	// until the input validations succeed, keep asking the user to give new input
+	// 	// and show error msg
+
+	// 	while (!result.equals(Constants.SUCCESS)) {
+	// 		System.out
+	// 				.println("Enter proper name which single word, no spl char and starts with letter...");
+	// 		phoneBookName = stringScanner.nextLine();
+	// 		result = PhoneUtil.validateName(phoneBookName);
+	// 	}
+	// 	if (phoneBookService.phoneBookExists(phoneBookName)) {
+	// 		System.out.println("loading phone book.. " + phoneBookName);
+	// 		showsContactsMenu();
+	// 	} else {
+	// 		System.out.println("Phone Book with name " + phoneBookName + " does not exist.");
+	// 	}
+	// }
+
+	
+
 
 	public List<ContactBean> listContacts(String phoneBook) {
 
@@ -86,7 +93,7 @@ public class PhoneBookService {
 				bean.setPhoneNumber1(splitFileData[2]);
 				bean.setPhoneNumber2(splitFileData[3]);
 				bean.setDateOfBirth(splitFileData[4]);
-				address.setHomeNumber(splitFileData[5]);
+				//address.setHomeNumber(splitFileData[5]);
 				address.setStreetAddress(splitFileData[6]);
 				address.setPincode(splitFileData[7]);
 				address.setCity(splitFileData[8]);
@@ -119,72 +126,7 @@ public class PhoneBookService {
 
 	}
 
-	/**
-	 * This method will open the file if it exists or will create a new one with the
-	 * phoneBook name given and will write a line with the format name:phnum using
-	 * the beans data
-	 * 
-	 * @param-Contact bean dataholder reference is the first parameter
-	 * @param-phone book name is the second parameter.
-	 * @return-returns "SUCCESS" else return error message to be shown to user!
-	 */
-	public String addContact(ContactBean contactBean, String phoneBookName) {
-
-		phoneBookService = new PhoneBookService();
-		Logger.getInstance().log("model->addContact() " + contactBean + " phB " + phoneBookName);
-		/*
-		 * Perform business validations - check if name is already used by another as
-		 * file, if its successful, apply business logic only if B.L succeeds,
-		 */
-		// Set Created and Modified Date
-		String createdDate = phoneBookService.getCurrentDate();
-		contactBean.setCreatedDate(createdDate);
-		contactBean.setModifiedDate(createdDate);
-		Logger.getInstance().log("createdDate=" + createdDate);
-		createdDate = null;
-
-		String line = contactBean.getName() + "=" + contactBean.getPetName() + ":" + contactBean.getPhoneNumber1() + ":"
-				+ contactBean.getPhoneNumber2() + ":" + contactBean.getDateOfBirth() + ":"
-				+ contactBean.getAddress().getHomeNumber() + ":" + contactBean.getAddress().getStreetAddress() + ":"
-				+ contactBean.getAddress().getPincode() + ":" + contactBean.getAddress().getCity() + ":"
-				+ contactBean.getAddress().getState() + ":" + contactBean.getAddress().getCountry() + ":"
-				+ contactBean.getEmail1() + ":" + contactBean.getEmail2() + ":" + contactBean.getEmail3() + ":"
-				+ contactBean.getCreatedDate() + ":" + contactBean.getModifiedDate() + ":" + contactBean.getTag();
-		System.out.println("model->addContact()->line = " + line);
-		BufferedWriter bw = null;
-		try {
-			bw = new BufferedWriter(new FileWriter(phoneBookName + ".pb", true));
-			bw.write(line);
-			bw.newLine();
-			return Constants.SUCCESS;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "Adding Contact Failed! " + e.getMessage();
-
-		} finally {
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (date != null) {
-				date = null;
-			}
-			if (simpleDateFormat != null) {
-				simpleDateFormat = null;
-			}
-			if (phoneBookService != null) {
-				phoneBookService = null;
-			}
-
-		}
-
-		// System.out.println("returning success");
-
-	}
+	
 
 	/*
 	 * For removing a line (a contact), you will have to copy the contents of the
@@ -192,61 +134,7 @@ public class PhoneBookService {
 	 * same file, overwriting the contents.
 	 * 
 	 */
-	public String removeContact(String phoneBookName, String contactName) {
-
-		LinkedHashMap<String, String> contactMap = new LinkedHashMap<String, String>();
-
-		BufferedReader br = null;
-		BufferedWriter bw = null;
-		try {
-			// Read contacts except Remove that specific contact
-			br = new BufferedReader(new FileReader(phoneBookName + ".pb"));
-			// split contact by = operator and put name as key and remaining as value in
-			// a linkedhashmap
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] splitFileData = line.split("[\\=]");
-				if (!splitFileData[0].equalsIgnoreCase(contactName)) {
-					contactMap.put(splitFileData[0], splitFileData[1]);
-				}
-
-			}
-			// Write linked hashmap contacts to file by overwriting file and adding an =
-			// operator between key and value
-			bw = new BufferedWriter(new FileWriter(phoneBookName + ".pb", false));
-			Set<String> keys = contactMap.keySet();
-			for (String key : keys) {
-				line = key + "=" + contactMap.get(key);
-				bw.write(line);
-				bw.newLine();
-			}
-			return Constants.SUCCESS;
-		} catch (IOException e) {
-			e.printStackTrace();
-			// we should throw a custom business exception here...for now I am returning
-			// null!
-			return null;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	}
+	
 
 	/*
 	 * BUSINESS VALIDATION

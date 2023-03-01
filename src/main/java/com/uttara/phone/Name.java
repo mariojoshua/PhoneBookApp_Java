@@ -1,34 +1,59 @@
 package main.java.com.uttara.phone;
 
-public class Name {
-    Pronoun type;
-    String firstName;
-    String middleName;
-    String lastName;
+import java.io.Serializable;
+
+public class Name implements Serializable{
+    Gender gender;
+    String fullName;
     String petName;
 
-    enum Pronoun {
-        he_him,
-        she_her,
-        they_them;
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPetName() {
+        return petName;
+    }
+
+    public enum Gender {
+        M,
+        F,
+        O;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
+    public Name(Gender gender, String fullName, String petName) {
+        this.gender = gender;
+        this.fullName = fullName;
+        this.petName = petName;
+    }
+
+    public Name() {
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+        result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
         result = prime * result + ((petName == null) ? 0 : petName.hashCode());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Name [type=" + type + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
-                + lastName + ", petName=" + petName + "]";
     }
 
     @Override
@@ -40,22 +65,12 @@ public class Name {
         if (getClass() != obj.getClass())
             return false;
         Name other = (Name) obj;
-        if (type != other.type)
+        if (gender != other.gender)
             return false;
-        if (firstName == null) {
-            if (other.firstName != null)
+        if (fullName == null) {
+            if (other.fullName != null)
                 return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
-        if (middleName == null) {
-            if (other.middleName != null)
-                return false;
-        } else if (!middleName.equals(other.middleName))
-            return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
+        } else if (!fullName.equals(other.fullName))
             return false;
         if (petName == null) {
             if (other.petName != null)
@@ -65,43 +80,10 @@ public class Name {
         return true;
     }
 
-    public Pronoun getType() {
-        return type;
+    @Override
+    public String toString() {
+        return "Name [gender=" + gender + ", fullName=" + fullName + ", petName=" + petName + "]";
     }
 
-    public void setType(Pronoun type) {
-        this.type = type;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPetName() {
-        return petName;
-    }
-
-    public void setPetName(String petName) {
-        this.petName = petName;
-    }
+    
 }

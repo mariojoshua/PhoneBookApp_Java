@@ -1,4 +1,4 @@
-package com.uttara.mvc.contactsApp;
+package main.java.com.uttara.phone;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,7 +20,6 @@ public class Logger {
 
 	public synchronized void log(String data) {
 		new Thread(new Runnable() {
-
 			@Override
 			public void run() {
 

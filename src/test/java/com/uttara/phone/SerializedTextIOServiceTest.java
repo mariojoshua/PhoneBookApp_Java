@@ -11,7 +11,7 @@ import org.junit.Assert;
 import main.java.com.uttara.phone.ContactBean;
 import main.java.com.uttara.phone.Name;
 import main.java.com.uttara.phone.SerializedTextIOService;
-import main.java.com.uttara.phone.Name.Pronoun;
+import main.java.com.uttara.phone.Name.Gender;
 
 public class SerializedTextIOServiceTest {
     public static void main(String[] args) {

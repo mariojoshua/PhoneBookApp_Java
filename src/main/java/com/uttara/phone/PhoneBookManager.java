@@ -1,4 +1,4 @@
-package com.uttara.mvc.contactsApp;
+package main.java.com.uttara.phone;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,23 +16,10 @@ import java.util.Scanner;
 
 public class PhoneBookManager {
 
-	// scanner1 for numbers, scanner2 for Strings
-	private static Scanner numberScanner = null;
-	private static Scanner stringScanner = null;
-	private static PhoneBookService phoneBookService = null;
-	private static String phoneBookName = null, contactName = null, petName = null;
-	private static String phoneNumber1 = null, phoneNumber2 = null;
-	private static String dateOfBirth = null, tag = null;
-	private static String email1 = null, email2 = null, email3 = null;
-	private static Address address = null;
-	private static String homeNumber = null;
-	private static String streetAddress = null;
-	private static String pincode = null;
-	private static String city = null;
-	private static String state = null;
-	private static String country = null;
-	private static String result = null;
-	private static int choice = 0;
+	private PhoneBookService phoneBookService = null;
+	private String result = null;
+	private int choice = -1;
+	private String phoneBookName;
 
 	/**
 	 * These methods forms the View of the application these method will display the
@@ -40,136 +27,78 @@ public class PhoneBookManager {
 	 * invoke the methods of model!
 	 */
 
-	public static void main(String[] args) {
+	public void run() {
+		System.out.println("In run method");
+		this.phoneBookService = new PhoneBookService();
+		//System.out.println(this.phoneBookService);
+		showsMainMenu();	
+	} 
 
-		try {
-			numberScanner = new Scanner(System.in);
-			stringScanner = new Scanner(System.in);
-			choice = 0;
+	public void showsMainMenu() {
+		int result = 0;
+		choice = 0;
+		while (choice != 6) {
+			System.out.println("\n\tContacts Book Menu");
+			System.out.println("*********************************\n");
+			System.out.println("Press [1] to Create Contacts Book");
+			System.out.println("Press [2] to Load Contact Books");
+			System.out.println("Press [3] to Search contacts");
+			System.out.println("Press [4] to List contacts");
+			System.out.println("Press [5] for Birthday reminders");
+			System.out.println("Press [6] to Exit");
+			System.out.println("\n*********************************");
+			System.out.println("Enter choice\f");
 
-			phoneBookService = new PhoneBookService();
-			while (choice != 6) {
-				System.out.println("\n\tContacts Book Menu");
-				System.out.println("*********************************\n");
-				System.out.println("Press [1] to Create Contacts Book");
-				System.out.println("Press [2] to Load Contact Books");
-				System.out.println("Press [3] to Search contacts");
-				System.out.println("Press [4] to List contacts");
-				System.out.println("Press [5] for Birthday reminders");
-				System.out.println("Press [6] to Exit");
-				System.out.println("\n*********************************");
-				System.out.println("Enter choice\f");
-
-				/*
-				 * until user gives only an int value, keep showing error message and ignore
-				 * token read
-				 */
-				while (!numberScanner.hasNextInt()) {
-					System.out.println("Kindly give numbers between 1 to 6 only\n\f");
-					numberScanner.next();
-				}
-
-				// read the valid token integer input from scanner
-				choice = numberScanner.nextInt();
-				Logger.getInstance().log("choice = " + choice);
-				// System.out.println("choice = " + ch1);
-
-				switch (choice) {
-				case 1:
-					/*
-					 * Creating a Contacts Book
-					 */
-					System.out.println("Creating phone book...");
-					System.out.println("Enter name of phone book");
-					phoneBookName = stringScanner.nextLine();
-					// input validations!
-					result = PhoneUtil.validateName(phoneBookName);
-					// until the input validations succeed, keep asking the user to give new input
-					// and show error msg
-
-					while (!result.equals(Constants.SUCCESS)) {
-						System.out
-								.println("Enter proper name which single word, no spl char and starts with letter...");
-						phoneBookName = stringScanner.nextLine();
-						result = PhoneUtil.validateName(phoneBookName);
-					}
-
-					if (phoneBookService.phoneBookExists(phoneBookName)) {
-						System.out.println("Name already exists, Opening Phone Book");
-					} else {
-						System.out.println("Creating new phone book, Opening Phone Book " + phoneBookName);
-					}
-					Logger.getInstance().log("phoneBookName = " + phoneBookName);
-
-					showsContactsMenu();
-					break;
-				case 2:
-					System.out.println("Enter name of an existing phone book");
-					phoneBookName = stringScanner.nextLine();
-					// input validations!
-					result = PhoneUtil.validateName(phoneBookName);
-					// until the input validations succeed, keep asking the user to give new input
-					// and show error msg
-
-					while (!result.equals(Constants.SUCCESS)) {
-						System.out
-								.println("Enter proper name which single word, no spl char and starts with letter...");
-						phoneBookName = stringScanner.nextLine();
-						result = PhoneUtil.validateName(phoneBookName);
-					}
-					if (phoneBookService.phoneBookExists(phoneBookName)) {
-						System.out.println("loading phone book.. " + phoneBookName);
-						showsContactsMenu();
-					} else {
-						System.out.println("Phone Book with name " + phoneBookName + " does not exist.");
-					}
-
-					break;
-				case 3:
-					System.out.println("searching phone book...");
-					break;
-				case 4:
-
-					System.out.println("listing phone book...");
-					System.out.println(phoneBookService.listContacts(phoneBookName));
-					break;
-				case 5:
-					System.out.println("listing birthday reminders...");
-					break;
-				case 6:
-					System.out.println("Exiting...Have a great day");
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to 6\n");
-					break;
-
-				}
-
+			/*
+				* until user gives only an int value, keep showing message
+				*/
+			// System.out.println("Enter a choice");	
+			while ( choice < 1 || choice > 6) {
+				choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+				Logger.getInstance().log("mainMenu choice = " + choice);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (numberScanner != null) {
-					numberScanner.close();
-					Logger.getInstance().log("scanner1 closed " + numberScanner);
-				}
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
-			try {
-				if (stringScanner != null) {
-					stringScanner.close();
-					Logger.getInstance().log("scanner2 closed " + stringScanner);
-				}
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
+			//choice = PhoneHelper.getUserNumberInput("");	
+			choice = mainMenuController(choice);
+			
 		}
-
+ 
 	}
 
-	public static void showsContactsMenu() {
+	public int mainMenuController (int choice) {
+		switch (choice) {
+			case 1: // Creates a Contacts Book file on disk/sql entry
+				phoneBookService.createContactsBook();
+				showsContactsMenu();
+				break;
+			case 2: // Loads Contacts Book Name from file
+			//	phoneBookService.loadsContactsBook();
+				System.out.println("Contact book loaded");
+				break;
+			case 3:
+				System.out.println("searching phone book...");
+				break;
+			case 4:
+
+				System.out.println("listing phone book...");
+			//	System.out.println(phoneBookService.listContacts(phoneBookName));
+				break;
+			case 5:
+				System.out.println("listing birthday reminders...");
+				break;
+			case 6:
+				System.out.println("Exiting...Have a great day");
+				break;
+			default:
+				System.out.println("Kindly enter choice between 1 to 6\n");
+				break;
+
+			}
+			return choice;
+	}
+
+	
+
+	public void showsContactsMenu() {
 		choice = 0;
 		while (choice != 6) {
 			System.out.println("\f\tContacts Menu");
@@ -181,27 +110,25 @@ public class PhoneBookManager {
 			System.out.println("Press [5] to Search contact");
 			System.out.println("Press [6] to go back");
 			System.out.println("\n-------------------------------");
-			while (!numberScanner.hasNextInt()) {
-				System.out.println("Enter only numbers");
-				numberScanner.next();
+			while ( choice < 1 || choice > 6) {
+				choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+				Logger.getInstance().log("mainMenu choice = " + choice);
 			}
-			choice = numberScanner.nextInt();
-			Logger.getInstance().log("choice = " + choice);
 
-			switch (choice) {
-			case 1:
-				/*
-				 * Adding a contact menu
-				 */
+			
+		}
+	}
+
+	public int contactsMenuController(int choice) {
+		switch (choice) {
+			case 1: // Adding a contact menu 
 				System.out.println("\f");
 				Logger.getInstance().log("Adding contact");
 				showsAddContactMenu();
 				break;
 
 			case 2:
-				/*
-				 * Edit contact Menu
-				 */
+				// Edit contact Menu
 				Logger.getInstance().log("Editing contact");
 				showsEditContactMenu();
 				break;
@@ -213,24 +140,21 @@ public class PhoneBookManager {
 				Logger.getInstance().log("removing contact");
 				showsRemoveContactMenu();
 				break;
-
 			case 4:
-				/*
-				 * List Contact Menu
-				 */
+				// List Contact Menu 
 				showsListContactMenu();
-
 				break;
 			case 5:
 				showsSearchContactMenu();
+				break;
 			default:
 				System.out.println("Yet to be implemented");
 				break;
 			}
-		}
+		return choice;
 	}
 
-	private static void showsSearchContactMenu() {
+	private void showsSearchContactMenu() {
 		/*
 		 * When 5 is selected (Search), you should ask the user to input a string to
 		 * search. This string has be searched in the entire contents of the contacts
@@ -253,18 +177,16 @@ public class PhoneBookManager {
 
 	}
 
-	private static void showsListContactMenu() {
+	private void showsListContactMenu() {
 		choice = 0;
 		System.out.println("Press 1 to list contacts by alphabetical listing by name");
 		System.out.println("Press 2 to list contacts by alphabetical ordering of tags");
 		System.out.println("Press 3 to list contacts by created date");
 		System.out.println("Press 4 to list contacts by string length (length of entire line info on contact)");
-		while (!numberScanner.hasNextInt()) {
-			System.out.println("Enter only numbers");
-			numberScanner.next();
+		while ( choice < 1 || choice > 4) {
+			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+			Logger.getInstance().log("mainMenu choice = " + choice);
 		}
-		choice = numberScanner.nextInt();
-		Logger.getInstance().log("choice = " + choice);
 		/*
 		 * To list all contact in the current phone book by String length
 		 */
@@ -281,39 +203,31 @@ public class PhoneBookManager {
 				// Sort by alphabetical listing of name
 				Collections.sort(contactsArray);
 				// loop over the list and invoke getter methods on bean to display to user
-				for (ContactBean contactBean : contactsArray) {
-					System.out.println(contactBean);
-				}
+				// for (ContactBean contactBean : contactsArray) {
+				// 	System.out.println(contactBean);
+				// }
+				contactsArray.forEach(contactBean -> System.out.println(contactBean));
 				break;
 			case 2:
 				// Sort by alphabetical ordering of tags
 				TagsComparator tagsComparator = new TagsComparator();
 				Collections.sort(contactsArray, tagsComparator);
 				// loop over the list and invoke getter methods on bean to display to user
-				for (ContactBean contactBean : contactsArray) {
-					System.out.println(contactBean);
-				}
+				contactsArray.forEach(contactBean -> System.out.println(contactBean));
 				break;
 			case 3:
 				// Sort Based on created Date
 				CreatedDateComparator cdc = new CreatedDateComparator();
 				Collections.sort(contactsArray, cdc);
 				// loop over the list and invoke getter methods on bean to display to user
-				for (ContactBean contactBean : contactsArray) {
-					System.out.println(contactBean);
-				}
+				contactsArray.forEach(contactBean -> System.out.println(contactBean));
 				break;
 			case 4:
 				// sort arraylist based on String Length
 				StringLengthComparator stringLengthComparator = new StringLengthComparator();
 				Collections.sort(contactsArray, stringLengthComparator);
 				// loop over the list and invoke getter methods on bean to display to user
-				for (ContactBean contactBean : contactsArray) {
-					System.out.println(contactBean);
-
-					// "Name : " + contactBean.getName() + " Phone : " +
-					// contactBean.getPhoneNumber1());
-				}
+				contactsArray.forEach(contactBean -> System.out.println(contactBean));
 				break;
 
 			default:
@@ -324,12 +238,12 @@ public class PhoneBookManager {
 
 	}
 
-	private static void showsRemoveContactMenu() {
+	private void showsRemoveContactMenu() {
 		/*
 		 * Take input of contact name to remove
 		 */
 		System.out.println("Enter Contact Name to remove");
-		contactName = stringScanner.nextLine();
+		contactName = PhoneHelper.getUserStringInput(phoneBookName);
 		/*
 		 * Check if contact exists, if yes then proceed to remove contact, if success //
 		 * message is returned print success message, if not give failure message
@@ -347,7 +261,7 @@ public class PhoneBookManager {
 
 	}
 
-	private static void showsEditContactMenu() {
+	private void showsEditContactMenu() {
 		int choice = 0;
 
 		// enter contact name to edit
@@ -516,14 +430,13 @@ public class PhoneBookManager {
 
 	}
 
-	public static void showsAddContactMenu() {
+	public void showsAddContactMenu() {
 		/*
 		 * Input Contact name and validate if its unique, if its unique then move
 		 * forward or else ask user to enter a unique name
 		 */
 
-		System.out.println("Enter name of contact");
-		contactName = stringScanner.nextLine();
+		contactName = PhoneHelper.getUserStringInput("Enter full name of contact");
 
 		while (!phoneBookService.isContactNameUnique(phoneBookName, contactName)) {
 			System.out.println("Name Already Exists, Kindly Enter a unique name.");
