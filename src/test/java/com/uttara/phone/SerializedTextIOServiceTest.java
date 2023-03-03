@@ -1,21 +1,11 @@
 package test.java.com.uttara.phone;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.codehaus.plexus.component.collections.ComponentList;
-import org.junit.Assert;
-
-import main.java.com.uttara.phone.ContactBean;
-import main.java.com.uttara.phone.Name;
-import main.java.com.uttara.phone.SerializedTextIOService;
-import main.java.com.uttara.phone.Name.Gender;
 
 public class SerializedTextIOServiceTest {
-    public static void main(String[] args) {
-        SerializedTextIOService sio = new SerializedTextIOService();
+
+        // SerializedTextIOService sio = new SerializedTextIOService();
         // //List<ContactBean> contactBeanList = new LinkedList<>();
         // Name name = new Name(Pronoun.she_her,"Trisha Krishnan","Trish");
         // List<String> phoneNumber = List.of("95546546664", "1254665556");
@@ -31,6 +21,46 @@ public class SerializedTextIOServiceTest {
         // // //contactBeanList.add(contactBean);
         //  sio.writeContacts(contactBean, "friends");
 
-       System.out.println(sio.readContact("friends"));
+    //    System.out.println(sio.readContact("friends"));
+    
+
+    @Test
+    public void testContactBookExists() {
+        System.out.println("Hello");
+    }
+
+    @Test
+    public void testContactExists() {
+        
+    }
+
+    @Test
+    public void testCreateContactBook() {
+        
+    }
+
+    @Test
+    public void testDeleteContact() {
+        
+    }
+
+    @Test
+    public void testDeleteContactBook() {
+        
+    }
+
+    @Test
+    public void testReadContact() {
+        
+    }
+
+    @Test
+    public void testUpdateContacts() {
+        
+    }
+
+    @Test
+    public void testWriteContacts() {
+        
     }
 }

@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MySqlService extends IOService {
@@ -33,6 +32,15 @@ public class MySqlService extends IOService {
 		return null;
     }
 
+    private static void rollbackSQLCommit(Connection connection) {
+		if(connection !=null)
+			try {
+				connection.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+
     @Override
     public Boolean createContactBook(String phoneBookName) {
         try (Connection connection = getConnection()){
@@ -54,14 +62,25 @@ public class MySqlService extends IOService {
               
     }
 
-    public static void rollbackSQLCommit(Connection connection) {
-		if(connection !=null)
-			try {
-				connection.rollback();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-	}
+    @Override
+    public Boolean contactBookExists(String phoneBookName) {
+        try (Connection connection = getConnection()){
+            ps1 = connection.prepareStatement(
+            """
+            SELECT name
+            FROM contactApp.phonebook_master 
+            WHERE name = '?');""");
+            ps1.setString(1, phoneBookName.toUpperCase());
+            Boolean result = ps1.execute(); 
+            return result;
+        } catch (SQLException e) {
+            rollbackSQLCommit(connection);    
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
     @Override
     public List<ContactBean> readContact(String phoneBookName) {
@@ -85,7 +104,7 @@ public class MySqlService extends IOService {
         }
     }
 
-    private int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) {
+    private int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         for (String tag: contactBean.tags()) {
             ps2 = connection.prepareStatement(
                 """
@@ -97,10 +116,11 @@ public class MySqlService extends IOService {
 
             resultSet = ps2.getGeneratedKeys();
             int tag_ID = resultSet.getInt("ID");
+        }    
         return 0;
     }
 
-    private int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) {
+    public int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
         PreparedStatement ps3 = connection.prepareStatement
         ("""
         INSERT INTO contacts_tags
@@ -109,7 +129,7 @@ public class MySqlService extends IOService {
         ps3.setInt(1, contacts_ID);
         ps3.setInt(2, tag_ID);
         ps3.executeQuery();
-    }
+        return 0;
     }
 
     private int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) throws SQLException {
@@ -139,7 +159,7 @@ public class MySqlService extends IOService {
     }
 
 
-    public int insertIntoContactsTable(ContactBean contactBean, String phoneBookName) throws SQLException {
+    private int insertIntoContactsTable(ContactBean contactBean, String phoneBookName) throws SQLException {
         ps1 = connection.prepareStatement(
                 """
                 INSERT INTO contactApp.contacts\
@@ -209,23 +229,7 @@ public class MySqlService extends IOService {
         }
     }
 
-    @Override
-    public Boolean contactBookExists(String phoneBookName) {
-        try (Connection connection = getConnection()){
-            ps1 = connection.prepareStatement(
-            """
-            SELECT name
-            FROM contactApp.phonebook_master 
-            WHERE name = '?');""");
-            ps1.setString(1, phoneBookName.toUpperCase());
-            Boolean result = ps1.execute(); 
-            return result;
-        } catch (SQLException e) {
-            rollbackSQLCommit(connection);    
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 
     @Override
     public Boolean contactExists(String fullName, String phoneBookName) {
