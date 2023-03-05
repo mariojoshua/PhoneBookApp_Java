@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="13" failures="0" name="test.java.com.uttara.phone.PhoneHelperTest" time="0.013" errors="0" skipped="0">
+<testsuite tests="13" failures="0" name="test.java.com.uttara.phone.PhoneHelperTest" time="0.015" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="19"/>
@@ -43,7 +43,7 @@
     <property name="java.class.path" value="/usr/local/Cellar/maven/3.8.6/libexec/boot/plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="19"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher package"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher test -f /Users/mariojoshuaaugustine/VSCode Projects/phone-book-app/pom.xml"/>
     <property name="java.home" value="/usr/local/Cellar/openjdk/19/libexec/openjdk.jdk/Contents/Home"/>
     <property name="apple.awt.application.name" value="Launcher"/>
     <property name="user.language" value="en"/>
@@ -62,17 +62,17 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|http://localhost:8080.|*.http://localhost:8080.|http://127.0.0.1/|*.http://127.0.0.1/"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|http://localhost:8080.|*.http://localhost:8080.|http://127.0.0.1/|*.http://127.0.0.1/"/>
   </properties>
-  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testGetUserStringInput" time="0.008"/>
+  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testGetUserStringInput" time="0.01"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidatePincode" time="0"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateStreetAddress" time="0"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testGetUserNumberInput" time="0.001"/>
-  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateCountry" time="0.001"/>
+  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateCountry" time="0"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateEmail" time="0.001"/>
-  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateState" time="0"/>
+  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateState" time="0.001"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateHomeNumber" time="0.001"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidatePhoneNumber" time="0"/>
-  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateCity" time="0"/>
+  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateCity" time="0.001"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateDate" time="0"/>
-  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateName" time="0.001"/>
+  <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateName" time="0"/>
   <testcase classname="test.java.com.uttara.phone.PhoneHelperTest" name="testValidateTags" time="0"/>
 </testsuite>
