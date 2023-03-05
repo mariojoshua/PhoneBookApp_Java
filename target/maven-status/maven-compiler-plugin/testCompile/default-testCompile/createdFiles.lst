@@ -1,0 +1,3 @@
+test/java/com/uttara/phone/SerializedTextIOServiceTest.class
+test/java/com/uttara/phone/PhoneHelperTest.class
+test/java/com/uttara/phone/MySqlServiceTest.class
