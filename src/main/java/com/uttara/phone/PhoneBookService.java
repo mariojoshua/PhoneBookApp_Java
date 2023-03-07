@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import main.java.com.uttara.phone.IOServiceFactory.IOServiceName;
+
 /**
  * This class controls the business logic and business validations, Also called
  * the Model Layer
@@ -27,27 +29,35 @@ public class PhoneBookService {
 	private String modifiedDate;
 	private SimpleDateFormat simpleDateFormat;
 	private String phoneBookName;
-	private IOService ioService = new SerializedTextIOService();
+	private IOService ioService = null;
 
 
 	/*
 	 * BUSINESS LOGIC
 	 */
 
-	/**
-	 * This method will open the file for the phone book given, read one line at a
-	 * time, split it, inject it to a bean object add the bean to a List and finally
-	 * return it.
-	 * 
-	 * @param phoneBook name
-	 * @return ArrayList of contactBean type elements
-	 */
+	public IOService getIOService() {
+		/* 
+		 * Change Persistence method here if needed, options
+		 * PLAIN_TEXT,
+         * SERIALIZED_TEXT,
+         * MYSQL_DATABASE;
+		*/
+		return new IOServiceFactory().getIoService(IOServiceName.MYSQL_DATABASE);
+	}
 
+	public Boolean createContactsBook(String phoneBookName) {
+		return ioService.createContactBook(phoneBookName);		
+	}
 
+	public boolean phoneBookExists(String phoneBookName) {
+		Logger.getInstance().log("Checking if " + phoneBookName + " exists");
+		return ioService.contactBookExists(phoneBookName);
+	}
 
-	public void createContactsBook() {
-		
-
+	public boolean contactNameExists(String phoneBookName, String contactName) {
+		Logger.getInstance().log("Checking if contact name " + contactName + " exists in " + phoneBookName);
+		return ioService.contactExists(contactName, phoneBookName);
 	}
 
 	// public void loadsContactsBook () {
@@ -80,49 +90,7 @@ public class PhoneBookService {
 
 		List<ContactBean> contactArray = new ArrayList<ContactBean>();
 
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(phoneBook + ".pb"));
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] splitFileData = line.split("[\\=|:]+");
-				ContactBean bean = new ContactBean();
-				Address address = new Address();
-				bean.setName(splitFileData[0]);
-				bean.setPetName(splitFileData[1]);
-				bean.setPhoneNumber1(splitFileData[2]);
-				bean.setPhoneNumber2(splitFileData[3]);
-				bean.setDateOfBirth(splitFileData[4]);
-				//address.setHomeNumber(splitFileData[5]);
-				address.setStreetAddress(splitFileData[6]);
-				address.setPincode(splitFileData[7]);
-				address.setCity(splitFileData[8]);
-				address.setState(splitFileData[9]);
-				address.setCountry(splitFileData[10]);
-				bean.setAddress(address);
-				bean.setEmail1(splitFileData[11]);
-				bean.setEmail2(splitFileData[12]);
-				bean.setEmail3(splitFileData[13]);
-				bean.setCreatedDate(splitFileData[14]);
-				bean.setModifiedDate(splitFileData[15]);
-				bean.setTag(splitFileData[16]);
-				contactArray.add(bean);
-			}
-			return contactArray;
-		} catch (IOException e) {
-			e.printStackTrace();
-			// we should throw a custom business exception here...for now I am returning
-			// null!
-			return null;
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
+		return contactArray;
 
 	}
 
@@ -140,52 +108,8 @@ public class PhoneBookService {
 	 * BUSINESS VALIDATION
 	 */
 
-	/**
-	 * Check if phoneBookName exists if yes,return true, if not return false and
-	 * create a new file with phoneBookName
-	 * 
-	 * @param
-	 * @return
-	 * @exception
-	 */
-	public boolean phoneBookExists(String phoneBookName) {
-		Logger.getInstance().log("Checking if " + phoneBookName + " exists");
-		return new File(phoneBookName + ".pb").exists();
-	}
 
-	public boolean contactNameExists(String phoneBookName, String contactName) {
-		Logger.getInstance().log("Checking if contact name " + contactName + " exists in " + phoneBookName);
 
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(phoneBookName + ".pb"));
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] contactArray = line.split("[\\=]");
-				Logger.getInstance().log(contactArray[0] + ".equalsIgnoreCase " + contactName);
-				if (contactArray[0].equalsIgnoreCase(contactName)) {
-					// contact name exists
-					return true;
-				}
-			}
-			// ContactName does not exist
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			// we should throw a custom business exception here...for now I am returning
-			// null!
-			return true;
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-
-	}
 
 	/**
 	 * Check if Contact name exits in that phone book, if yes return false, if no
@@ -193,44 +117,12 @@ public class PhoneBookService {
 	 */
 	public boolean isContactNameUnique(String phoneBookName, String contactName) {
 		Logger.getInstance().log("Checking if contact name " + contactName + " exists in " + phoneBookName);
-
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(phoneBookName + ".pb"));
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] contactArray = line.split("[\\=]+");
-				Logger.getInstance().log(contactArray[0] + ".equalsIgnoreCase " + contactName);
-				if (contactArray[0].equalsIgnoreCase(contactName)) {
-					Logger.getInstance().log(contactArray[0] + " == " + contactName);
-					// contact name is not unique
-					return false;
-				}
-			}
-			// ContactName is unique
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			// we should throw a custom business exception here...for now I am returning
-			// null!
-			return true;
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-
+		return true;
 	}
 
 	public String getCurrentDate() {
 		// "dd/MM/yyyy HH:mm:ss")
-		date = new Date();
-		simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return simpleDateFormat.format(date);
+		return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 	}
 
 	public String editPhoneNumber(String phoneBookName, String contactName, String phoneNumber, int choice) {

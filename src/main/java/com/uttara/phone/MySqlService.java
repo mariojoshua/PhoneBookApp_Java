@@ -51,9 +51,12 @@ public class MySqlService extends IOService {
             (name) 
             VALUES(?)""");
             ps1.setString(1, phoneBookName.toUpperCase());
-            ps1.execute();
-            connection.commit();
-            return true;
+            if (ps1.executeUpdate() != 0) {
+                connection.commit();
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException e) {
             rollbackSQLCommit(connection);    
             e.printStackTrace();

@@ -14,7 +14,7 @@ import java.util.stream.Collector;
 
 
 
-public class SerializedTextIOService implements IOService {
+public class SerializedTextIOService extends IOService {
 
     @Override
     public  List<ContactBean> readContact(String phoneBookName) {
@@ -88,6 +88,12 @@ public class SerializedTextIOService implements IOService {
     public Boolean deleteContact(String fullName, String phoneBookName) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Boolean updateContacts(ContactBean contactBean) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateContacts'");
     }
 
 }
