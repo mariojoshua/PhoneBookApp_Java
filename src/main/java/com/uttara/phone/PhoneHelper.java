@@ -1,4 +1,4 @@
-package main.java.com.uttara.phone;
+package com.uttara.phone;
 
 /**
  * Utility class only for input validations

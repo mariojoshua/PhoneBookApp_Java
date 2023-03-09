@@ -1,4 +1,4 @@
-package main.java.com.uttara.phone;
+package com.uttara.phone;
 
 public class PhoneNumber {
     PhoneType phoneType;

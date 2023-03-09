@@ -1,4 +1,4 @@
-package main.java.com.uttara.phone;
+package com.uttara.phone;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

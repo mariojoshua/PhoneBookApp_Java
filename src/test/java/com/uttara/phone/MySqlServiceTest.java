@@ -1,18 +1,17 @@
-package test.java.com.uttara.phone;
+package com.uttara.phone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import main.java.com.uttara.phone.MySqlService;
 
 public class MySqlServiceTest {
 
     MySqlService mySqlService;
 
-    @Before
+    @BeforeEach
     public void init() {
         mySqlService = new MySqlService();
     }

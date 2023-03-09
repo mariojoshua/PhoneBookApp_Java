@@ -1,4 +1,4 @@
-package main.java.com.uttara.phone;
+package com.uttara.phone;
 
 /**
  * This is a placeholder interface for all constants of the application.
