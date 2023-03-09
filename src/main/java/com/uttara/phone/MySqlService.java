@@ -51,10 +51,15 @@ public class MySqlService extends IOService {
             (name) 
             VALUES(?)""");
             ps1.setString(1, phoneBookName.toUpperCase());
-            if (ps1.executeUpdate() != 0) {
+            System.out.println("Came till here");
+            int returnValue = ps1.executeUpdate();
+            if ( returnValue != 0) {
                 connection.commit();
+                System.out.println("True statement");
                 return true;
             } else {
+                rollbackSQLCommit(connection); 
+                System.out.println("False statement");
                 return false;
             }
         } catch (SQLException e) {
@@ -76,6 +81,27 @@ public class MySqlService extends IOService {
             ps1.setString(1, phoneBookName.toUpperCase());
             Boolean result = ps1.execute(); 
             return result;
+        } catch (SQLException e) {
+            rollbackSQLCommit(connection);    
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean deleteContactBook(String phoneBookName) {
+        try (Connection connection = getConnection()){
+            // Give warning that all contacts will also be deleted, delete all contacts first and then delte the contact book
+            deleteContact("IS NOT NULL", phoneBookName);
+            connection.setAutoCommit(false);
+            ps1 = connection.prepareStatement(
+            """
+            DELETE FROM contactApp.phonebook_master 
+            WHERE name(?)""");
+            ps1.setString(1, phoneBookName.toUpperCase());
+            ps1.execute();
+            connection.commit();
+            return true;
         } catch (SQLException e) {
             rollbackSQLCommit(connection);    
             e.printStackTrace();
@@ -183,8 +209,23 @@ public class MySqlService extends IOService {
 
     @Override
     public Boolean updateContacts(ContactBean contactBean) {
-        // TODO Auto-generated method stub
-        return null;
+        try (Connection connection = getConnection()){
+            connection.setAutoCommit(false);
+            ps1 = connection.prepareStatement(
+        """
+        UPDATE users
+        SET name = 'barfoo', email = 'bar@foo.com'
+        WHERE email = 'foo@bar.com';
+        """);
+        int rowsAffected = ps1.executeUpdate();
+        System.out.println(rowsAffected + " row(s) has been deleted!");
+        connection.commit();
+        return true;
+    } catch (SQLException e) {
+        rollbackSQLCommit(connection);    
+        e.printStackTrace();
+        return false;
+    }
     }
 
     @Override
@@ -211,26 +252,7 @@ public class MySqlService extends IOService {
     }
 
 
-    @Override
-    public Boolean deleteContactBook(String phoneBookName) {
-        try (Connection connection = getConnection()){
-            // Give warning that all contacts will also be deleted, delete all contacts first and then delte the contact book
-            deleteContact("IS NOT NULL", phoneBookName);
-            connection.setAutoCommit(false);
-            ps1 = connection.prepareStatement(
-            """
-            DELETE FROM contactApp.phonebook_master 
-            WHERE name(?)""");
-            ps1.setString(1, phoneBookName.toUpperCase());
-            ps1.execute();
-            connection.commit();
-            return true;
-        } catch (SQLException e) {
-            rollbackSQLCommit(connection);    
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 
 
 

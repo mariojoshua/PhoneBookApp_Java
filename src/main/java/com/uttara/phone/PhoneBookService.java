@@ -46,8 +46,12 @@ public class PhoneBookService {
 		return new IOServiceFactory().getIoService(IOServiceName.MYSQL_DATABASE);
 	}
 
-	public Boolean createContactsBook(String phoneBookName) {
-		return ioService.createContactBook(phoneBookName);		
+	public String createContactsBook(String phoneBookName) {	
+		if (ioService.createContactBook(phoneBookName) == true) {
+			return phoneBookName + "phone book successfully created";
+		} else {
+			return phoneBookName + "phone book could not be created";
+		}		
 	}
 
 	public boolean phoneBookExists(String phoneBookName) {
@@ -199,6 +203,7 @@ public class PhoneBookService {
 				// change modified date
 				modifiedDate = phoneBookService.getCurrentDate();
 				contactBean.setModifiedDate(modifiedDate);
+				
 				Logger.getInstance().log("modifiedDate=" + modifiedDate);
 				modifiedDate = null;
 				// Check if phoneNumber 1 is empty, then put new phone number there

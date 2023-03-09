@@ -14,6 +14,8 @@ import java.util.Scanner;
  * 
  */
 
+
+
 public class PhoneBookManager {
 
 	private PhoneBookService phoneBookService = null;
@@ -67,7 +69,7 @@ public class PhoneBookManager {
 	public int mainMenuController (int choice) {
 		switch (choice) {
 			case 1: // Creates a Contacts Book file on disk/sql entry
-				phoneBookService.createContactsBook();
+				createContactsBook();
 				showsContactsMenu();
 				break;
 			case 2: // Loads Contacts Book Name from file
@@ -97,6 +99,20 @@ public class PhoneBookManager {
 	}
 
 	
+
+	private void createContactsBook() {
+		String phoneBookName = PhoneHelper
+			.getUserStringInput("Enter a name for the phoneBook");
+		String result = PhoneHelper.validateName(phoneBookName);
+		while (!result.equals(Constants.SUCCESS)) {
+			System.out.println("""
+			Enter a name which consists of a single word, 
+			no special characters and starts with a letter.""");
+			result = PhoneHelper.validateName(phoneBookName);
+		}
+		Logger.getInstance().log("Validation Success, Creating phonebook " + phoneBookName);
+		System.out.println(phoneBookService.createContactsBook(phoneBookName));
+	}
 
 	public void showsContactsMenu() {
 		choice = 0;

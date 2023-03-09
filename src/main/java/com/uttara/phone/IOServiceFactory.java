@@ -8,7 +8,7 @@ public class IOServiceFactory {
         MYSQL_DATABASE;
     }
 
-    public IOService getIoService(Enum IOServiceType){		
+    public IOService getIoService(Enum<?> IOServiceType){		
         if (IOServiceType == IOServiceName.PLAIN_TEXT) {
            return new PlainTextIOService();
            
