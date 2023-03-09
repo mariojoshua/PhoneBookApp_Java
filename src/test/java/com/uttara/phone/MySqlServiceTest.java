@@ -1,16 +1,14 @@
 package test.java.com.uttara.phone;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
-// Test runner not working, use mvn test command to run unit tests
+
 public class MySqlServiceTest {
     @Test
-    public void testCreateContactBook() {
-        System.out.println("This test ran");
-    }
-
-    @Test
     public void testContactBookExists() {
-
+        System.out.println("Test Ran");
+        assertTrue(null, false);
     }
 
     @Test
@@ -18,7 +16,10 @@ public class MySqlServiceTest {
 
     }
 
+    @Test
+    public void testCreateContactBook() {
 
+    }
 
     @Test
     public void testDeleteContact() {
@@ -31,7 +32,7 @@ public class MySqlServiceTest {
     }
 
     @Test
-    public void testInsertIntoContactsTable() {
+    public void testInsertIntoContactsTagsLinkTable() {
 
     }
 
