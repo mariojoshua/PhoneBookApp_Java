@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import main.java.com.uttara.phone.IOServiceFactory.IOServiceName;
+import com.uttara.phone.IOServiceFactory.IOServiceName;
 
 /**
  * This class controls the business logic and business validations, Also called
@@ -35,6 +35,10 @@ public class PhoneBookService {
 	/*
 	 * BUSINESS LOGIC
 	 */
+	public PhoneBookService() {
+		ioService = getIOService();
+	}
+	 
 
 	public IOService getIOService() {
 		/* 
@@ -45,6 +49,7 @@ public class PhoneBookService {
 		*/
 		return new IOServiceFactory().getIoService(IOServiceName.MYSQL_DATABASE);
 	}
+
 
 	public String createContactsBook(String phoneBookName) {	
 		if (ioService.createContactBook(phoneBookName) == true) {

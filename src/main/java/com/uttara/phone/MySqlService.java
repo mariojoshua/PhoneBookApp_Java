@@ -11,7 +11,7 @@ import java.util.List;
 public class MySqlService extends IOService {
 
     PreparedStatement ps1 = null, ps2 = null;
-    ResultSet resultSet = null;
+    //ResultSet resultSet = null;
     Connection connection = null;
 
     private Connection getConnection() {
@@ -33,7 +33,7 @@ public class MySqlService extends IOService {
     }
 
     private static void rollbackSQLCommit(Connection connection) {
-		if(connection !=null)
+		if(connection != null)
 			try {
 				connection.rollback();
 			} catch (SQLException e) {
@@ -51,23 +51,25 @@ public class MySqlService extends IOService {
             (name) 
             VALUES(?)""");
             ps1.setString(1, phoneBookName.toUpperCase());
-            System.out.println("Came till here");
             int returnValue = ps1.executeUpdate();
-            if ( returnValue != 0) {
-                connection.commit();
-                System.out.println("True statement");
-                return true;
-            } else {
-                rollbackSQLCommit(connection); 
-                System.out.println("False statement");
-                return false;
-            }
+            return isExecutedOrNot(returnValue, connection);
         } catch (SQLException e) {
             rollbackSQLCommit(connection);    
             e.printStackTrace();
             return false;
         }
               
+    }
+
+    private boolean isExecutedOrNot(int returnValue, Connection connection) throws SQLException {
+        if ( returnValue != 0) {
+            connection.commit();
+            return true;
+        } else {
+            rollbackSQLCommit(connection); 
+            System.out.println("False statement");
+            return false;
+        }
     }
 
     @Override
@@ -77,10 +79,18 @@ public class MySqlService extends IOService {
             """
             SELECT name
             FROM contactApp.phonebook_master 
-            WHERE name = '?');""");
-            ps1.setString(1, phoneBookName.toUpperCase());
-            Boolean result = ps1.execute(); 
-            return result;
+            WHERE name = ?;""");
+            
+            ps1.setString(1, phoneBookName);
+            
+            ResultSet resultSet = ps1.executeQuery(); 
+            String nameFromDatabase = "";
+            while (resultSet.next()) {              
+                nameFromDatabase = resultSet.getString("name");       
+                System.out.println("namefromdb = " + nameFromDatabase);
+
+            }
+            return phoneBookName.toUpperCase().equals(nameFromDatabase) ? true : false;
         } catch (SQLException e) {
             rollbackSQLCommit(connection);    
             e.printStackTrace();
@@ -92,16 +102,14 @@ public class MySqlService extends IOService {
     public Boolean deleteContactBook(String phoneBookName) {
         try (Connection connection = getConnection()){
             // Give warning that all contacts will also be deleted, delete all contacts first and then delte the contact book
-            deleteContact("IS NOT NULL", phoneBookName);
+            //deleteContact("IS NOT NULL", phoneBookName);
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(
             """
             DELETE FROM contactApp.phonebook_master 
-            WHERE name(?)""");
-            ps1.setString(1, phoneBookName.toUpperCase());
-            ps1.execute();
-            connection.commit();
-            return true;
+            WHERE name = ?;""");
+            ps1.setString(1, phoneBookName);
+            return isExecutedOrNot(ps1.executeUpdate(), connection);
         } catch (SQLException e) {
             rollbackSQLCommit(connection);    
             e.printStackTrace();
@@ -149,7 +157,7 @@ public class MySqlService extends IOService {
         return 0;
     }
 
-    public int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
+    private int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
         PreparedStatement ps3 = connection.prepareStatement
         ("""
         INSERT INTO contacts_tags

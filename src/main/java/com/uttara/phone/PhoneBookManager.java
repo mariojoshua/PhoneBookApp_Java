@@ -1,6 +1,7 @@
 package com.uttara.phone;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -233,6 +234,8 @@ public class PhoneBookManager {
 				break;
 			case 3:
 				// Sort Based on created Date
+				Comparator<ContactBean> stringLengthComparator = (o1, o2) -> 
+									o1.dateOfBirth() - o2.toString().length();
 				CreatedDateComparator cdc = new CreatedDateComparator();
 				Collections.sort(contactsArray, cdc);
 				// loop over the list and invoke getter methods on bean to display to user
@@ -240,7 +243,8 @@ public class PhoneBookManager {
 				break;
 			case 4:
 				// sort arraylist based on String Length
-				StringLengthComparator stringLengthComparator = new StringLengthComparator();
+				Comparator<Object> stringLengthComparator = (o1, o2) -> 
+									o1.toString().length() - o2.toString().length();
 				Collections.sort(contactsArray, stringLengthComparator);
 				// loop over the list and invoke getter methods on bean to display to user
 				contactsArray.forEach(contactBean -> System.out.println(contactBean));
