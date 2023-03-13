@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
+import java.sql.SQLTransientConnectionException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -26,7 +28,6 @@ public class MySqlService extends IOService {
 			connection.prepareStatement("USE contactAPP");
             return connection;
 		} catch (ClassNotFoundException |SQLException se) {
-			rollbackSQLCommit(connection);
             se.printStackTrace();
 		}
 		return null;
@@ -52,16 +53,15 @@ public class MySqlService extends IOService {
             VALUES(?)""");
             ps1.setString(1, phoneBookName.toUpperCase());
             int returnValue = ps1.executeUpdate();
-            return isExecutedOrNot(returnValue, connection);
-        } catch (SQLException e) {
-            rollbackSQLCommit(connection);    
+            return isUpdateExecutedOrNot(returnValue, connection);
+        } catch (SQLException e) {    
             e.printStackTrace();
             return false;
         }
               
     }
 
-    private boolean isExecutedOrNot(int returnValue, Connection connection) throws SQLException {
+    private boolean isUpdateExecutedOrNot(int returnValue, Connection connection) throws SQLException {
         if ( returnValue != 0) {
             connection.commit();
             return true;
@@ -91,8 +91,7 @@ public class MySqlService extends IOService {
 
             }
             return phoneBookName.toUpperCase().equals(nameFromDatabase) ? true : false;
-        } catch (SQLException e) {
-            rollbackSQLCommit(connection);    
+        } catch (SQLException e) { 
             e.printStackTrace();
             return false;
         }
@@ -109,9 +108,8 @@ public class MySqlService extends IOService {
             DELETE FROM contactApp.phonebook_master 
             WHERE name = ?;""");
             ps1.setString(1, phoneBookName);
-            return isExecutedOrNot(ps1.executeUpdate(), connection);
-        } catch (SQLException e) {
-            rollbackSQLCommit(connection);    
+            return isUpdateExecutedOrNot(ps1.executeUpdate(), connection);
+        } catch (SQLException e) {   
             e.printStackTrace();
             return false;
         }
@@ -135,7 +133,6 @@ public class MySqlService extends IOService {
             connection.commit();
             return true;
         } catch (SQLException se) {
-            rollbackSQLCommit(connection);
             se.printStackTrace();
             return false;
         }
