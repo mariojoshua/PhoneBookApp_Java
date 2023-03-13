@@ -146,5 +146,28 @@ public class PlainTextIOService extends IOService {
 		}
         throw new UnsupportedOperationException("Unimplemented method 'contactExists'");
     }
+
+	// public void loadsContactsBook () {
+	// 	phoneBookService.getUserStringInput("Enter name of an existing phone book"):
+	// 	System.out.println();
+	// 	phoneBookName = stringScanner.nextLine();
+	// 	// input validations!
+	// 	result = PhoneUtil.validateName(phoneBookName);
+	// 	// until the input validations succeed, keep asking the user to give new input
+	// 	// and show error msg
+
+	// 	while (!result.equals(Constants.SUCCESS)) {
+	// 		System.out
+	// 				.println("Enter proper name which single word, no spl char and starts with letter...");
+	// 		phoneBookName = stringScanner.nextLine();
+	// 		result = PhoneUtil.validateName(phoneBookName);
+	// 	}
+	// 	if (phoneBookService.phoneBookExists(phoneBookName)) {
+	// 		System.out.println("loading phone book.. " + phoneBookName);
+	// 		showsContactsMenu();
+	// 	} else {
+	// 		System.out.println("Phone Book with name " + phoneBookName + " does not exist.");
+	// 	}
+	// }
     
 }

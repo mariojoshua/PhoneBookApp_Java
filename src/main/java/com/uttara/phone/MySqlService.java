@@ -24,7 +24,7 @@ public class MySqlService extends IOService {
 		try {
             connection = DriverManager.getConnection(URL,UID,PASS);
 			Class.forName(DRIVER);
-			System.out.println("Established Connection Succesfully "+ connection);
+			Logger.getInstance().log("Established Connection Succesfully "+ connection);
 			connection.prepareStatement("USE contactAPP");
             return connection;
 		} catch (ClassNotFoundException |SQLException se) {
@@ -234,7 +234,7 @@ public class MySqlService extends IOService {
     }
 
     @Override
-    public Boolean deleteContact(String fullName, String phoneBookName) {
+    public Boolean deleteContact(String emailId, String phoneBookName) {
         try (Connection connection = getConnection()){
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(

@@ -17,10 +17,11 @@ import java.util.Date;
 public class Logger {
 
 	private static final Logger logger = null;
-	private boolean debugMode = false;	
-	private Path myPath = Paths.get("/Users/mariojoshuaaugustine/Desktop/tasklog.txt");
+	private boolean debugMode = true;	
+	private Path myPath = null;
 	
 	private Logger() {
+		myPath = Paths.get("/Users/mariojoshuaaugustine/Desktop/tasklog.txt");
 	}
 
 	public static Logger getInstance() {

@@ -1,8 +1,9 @@
 package com.uttara.phone;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a data holder Java 14 record class. This class has instance variables with
@@ -18,9 +19,8 @@ public record ContactBean(Name name,
 						  String address,
 						  List<String> tags,
 						  List<String> email,
-						  Date dateOfBirth) 
+						  Map<String, LocalDate> dates) 
 						  implements Serializable {
 
-	
 }
 
