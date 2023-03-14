@@ -24,9 +24,10 @@ public record ContactBean (String phoneBookName,
 						  Map<String, LocalDate> dates) 
 						  implements Serializable {
 
-
     public ContactBean (String phoneBookName, Name name) {
 		this(phoneBookName, name, null, null, null, null, null);
+		Objects.requireNonNull(phoneBookName);
+		Objects.requireNonNull(name);
 	}						
 }
 
