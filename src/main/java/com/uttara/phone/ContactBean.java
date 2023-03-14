@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This is a data holder Java 14 record class. This class has instance variables with
@@ -14,8 +15,8 @@ import java.util.Map;
  * @author mariojoshuaaugustine
  * 
  */
-public record ContactBean(Name name,
-						  String phoneBookName,
+public record ContactBean (String phoneBookName,
+						  Name name,
 						  List<String> phoneNumbers,
 						  String address,
 						  List<String> tags,
@@ -23,5 +24,10 @@ public record ContactBean(Name name,
 						  Map<String, LocalDate> dates) 
 						  implements Serializable {
 
+
+    public ContactBean (String phoneBookName, Name name) {
+		this(phoneBookName, name, null, null, null, null, null);
+	}						
 }
+
 

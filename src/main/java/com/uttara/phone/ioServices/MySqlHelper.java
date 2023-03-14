@@ -22,7 +22,7 @@ class MySqlHelper {
             Connection connection = DriverManager.getConnection(URL,UID,PASS);
 			Class.forName(DRIVER);
 			Logger.getInstance().log("Established Connection Succesfully "+ connection);
-			connection.prepareStatement("USE contactAPP");
+			connection.prepareStatement("USE contactAPP").execute();
             return connection;
 		} catch (ClassNotFoundException |SQLException se) {
             se.printStackTrace();

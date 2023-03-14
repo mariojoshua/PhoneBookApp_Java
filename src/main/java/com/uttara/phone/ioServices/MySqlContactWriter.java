@@ -33,14 +33,36 @@ public class MySqlContactWriter {
         }
     }
 
-    private int insertIntoContactsTable(ContactBean contactBean) throws SQLException {
+    int getPhonebook_ID(ContactBean contactBean) {
+        try(Connection connection = MySqlHelper.getConnection()) {
+            ps1 = connection.prepareStatement("""
+                SELECT ID 
+                FROM phonebook_master 
+                WHERE name = ?""" );
+            ps1.setString(1, contactBean.phoneBookName());
+            resultSet = ps1.executeQuery();
+            System.out.println("Ran till here");
+            int phonebook_ID = -1;
+            while (resultSet.next()) {
+                phonebook_ID = ps1.getResultSet().getInt("ID");
+            }
+            Logger.getInstance().log("getPhonebook_ID method phonebook_ID= " + phonebook_ID);
+            return phonebook_ID != 0 ? phonebook_ID : -1 ;
+        } catch (SQLException e) {
+            // TODO: handle exception
+            return -1;
+        }
+    }
+
+    int insertIntoContactsTable(ContactBean contactBean) throws SQLException {
+        int phonebook_ID = getPhonebook_ID(contactBean);
         ps1 = connection.prepareStatement(
                 """
-                INSERT INTO contactApp.contacts\
-                (phonebook_ID, gender, fullname, petname, dateOfBirth, address)\
-                VALUES((SELECT ID FROM phonebook.master WHERE ID ="""
-                + contactBean.phoneBookName() + ";),?,?,?,?,?)",
+                INSERT INTO contacts
+                (phonebook_ID, gender, fullname, petname, dateOfBirth, address)
+                VALUES(?,?,?,?,?,?)""",
                 Statement.RETURN_GENERATED_KEYS);
+            ps1.setInt(1, phonebook_ID);
             ps1.setString(2, contactBean.name().getGender().name());
             ps1.setString(3,contactBean.name().getFullName());
             ps1.setString(4, contactBean.name().getPetName());
@@ -50,10 +72,10 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoContactsTable executeUpdate return Value= " + ps1.executeUpdate());
             resultSet = ps1.getGeneratedKeys();
             int contacts_ID = resultSet.getInt("ID");
-            return contacts_ID;
+            return contacts_ID != 0 ? contacts_ID : -1 ;
     }
 
-    private int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         for (String tag: contactBean.tags()) {
             ps2 = connection.prepareStatement(
                 """
@@ -70,7 +92,7 @@ public class MySqlContactWriter {
         return 0;
     }
 
-    private int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
+    int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
         PreparedStatement ps3 = connection.prepareStatement
         ("""
         INSERT INTO contacts_tags
@@ -82,7 +104,7 @@ public class MySqlContactWriter {
         return 0;
     }
 
-    private int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         for (String emailid: contactBean.email()) {
             ps2 = connection.prepareStatement(
                 """
@@ -95,7 +117,7 @@ public class MySqlContactWriter {
         return 0;
     }
 
-    private int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         for (String phoneNumber: contactBean.phoneNumbers()) {
             ps2 = connection.prepareStatement(
                 """

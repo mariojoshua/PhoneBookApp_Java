@@ -41,8 +41,6 @@ public class MySqlService extends IOService {
               
     }
 
-
-
     @Override
     public Boolean contactBookExists(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()){

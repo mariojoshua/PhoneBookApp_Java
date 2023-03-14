@@ -43,6 +43,10 @@ public class Name implements Serializable{
         this.petName = petName;
     }
 
+    public Name(String fullName) {
+        this.fullName = fullName;
+    }
+
     public Name() {
     }
 
