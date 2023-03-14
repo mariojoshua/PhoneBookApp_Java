@@ -1,6 +1,10 @@
-package com.uttara.phone;
+package com.uttara.phone.ioServices;
 
 import java.util.List;
+
+import com.uttara.phone.Address;
+import com.uttara.phone.ContactBean;
+import com.uttara.phone.Logger;
 
 public class PlainTextIOService extends IOService {
 
@@ -146,6 +150,26 @@ public class PlainTextIOService extends IOService {
 		}
         throw new UnsupportedOperationException("Unimplemented method 'contactExists'");
     }
+
+
+
+
+
+	@Override
+	public Boolean writeContacts(ContactBean contactBean) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'writeContacts'");
+	}
+
+
+
+
+
+	@Override
+	public Boolean contactExists(ContactBean contactBean) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'contactExists'");
+	}
 
 	// public void loadsContactsBook () {
 	// 	phoneBookService.getUserStringInput("Enter name of an existing phone book"):

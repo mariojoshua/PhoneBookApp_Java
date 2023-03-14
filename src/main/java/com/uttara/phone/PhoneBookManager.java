@@ -227,7 +227,7 @@ public class PhoneBookManager {
 				break;
 			case 2:
 				// Sort by alphabetical ordering of tags
-				TagsComparator tagsComparator = new TagsComparator();
+				TagsComparator tagsComparator = ((o1,o2) -> o1.tag compareTo(o2)))
 				Collections.sort(contactsArray, tagsComparator);
 				// loop over the list and invoke getter methods on bean to display to user
 				contactsArray.forEach(contactBean -> System.out.println(contactBean));

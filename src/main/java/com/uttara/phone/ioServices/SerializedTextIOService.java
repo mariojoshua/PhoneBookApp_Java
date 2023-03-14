@@ -1,4 +1,4 @@
-package com.uttara.phone;
+package com.uttara.phone.ioServices;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collector;
+
+import com.uttara.phone.ContactBean;
 
 
 
@@ -94,6 +96,18 @@ public class SerializedTextIOService extends IOService {
     public Boolean updateContacts(ContactBean contactBean) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateContacts'");
+    }
+
+    @Override
+    public Boolean writeContacts(ContactBean contactBean) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'writeContacts'");
+    }
+
+    @Override
+    public Boolean contactExists(ContactBean contactBean) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'contactExists'");
     }
 
 }

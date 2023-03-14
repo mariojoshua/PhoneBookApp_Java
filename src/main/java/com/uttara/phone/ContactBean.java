@@ -15,6 +15,7 @@ import java.util.Map;
  * 
  */
 public record ContactBean(Name name,
+						  String phoneBookName,
 						  List<String> phoneNumbers,
 						  String address,
 						  List<String> tags,

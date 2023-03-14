@@ -33,19 +33,6 @@ CREATE TABLE contacts (
 	FOREIGN KEY (phonebook_ID) REFERENCES phonebook_master(id);
 )
 
-CREATE TABLE tags (
-	ID integer PRIMARY KEY AUTO_INCREMENT,
-	tag varchar(25)
-)
-
-CREATE TABLE contacts_tags(
-	ID integer PRIMARY KEY AUTO_INCREMENT,
-	contacts_ID integer NOT NULL ,
-	tag_ID integer NOT NULL, 
-	FOREIGN KEY (contacts_id) REFERENCES contacts(ID),
-	FOREIGN KEY (tag_ID) REFERENCES tags(ID)
-)
-
 CREATE TABLE phonenumber (
 	ID integer PRIMARY KEY AUTO_INCREMENT,
 	contacts_ID integer,	
@@ -62,6 +49,23 @@ CREATE TABLE email (
 	emailid varchar(40) UNIQUE
 	FOREIGN KEY (contacts_ID) REFERENCES contacts(ID)
 )
+
+CREATE TABLE tags (
+	ID integer PRIMARY KEY AUTO_INCREMENT,
+	tag varchar(25)
+)
+
+CREATE TABLE contacts_tags(
+	ID integer PRIMARY KEY AUTO_INCREMENT,
+	contacts_ID integer NOT NULL ,
+	tag_ID integer NOT NULL, 
+	FOREIGN KEY (contacts_id) REFERENCES contacts(ID),
+	FOREIGN KEY (tag_ID) REFERENCES tags(ID)
+)
+
+
+
+
 ```
 
 ## Alter Table

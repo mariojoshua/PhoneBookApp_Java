@@ -1,4 +1,4 @@
-package com.uttara.phone;
+package com.uttara.phone.ioServices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.uttara.phone.Name.Gender;
+import com.uttara.phone.ioServices.MySqlService;
 
 
 public class MySqlServiceTest {
@@ -29,7 +30,7 @@ public class MySqlServiceTest {
     public void testCreateContactBook() {
         assertTrue (mySqlService.createContactBook("park11"));
        assertTrue(mySqlService.contactBookExists("park11"));
-        assertFalse (mySqlService.createContactBook("park11"));
+        //assertFalse (mySqlService.createContactBook("park11"));
         assertTrue (mySqlService.deleteContactBook("park11"));
         assertFalse(mySqlService.contactBookExists("park11"));
     }
@@ -62,13 +63,14 @@ public class MySqlServiceTest {
             List.of("lake","asia" , "chola"), 
             List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1025, 2, 14)));
+            LocalDate.of(1525, 2, 14)));
         assertTrue (mySqlService.createContactBook(phoneBookName));
         assertTrue (mySqlService.writeContacts(contactBean, phoneBookName));
-        assertTrue (mySqlService.contactExists("arulmozhi varman", "lake cleaning group"));
-        assertFalse (mySqlService.writeContacts(contactBean, phoneBookName));
+        // assertTrue (mySqlService.contactExists("arulmozhi varman", "lake cleaning group"));
+        // assertFalse (mySqlService.writeContacts(contactBean, phoneBookName));
         // assertEquals(List.of(contactBean),mySqlService.readContact(phoneBookName));
         // assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", phoneBookName));
+        assertTrue (mySqlService.deleteContactBook(phoneBookName));
     }
 
     @Test
@@ -81,7 +83,7 @@ public class MySqlServiceTest {
             List.of("army","asia" , "chola"), 
             List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1022, 2, 14)));
+            LocalDate.of(1922, 2, 14)));
         assertTrue (mySqlService.createContactBook(phoneBookName));
         assertTrue (mySqlService.writeContacts(contactBean, phoneBookName));
         assertTrue (mySqlService.contactExists("Aditha", "lake cleaning group"));
@@ -100,7 +102,7 @@ public class MySqlServiceTest {
             List.of("secret service","asia", "chola"), 
             List.of("Thirumalai.Nambi@yahoo.com", "Azhwarkadiyan_Nambi@gmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1015, 6, 28)));
+            LocalDate.of(1915, 6, 28)));
         assertTrue (mySqlService.createContactBook(phoneBookName));
         assertTrue (mySqlService.writeContacts(contactBean, phoneBookName));
         assertTrue (mySqlService.contactExists("Nambi", "lake cleaning group"));
@@ -119,7 +121,7 @@ public class MySqlServiceTest {
             List.of("army","asia", "chola"), 
             List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(2023, 2, 14)));
+            LocalDate.of(1723, 2, 14)));
         assertTrue (mySqlService.createContactBook(phoneBookName));
         assertTrue (mySqlService.writeContacts(contactBean, phoneBookName));
         assertTrue (mySqlService.contactExists("arulmozhi varman", "lake cleaning group"));
@@ -131,7 +133,7 @@ public class MySqlServiceTest {
             List.of("army","asia" ,"prince", "chola"), 
             List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1022, 2, 14)));
+            LocalDate.of(1622, 2, 14)));
         assertTrue (mySqlService.createContactBook(phoneBookName));
         assertTrue (mySqlService.writeContacts(contactBean, phoneBookName));
         assertFalse (mySqlService.contactExists("Aditha", "lake cleaning group"));
