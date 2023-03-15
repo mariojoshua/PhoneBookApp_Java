@@ -30,13 +30,10 @@ class MySqlHelper {
 		return null;
     }
 
-    static void rollbackSQLCommit(Connection connection) {
-		if(connection != null)
-			try {
+    static void rollbackSQLCommit(Connection connection) throws SQLException {
+		if (connection != null) {
 				connection.rollback();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		}
 	}
 
     static boolean isUpdateExecutedOrNot(int returnValue, Connection connection) throws SQLException {

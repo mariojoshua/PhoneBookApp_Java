@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Date;
 
 /**
@@ -33,7 +34,7 @@ public class Logger {
 			@Override
 			public void run() {
 				
-				try (BufferedWriter bufferedWriter = Files.newBufferedWriter(myPath)) {
+				try (BufferedWriter bufferedWriter = Files.newBufferedWriter(myPath, StandardOpenOption.APPEND)) {
 					String message = new Date() + " : " + data;
 					bufferedWriter.write(message);
 					bufferedWriter.newLine();
@@ -42,7 +43,7 @@ public class Logger {
 					}		
 				} catch (IOException e) {
 					e.printStackTrace();
-				}			
+				} 		
 			}
 		}).start();
 	}

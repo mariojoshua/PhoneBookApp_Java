@@ -46,7 +46,7 @@ public class MySqlContactWriterTest {
 
     @Test
     void testInsertIntoContactsTable() throws SQLException {
-        mWriter.insertIntoContactsTable(null);
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
     }
 
     @Test
@@ -76,7 +76,6 @@ public class MySqlContactWriterTest {
 
     @AfterEach  
     void kill() {
-        mWriter = new MySqlContactWriter();
-        new MySqlService().deleteContactBook("walking group 56");
+        //new MySqlService().deleteContactBook("walking group 56");
     }
 }

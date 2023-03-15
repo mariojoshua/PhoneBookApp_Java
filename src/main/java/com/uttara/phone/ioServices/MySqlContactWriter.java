@@ -41,7 +41,6 @@ public class MySqlContactWriter {
                 WHERE name = ?""" );
             ps1.setString(1, contactBean.phoneBookName());
             resultSet = ps1.executeQuery();
-            System.out.println("Ran till here");
             int phonebook_ID = -1;
             while (resultSet.next()) {
                 phonebook_ID = ps1.getResultSet().getInt("ID");
@@ -55,13 +54,16 @@ public class MySqlContactWriter {
     }
 
     int insertIntoContactsTable(ContactBean contactBean) throws SQLException {
-        int phonebook_ID = getPhonebook_ID(contactBean);
-        ps1 = connection.prepareStatement(
+        try(Connection connection = MySqlHelper.getConnection()) {
+            connection.setAutoCommit(false); 
+            int phonebook_ID = getPhonebook_ID(contactBean);
+            ps1 = connection.prepareStatement(
                 """
                 INSERT INTO contacts
                 (phonebook_ID, gender, fullname, petname, dateOfBirth, address)
                 VALUES(?,?,?,?,?,?)""",
-                Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement.RETURN_GENERATED_KEYS);
+            System.out.println("Ran till here");
             ps1.setInt(1, phonebook_ID);
             ps1.setString(2, contactBean.name().getGender().name());
             ps1.setString(3,contactBean.name().getFullName());
@@ -69,10 +71,19 @@ public class MySqlContactWriter {
             Date date = new java.sql.Date(Date.valueOf(contactBean.dates().get("dateOfBirth")).getTime());
             ps1.setDate(5, date);
             ps1.setString(6, contactBean.address());
-            Logger.getInstance().log("insertIntoContactsTable executeUpdate return Value= " + ps1.executeUpdate());
+            int executeValue = ps1.executeUpdate();
+            MySqlHelper.isUpdateExecutedOrNot(executeValue, connection);
+            Logger.getInstance().log("insertIntoContactsTable executeUpdate return Value= " + executeValue);
+            connection.commit();
             resultSet = ps1.getGeneratedKeys();
-            int contacts_ID = resultSet.getInt("ID");
-            return contacts_ID != 0 ? contacts_ID : -1 ;
+            int contacts_ID = -1;
+            if (resultSet.next()) {
+                contacts_ID = resultSet.getInt(1);
+            }
+            Logger.getInstance().log("insertIntoContactsTable executeUpdate contacts_ID= " + contacts_ID);
+            System.out.println("Ran till here");
+            return contacts_ID;
+        }     
     }
 
     int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {

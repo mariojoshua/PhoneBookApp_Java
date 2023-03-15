@@ -48,8 +48,8 @@ public class MySqlService extends IOService {
             """
             SELECT name
             FROM contactApp.phonebook_master 
-            WHERE name = ?;""");
-            ps1.setString(1, phoneBookName);
+            WHERE name LIKE ?;""");
+            ps1.setString(1,"%" + phoneBookName + "%");
             resultSet = ps1.executeQuery(); 
             String nameFromDatabase = "";
             while (resultSet.next()) {              
@@ -122,27 +122,9 @@ public class MySqlService extends IOService {
     }
 
     @Override
-    public Boolean deleteContact(String emailId, String phoneBookName) {
-        try (Connection connection = MySqlHelper.getConnection()){
-            connection.setAutoCommit(false);
-            ps1 = connection.prepareStatement(
-            //rewrite delete    
-            """
-            DELETE FROM contactApp.contacts
-            WHERE phoneBook_ID = 
-                (SELECT ID 
-                 FROM phonebook_master 
-                 WHERE name='"""+ phoneBookName+ "')" 
-              + "AND fullname=" + emailId + ";");
-            int rowsAffected = ps1.executeUpdate();
-            System.out.println(rowsAffected + " row(s) has been deleted!");
-            connection.commit();
-            return true;
-        } catch (SQLException e) {
-            //rollbackSQLCommit(connection);    
-            e.printStackTrace();
-            return false;
-        }
+    public Boolean deleteContact(String phoneBookName, String fullName) {
+        MySqlContactDeletor mySqlContactDeletor = new MySqlContactDeletor();
+        return mySqlContactDeletor.delete(fullName);
     }
 
     @Override
@@ -151,9 +133,9 @@ public class MySqlService extends IOService {
             ps1 = connection.prepareStatement(
             """
             SELECT fullname
-            FROM contactApp.contacts 
-            WHERE phoneBookName = ?
-              AND fullname = ? ;""");
+            FROM contacts 
+            WHERE phoneBookName LIKE ?
+              AND fullname LIKE ? ;""");
             ps1.setString(1, contactBean.phoneBookName().toUpperCase());
             ps1.setString(2, contactBean.name().getFullName());
             return ps1.execute();
