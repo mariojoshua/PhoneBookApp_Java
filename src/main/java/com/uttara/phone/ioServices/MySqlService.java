@@ -123,7 +123,7 @@ public class MySqlService extends IOService {
 
     @Override
     public Boolean deleteContact(String phoneBookName, String fullName) {
-        MySqlContactDeletor mySqlContactDeletor = new MySqlContactDeletor();
+        MySqlContactDeleter mySqlContactDeletor = new MySqlContactDeleter();
         return mySqlContactDeletor.delete(fullName);
     }
 

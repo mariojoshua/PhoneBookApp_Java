@@ -48,12 +48,12 @@ public class MySqlContactWriter {
             Logger.getInstance().log("getPhonebook_ID method phonebook_ID= " + phonebook_ID);
             return phonebook_ID != 0 ? phonebook_ID : -1 ;
         } catch (SQLException e) {
-            // TODO: handle exception
+            e.printStackTrace();
             return -1;
         }
     }
 
-    int insertIntoContactsTable(ContactBean contactBean) throws SQLException {
+    int insertIntoContactsTable(ContactBean contactBean) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int phonebook_ID = getPhonebook_ID(contactBean);
@@ -83,7 +83,10 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoContactsTable executeUpdate contacts_ID= " + contacts_ID);
             System.out.println("Ran till here");
             return contacts_ID;
-        }     
+        }   catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }    
     }
 
     int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {

@@ -21,7 +21,7 @@ class MySqlHelper {
 		try {
             Connection connection = DriverManager.getConnection(URL,UID,PASS);
 			Class.forName(DRIVER);
-			Logger.getInstance().log("Established Connection Succesfully "+ connection);
+			//Logger.getInstance().log("Established Connection Succesfully "+ connection);
 			connection.prepareStatement("USE contactAPP").execute();
             return connection;
 		} catch (ClassNotFoundException |SQLException se) {

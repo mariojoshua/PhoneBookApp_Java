@@ -10,7 +10,7 @@ public abstract class IOService {
     public abstract Boolean writeContacts(ContactBean contactBean);
     public abstract Boolean updateContacts(ContactBean contactBean);
     public abstract Boolean createContactBook(String phoneBookName);
-    public abstract Boolean deleteContact(String fullName, String phoneBookName);
+    public abstract Boolean deleteContact(String phoneBookName, String fullName);
     public abstract Boolean deleteContactBook(String phoneBookName);
     public abstract Boolean contactBookExists(String phoneBookName);
     public abstract Boolean contactExists(ContactBean contactBean);

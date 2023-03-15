@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.uttara.phone.ContactBean;
+import com.uttara.phone.Logger;
 
-public class MySqlContactDeletor {
+public class MySqlContactDeleter {
     
     PreparedStatement ps1 = null, ps2 = null;
     ResultSet resultSet = null;
@@ -23,14 +24,13 @@ public class MySqlContactDeletor {
             //rewrite delete    
             """
             DELETE FROM contacts
-            WHERE fullname = ?);""");
+            WHERE fullname = ?;""");
             ps1.setString(1, fullName);
             int rowsAffected = ps1.executeUpdate();
-            System.out.println(rowsAffected + " row(s) has been deleted!");
-            connection.commit();
+            MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
+            Logger.getInstance().log("deleteFromContactsTable executeUpdate rowsAffected = " + rowsAffected);
             return true;
-        } catch (SQLException e) {
-            //rollbackSQLCommit(connection);    
+        } catch (SQLException e) { 
             e.printStackTrace();
             return false;
         }

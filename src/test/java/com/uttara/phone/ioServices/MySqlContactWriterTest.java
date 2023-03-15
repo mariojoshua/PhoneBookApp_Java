@@ -21,12 +21,14 @@ public class MySqlContactWriterTest {
     MySqlContactWriter mWriter = null;
     ContactBean contactBean = null;
     MySqlService mySqlService = null;
+    MySqlContactDeleter mDeleter = null;
 
     @BeforeEach 
     void init() {
         mWriter = new MySqlContactWriter();
         mySqlService = new MySqlService();
         mySqlService.createContactBook("walking group 56");
+        mDeleter = new MySqlContactDeleter();
         contactBean = new ContactBean(
             "walking group 56",
             new Name(Gender.M, "Aditha Karikalan", "Adi"), 
@@ -76,6 +78,12 @@ public class MySqlContactWriterTest {
 
     @AfterEach  
     void kill() {
-        //new MySqlService().deleteContactBook("walking group 56");
+        /**
+         * contacts table has a foreign key to a primary key from contactBook table
+         * hence the table containing the foreign key has to be deleted first, 
+         * then the independent table
+         *  */ 
+        mDeleter.deleteFromContactsTable(contactBean.name().getFullName());
+        mySqlService.deleteContactBook(contactBean.phoneBookName());
     }
 }
