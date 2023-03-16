@@ -63,7 +63,7 @@ classDiagram
 
         PhoneBookService *-- IOService
     class IOService {
-        <<Inteface>>
+        <<Abstract>>
         +readContact()
         +writeContact()
         +updateContact()
@@ -72,9 +72,9 @@ classDiagram
         +deleteContactBook()
     }
 
-    IOService *-- PlainTextIOService : implements
-    IOService *-- SerializedTextIOService : implements
-    IOService <|-- MySQLService : implements
+    IOService *-- PlainTextIOService : extends
+    IOService *-- SerializedTextIOService : extends
+    IOService <|-- MySQLService : extends
 
     class PlainTextIOService {
 

@@ -90,59 +90,87 @@ public class MySqlContactWriter {
     }
 
     int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
-        for (String tag: contactBean.tags()) {
-            ps2 = connection.prepareStatement(
-                """
-                INSERT INTO contactApp.tags
-                (tag)
-                VALUES(?,""" + Statement.RETURN_GENERATED_KEYS + ")");
-            ps2.setString(1, tag); 
-            Logger.getInstance().log("insertIntoTagsTable executeUpdate return value = " + ps2.executeUpdate());
-            resultSet = ps2.getGeneratedKeys();
-            int tag_ID = resultSet.getInt("ID");
-            // insert into Contacts_tags link table
-            insertIntoContactsTagsLinkTable(tag_ID, contacts_ID);
-        }    
-        return 0;
+        try(Connection connection = MySqlHelper.getConnection()) {
+            connection.setAutoCommit(false); 
+            for (String tag: contactBean.tags()) {
+                ps2 = connection.prepareStatement(
+                    """
+                    INSERT INTO contactApp.tags
+                    (tag)
+                    VALUES(?)""", Statement.RETURN_GENERATED_KEYS);
+                ps2.setString(1, tag); 
+                Logger.getInstance().log("insertIntoTagsTable executeUpdate return value = " + ps2.executeUpdate());
+                resultSet = ps2.getGeneratedKeys();
+                int tag_ID = -1;
+                while(resultSet.next()) {
+                    tag_ID = resultSet.getInt(1);
+                }
+                // insert into Contacts_tags link table
+                insertIntoContactsTagsLinkTable(tag_ID, contacts_ID);
+            } 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }  
     }
 
     int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
-        PreparedStatement ps3 = connection.prepareStatement
-        ("""
-        INSERT INTO contacts_tags
-        (contacts_ID, tag_ID)
-        VALUES(?,?)""");
-        ps3.setInt(1, contacts_ID);
-        ps3.setInt(2, tag_ID);
-        Logger.getInstance().log("insertIntoContactsTagsLinkTable executeUpdate value = " + ps3.executeUpdate());
-        return 0;
+        try(Connection connection = MySqlHelper.getConnection()) {
+            connection.setAutoCommit(false); 
+            PreparedStatement ps3 = connection.prepareStatement
+            ("""
+            INSERT INTO contacts_tags
+            (contacts_ID, tag_ID)
+            VALUES(?,?)""");
+            ps3.setInt(1, contacts_ID);
+            ps3.setInt(2, tag_ID);
+            Logger.getInstance().log("insertIntoContactsTagsLinkTable executeUpdate value = " + ps3.executeUpdate());
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }  
     }
 
     int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) throws SQLException {
-        for (String emailid: contactBean.email()) {
-            ps2 = connection.prepareStatement(
-                """
-                INSERT INTO contactApp.email
-                (contacts_ID,emailid)
-                VALUES(""" + contacts_ID +",?)");
-            ps2.setString(2, emailid); 
-            Logger.getInstance().log("insertIntoEmailTable executeUpdate value" + ps2.executeUpdate());  
-        }
+        try(Connection connection = MySqlHelper.getConnection()) {
+            connection.setAutoCommit(false); 
+            for (String emailid: contactBean.email()) {
+                ps2 = connection.prepareStatement(
+                    """
+                    INSERT INTO contactApp.email
+                    (contacts_ID, emailid)
+                    VALUES( ?, ?)""");
+                ps2.setInt(1, contacts_ID);    
+                ps2.setString(2, emailid); 
+                int executeValue = ps2.executeUpdate();
+                MySqlHelper.isUpdateExecutedOrNot(executeValue, connection);
+                Logger.getInstance().log("insertIntoEmailTable executeUpdate value" + executeValue);  
+            }
         return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }  
     }
 
     int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) throws SQLException {
-        for (String phoneNumber: contactBean.phoneNumbers()) {
-            ps2 = connection.prepareStatement(
-                """
-                INSERT INTO contactApp.phonenumber
-                (contacts_ID,phoneNumber)
-                VALUES(""" + contacts_ID +",?)");
-            ps2.setString(0, phoneNumber);
-            Logger.getInstance().log("insertIntoPhoneNumberTable executeUpdate value" + ps2.executeUpdate());  
-        }
-        return 0;
+        try(Connection connection = MySqlHelper.getConnection()) {
+            connection.setAutoCommit(false); 
+            for (String phoneNumber: contactBean.phoneNumbers()) {
+                ps2 = connection.prepareStatement(
+                    """
+                    INSERT INTO contactApp.phonenumber
+                    (contacts_ID,phoneNumber)
+                    VALUES( ?, ?)""");
+                ps1.setInt(1, contacts_ID);
+                ps2.setString(0, phoneNumber);
+                Logger.getInstance().log("insertIntoPhoneNumberTable executeUpdate value" + ps2.executeUpdate());  
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }  
     }
-
-
 }

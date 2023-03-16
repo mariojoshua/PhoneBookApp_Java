@@ -1,5 +1,6 @@
 package com.uttara.phone.ioServices;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,16 +50,19 @@ public class MySqlContactWriterTest {
     @Test
     void testInsertIntoContactsTable() throws SQLException {
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        mDeleter.deleteFromContactsTable(contactBean.name().getFullName());
     }
 
     @Test
     void testInsertIntoContactsTagsLinkTable() throws SQLException {
-        mWriter.insertIntoContactsTagsLinkTable(0, 0);
+        assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
     }
 
     @Test
     void testInsertIntoEmailTable() throws SQLException {
-
+        int contacts_ID = mWriter.insertIntoContactsTable(contactBean);
+        //contact exists check
+        assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
     }
 
     @Test

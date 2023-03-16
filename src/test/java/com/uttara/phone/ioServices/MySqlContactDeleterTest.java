@@ -1,5 +1,6 @@
 package com.uttara.phone.ioServices;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -14,11 +15,12 @@ import com.uttara.phone.ContactBean;
 import com.uttara.phone.Name;
 import com.uttara.phone.Name.Gender;
 
-public class MySqlContactDeletorTest {
+public class MySqlContactDeleterTest {
     MySqlContactWriter mWriter = null;
     ContactBean contactBean = null;
     MySqlService mySqlService = null;
     MySqlContactDeleter mDeleter = null;
+    int contacts_ID;
    
     @BeforeEach 
     void init() {
@@ -35,7 +37,12 @@ public class MySqlContactDeletorTest {
             List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
             Map.of("dateOfBirth",
             LocalDate.of(1525, 2, 14)));
-        mWriter.insertIntoContactsTable(contactBean);
+        contacts_ID = mWriter.insertIntoContactsTable(contactBean);
+    }
+
+    @Test
+    void testGetContacts_ID() {
+        assertNotEquals(-1, mDeleter.getContacts_ID(contactBean.name().getFullName()));
     }
 
     @Test
@@ -56,13 +63,21 @@ public class MySqlContactDeletorTest {
 
     @Test
     void testDeleteFromEmailTable() {
-
+        assertTrue(mDeleter.deleteFromEmailTable(contacts_ID));
+        assertTrue(mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
     }
 
     @Test
     void testDeleteFromPhoneNumberTable() {
 
     }
+
+    
+    @Test
+    void testGetTags_ID() {
+
+    }
+    
 
     @Test
     void testDeleteFromTagsTable() {
