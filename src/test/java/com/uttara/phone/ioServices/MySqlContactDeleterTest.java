@@ -43,6 +43,7 @@ public class MySqlContactDeleterTest {
     @Test
     void testGetContacts_ID() {
         assertNotEquals(-1, mDeleter.getContacts_ID(contactBean.name().getFullName()));
+        assertTrue(mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
     }
 
     @Test
@@ -63,6 +64,7 @@ public class MySqlContactDeleterTest {
 
     @Test
     void testDeleteFromEmailTable() {
+        assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
         assertTrue(mDeleter.deleteFromEmailTable(contacts_ID));
         assertTrue(mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
     }

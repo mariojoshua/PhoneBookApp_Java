@@ -63,7 +63,6 @@ public class MySqlContactWriter {
                 (phonebook_ID, gender, fullname, petname, dateOfBirth, address)
                 VALUES(?,?,?,?,?,?)""",
                 PreparedStatement.RETURN_GENERATED_KEYS);
-            System.out.println("Ran till here");
             ps1.setInt(1, phonebook_ID);
             ps1.setString(2, contactBean.name().getGender().name());
             ps1.setString(3,contactBean.name().getFullName());
@@ -132,7 +131,7 @@ public class MySqlContactWriter {
         }  
     }
 
-    int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             for (String emailid: contactBean.email()) {
@@ -145,7 +144,7 @@ public class MySqlContactWriter {
                 ps2.setString(2, emailid); 
                 int executeValue = ps2.executeUpdate();
                 MySqlHelper.isUpdateExecutedOrNot(executeValue, connection);
-                Logger.getInstance().log("insertIntoEmailTable executeUpdate value" + executeValue);  
+                Logger.getInstance().log("insertIntoEmailTable executeUpdate value = " + executeValue);  
             }
         return 0;
         } catch (SQLException e) {
@@ -154,7 +153,7 @@ public class MySqlContactWriter {
         }  
     }
 
-    int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             for (String phoneNumber: contactBean.phoneNumbers()) {

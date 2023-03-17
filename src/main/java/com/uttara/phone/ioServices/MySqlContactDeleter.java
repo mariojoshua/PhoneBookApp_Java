@@ -25,7 +25,7 @@ public class MySqlContactDeleter {
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(  
             """
-            DELETE FROM contactsApp.contacts
+            DELETE FROM contactApp.contacts
             WHERE fullname = ?;""");
             ps1.setString(1, fullName);
             int rowsAffected = ps1.executeUpdate();
@@ -43,7 +43,7 @@ public class MySqlContactDeleter {
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(  
             """
-            DELETE FROM contactsApp.email
+            DELETE FROM contactApp.email
             WHERE contacts_id = ?;""");
             ps1.setInt(1, contacts_id);
             int rowsAffected = ps1.executeUpdate();
