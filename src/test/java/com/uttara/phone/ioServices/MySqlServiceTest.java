@@ -79,21 +79,21 @@ public class MySqlServiceTest {
 
     @Test
     public void testContactExists() {
-        // ContactBean contactBean = new ContactBean(
-        //     "North Army",
-        //     new Name(Gender.M, "Aditha Karikalan", "Adi"), 
-        //     List.of("1429532666", "5324266691"), 
-        //     "No 66, Golden palace road, Kanchipuram, India - 503125", 
-        //     List.of("army","asia" , "chola"), 
-        //     List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
-        //     Map.of("dateOfBirth",
-        //     LocalDate.of(1922, 2, 14)));
-        // assertTrue (mySqlService.createContactBook(phoneBookName));
-        // assertTrue (mySqlService.writeContacts(contactBean));
-        // assertTrue (mySqlService.contactExists(contactBean));
-        // assertFalse (mySqlService.writeContacts(contactBean));
-        // assertEquals(List.of(contactBean),mySqlService.readContact(phoneBookName));
-        // assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", phoneBookName));
+        ContactBean contactBean = new ContactBean(
+            "North Army",
+            new Name(Gender.M, "Aditha Karikalan", "Adi"), 
+            List.of("1429532666", "5324266691"), 
+            "No 66, Golden palace road, Kanchipuram, India - 503125", 
+            List.of("army","asia" , "chola"), 
+            List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
+            Map.of("dateOfBirth",
+            LocalDate.of(1922, 2, 14)));
+        assertTrue (mySqlService.createContactBook(contactBean.phoneBookName()));
+        //assertTrue (mySqlService.writeContacts(contactBean));
+        assertTrue (mySqlService.contactExists(contactBean));
+        //assertFalse (mySqlService.writeContacts(contactBean));
+        //assertEquals(List.of(contactBean),mySqlService.readContact(contactBean.phoneBookName()));
+        //assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", contactBean.phoneBookName()));
     }
 
     @Test

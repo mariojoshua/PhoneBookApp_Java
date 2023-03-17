@@ -19,6 +19,7 @@ public class MySqlService extends IOService {
     PreparedStatement ps1 = null, ps2 = null;
     ResultSet resultSet = null;
     Connection connection = null;
+    MySqlContactWriter mWriter = new MySqlContactWriter();
 
     
     @Override
@@ -130,15 +131,16 @@ public class MySqlService extends IOService {
     @Override
     public Boolean contactExists(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()){
+            int phonebook_ID = mWriter.getPhonebook_ID(contactBean);
             ps1 = connection.prepareStatement(
             """
             SELECT fullname
             FROM contacts 
-            WHERE phoneBookName LIKE ?
+            WHERE phonebook_ID = ?
               AND fullname LIKE ? ;""");
-            ps1.setString(1, contactBean.phoneBookName().toUpperCase());
+            ps1.setInt(1, phonebook_ID);
             ps1.setString(2, contactBean.name().getFullName());
-            return ps1.execute();
+            return ps1.executeQuery().next();
         } catch (SQLException e) {
             //rollbackSQLCommit(connection);    
             e.printStackTrace();

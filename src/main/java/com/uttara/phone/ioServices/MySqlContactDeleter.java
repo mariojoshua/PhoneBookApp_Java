@@ -20,7 +20,7 @@ public class MySqlContactDeleter {
         return false;
     }
 
-    Boolean deleteFromContactsTable(String fullName) {
+    int deleteFromContactsTable(String fullName) {
         try (Connection connection = MySqlHelper.getConnection()){
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(  
@@ -31,14 +31,14 @@ public class MySqlContactDeleter {
             int rowsAffected = ps1.executeUpdate();
             MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
             Logger.getInstance().log("deleteFromContactsTable executeUpdate rowsAffected = " + rowsAffected);
-            return true;
+            return rowsAffected;
         } catch (SQLException e) { 
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
 
-    Boolean deleteFromEmailTable(int contacts_id) {
+    int deleteFromEmailTable(int contacts_id) {
         try (Connection connection = MySqlHelper.getConnection()){
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(  
@@ -49,28 +49,28 @@ public class MySqlContactDeleter {
             int rowsAffected = ps1.executeUpdate();
             MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
             Logger.getInstance().log("deleteFromEmailTable executeUpdate rowsAffected = " + rowsAffected);
-            return true;
+            return rowsAffected;
         } catch (SQLException e) { 
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
-    Boolean deleteFromPhoneNumberTable(int contacts_id) {
+    int deleteFromPhoneNumberTable(int contacts_id) {
         try (Connection connection = MySqlHelper.getConnection()){
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(  
             """
-            DELETE FROM contacts
+            DELETE FROM contactApp.phonenumber
             WHERE contacts_id = ?;""");
             ps1.setInt(1, contacts_id);
             int rowsAffected = ps1.executeUpdate();
             MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
-            Logger.getInstance().log("deleteFromContactsTable executeUpdate rowsAffected = " + rowsAffected);
-            return true;
+            Logger.getInstance().log("deleteFromPhoneNumberTable method executeUpdate rowsAffected = " + rowsAffected);
+            return rowsAffected;
         } catch (SQLException e) { 
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
 

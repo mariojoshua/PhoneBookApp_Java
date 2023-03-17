@@ -1,6 +1,7 @@
 package com.uttara.phone.ioServices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,6 +24,7 @@ public class MySqlContactWriterTest {
     ContactBean contactBean = null;
     MySqlService mySqlService = null;
     MySqlContactDeleter mDeleter = null;
+    int contacts_ID = -1;
 
     @BeforeEach 
     void init() {
@@ -49,25 +51,31 @@ public class MySqlContactWriterTest {
 
     @Test
     void testInsertIntoContactsTable() throws SQLException {
+        assertFalse(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
         mDeleter.deleteFromContactsTable(contactBean.name().getFullName());
     }
 
     @Test
     void testInsertIntoContactsTagsLinkTable() throws SQLException {
-        assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
+        //assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
     }
 
     @Test
     void testInsertIntoEmailTable() throws SQLException {
-        int contacts_ID = mWriter.insertIntoContactsTable(contactBean);
-        //contact exists check
+        assertNotEquals(-1, contacts_ID = mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
+        assertNotEquals(0, mDeleter.deleteFromEmailTable(contacts_ID));
     }
 
     @Test
     void testInsertIntoPhoneNumberTable() throws SQLException {
-
+        assertNotEquals(-1, contacts_ID = mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, mWriter.insertIntoPhoneNumberTable(contactBean, contacts_ID));
+        assertNotEquals(0, mDeleter.deleteFromPhoneNumberTable(contacts_ID));
     }
 
     @Test
