@@ -12,9 +12,13 @@ import com.uttara.phone.Logger;
 
 public class MySqlContactWriter {
 
-    private PreparedStatement ps1 = null, ps2 = null;
-    private ResultSet resultSet = null;
-    private Connection connection = null;
+    PreparedStatement ps1 = null;
+    private PreparedStatement ps2 = null;
+    ResultSet resultSet = null;
+
+    public MySqlContactWriter() {
+;
+    }
 
     public boolean write(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -28,35 +32,15 @@ public class MySqlContactWriter {
             Logger.getInstance().log("writeContacts method finished");
             return true;
         } catch (SQLException se) {
-            se.printStackTrace();
+            Logger.getInstance().log("write\n" +  se.getStackTrace().toString());
             return false;
-        }
-    }
-
-    int getPhonebook_ID(ContactBean contactBean) {
-        try(Connection connection = MySqlHelper.getConnection()) {
-            ps1 = connection.prepareStatement("""
-                SELECT ID 
-                FROM phonebook_master 
-                WHERE name = ?""" );
-            ps1.setString(1, contactBean.phoneBookName());
-            resultSet = ps1.executeQuery();
-            int phonebook_ID = -1;
-            while (resultSet.next()) {
-                phonebook_ID = ps1.getResultSet().getInt("ID");
-            }
-            Logger.getInstance().log("getPhonebook_ID method phonebook_ID= " + phonebook_ID);
-            return phonebook_ID != 0 ? phonebook_ID : -1 ;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
         }
     }
 
     int insertIntoContactsTable(ContactBean contactBean) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
-            int phonebook_ID = getPhonebook_ID(contactBean);
+            int phonebook_ID = new MySqlService().getPhonebook_ID(contactBean);
             ps1 = connection.prepareStatement(
                 """
                 INSERT INTO contacts
@@ -73,16 +57,15 @@ public class MySqlContactWriter {
             int rowsAffected = ps1.executeUpdate();
             MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
             Logger.getInstance().log("insertIntoContactsTable rowsAffected= " + rowsAffected);
-            connection.commit();
             resultSet = ps1.getGeneratedKeys();
             int contacts_ID = -1;
             if (resultSet.next()) {
                 contacts_ID = resultSet.getInt(1);
             }
-            Logger.getInstance().log("insertIntoContactsTable executeUpdate contacts_ID= " + contacts_ID);
-            return contacts_ID;
+            Logger.getInstance().log("insertIntoContactsTable generatedKey contacts_ID= " + contacts_ID);
+            return rowsAffected;
         }   catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getInstance().log("insertIntoContactsTable\n" +  e.getStackTrace().toString());
             return -1;
         }    
     }
@@ -90,6 +73,7 @@ public class MySqlContactWriter {
     int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
+            int rowsAffected = 0;
             for (String tag: contactBean.tags()) {
                 ps2 = connection.prepareStatement(
                     """
@@ -97,7 +81,8 @@ public class MySqlContactWriter {
                     (tag)
                     VALUES(?)""", Statement.RETURN_GENERATED_KEYS);
                 ps2.setString(1, tag); 
-                Logger.getInstance().log("insertIntoTagsTable executeUpdate return value = " + ps2.executeUpdate());
+                rowsAffected += ps2.executeUpdate();
+                Logger.getInstance().log("insertIntoTagsTable executeUpdate return value = " + rowsAffected);
                 resultSet = ps2.getGeneratedKeys();
                 int tag_ID = -1;
                 while(resultSet.next()) {
@@ -106,8 +91,9 @@ public class MySqlContactWriter {
                 // insert into Contacts_tags link table
                 insertIntoContactsTagsLinkTable(tag_ID, contacts_ID);
             } 
+            return rowsAffected;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getInstance().log("insertIntoTagsTable\n" + e.getStackTrace().toString());
             return -1;
         }  
     }
@@ -125,12 +111,13 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoContactsTagsLinkTable executeUpdate value = " + ps3.executeUpdate());
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getInstance().log("insertIntoContactsTagsLinkTable\n" +  e.getStackTrace().toString());
             return -1;
         }  
     }
 
     int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) {
+        System.out.println(contacts_ID);
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
@@ -148,7 +135,7 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoEmailTable rowsAffected = " + rowsAffected);     
             return rowsAffected;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getInstance().log("insertIntoEmailTable\n" +  e.getStackTrace().toString());
             return -1;
         }  
     }
@@ -172,6 +159,7 @@ public class MySqlContactWriter {
             return rowsAffected;
         } catch (SQLException e) {
             e.printStackTrace();
+            Logger.getInstance().log("insertIntoPhoneNumberTable\n" +  e.getStackTrace().toString());
             return -1;
         }  
     }

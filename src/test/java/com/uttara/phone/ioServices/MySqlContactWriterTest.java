@@ -1,11 +1,9 @@
 package com.uttara.phone.ioServices;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,13 +38,13 @@ public class MySqlContactWriterTest {
             List.of("army","asia" , "chola"), 
             List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1922, 2, 14)));
+            LocalDate.of(1922, 2, 14)));  
     }
 
     @Test
     void testGetPhoneBook_ID() {
         assertTrue(mySqlService.contactBookExists(contactBean.phoneBookName()));
-        assertNotEquals(-1,  mWriter.getPhonebook_ID(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getPhonebook_ID(contactBean));
     }
 
     @Test
@@ -60,20 +58,27 @@ public class MySqlContactWriterTest {
     @Test
     void testInsertIntoContactsTagsLinkTable() throws SQLException {
         //assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
+        assertNotEquals(0, mDeleter.deleteFromEmailTable(contacts_ID));
     }
 
     @Test
     void testInsertIntoEmailTable() throws SQLException {
-        assertNotEquals(-1, contacts_ID = mWriter.insertIntoContactsTable(contactBean));
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
         assertNotEquals(0, mDeleter.deleteFromEmailTable(contacts_ID));
     }
 
     @Test
     void testInsertIntoPhoneNumberTable() throws SQLException {
-        assertNotEquals(-1, contacts_ID = mWriter.insertIntoContactsTable(contactBean));
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertNotEquals(-1, mWriter.insertIntoPhoneNumberTable(contactBean, contacts_ID));
         assertNotEquals(0, mDeleter.deleteFromPhoneNumberTable(contacts_ID));
     }

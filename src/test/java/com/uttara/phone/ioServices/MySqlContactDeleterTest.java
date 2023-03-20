@@ -3,7 +3,6 @@ package com.uttara.phone.ioServices;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,14 +39,15 @@ public class MySqlContactDeleterTest {
             List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
             Map.of("dateOfBirth",
             LocalDate.of(1525, 2, 14)));
-            contacts_ID = mWriter.insertIntoContactsTable(contactBean);
+            mWriter.insertIntoContactsTable(contactBean);
+            contacts_ID = mySqlService.getContacts_ID(phoneBookName);
     }
 
     @Test
     void testGetContacts_ID() {
-        assertNotEquals(-1, mDeleter.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertNotEquals(0, mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
-        assertEquals(-1, mDeleter.getContacts_ID(contactBean.name().getFullName()));
+        assertEquals(-1, mySqlService.getContacts_ID(contactBean.name().getFullName()));
     }
 
     @Test
@@ -62,14 +62,11 @@ public class MySqlContactDeleterTest {
         assertEquals(0, mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
     }
 
-    @Test
-    void testDeleteFromContactsTagsLinkTable() {
-        
-    }
+
 
     @Test
     void testDeleteFromEmailTable() {
-        assertNotEquals(-1, contacts_ID = mDeleter.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertTrue(mySqlService.contactBookExists(contactBean.phoneBookName()));
         assertNotEquals(0, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
         Logger.getInstance().log("contacts_ID = " + contacts_ID);
@@ -79,7 +76,7 @@ public class MySqlContactDeleterTest {
 
     @Test
     void testDeleteFromPhoneNumberTable() {      
-        assertNotEquals(-1, contacts_ID = mDeleter.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertNotEquals(0, mWriter.insertIntoPhoneNumberTable(contactBean, contacts_ID));
         assertNotEquals(0, mDeleter.deleteFromPhoneNumberTable(contacts_ID));
         assertEquals(0, mDeleter.deleteFromPhoneNumberTable(contacts_ID));
@@ -89,14 +86,27 @@ public class MySqlContactDeleterTest {
     
     @Test
     void testGetTags_ID() {
-        
+        mySqlService.getTags_ID(contacts_ID);
     }
-    
+
+    @Test
+    void testNumberOfContactsLinkedWithTags() {
+        mDeleter.numberOfContactsLinkedWithTags(contacts_ID) ;
+    }
 
     @Test
     void testDeleteFromTagsTable() {
-        
+        assertEquals(0, mDeleter.deleteFromTagsTable(contacts_ID));
     }
+    
+    @Test
+    void testDeleteFromContactsTagsLinkTable() {
+        mDeleter.deleteFromContactsTagsLinkTable(contacts_ID);
+    }
+
+
+
+
 
     @AfterEach 
     void kill() {

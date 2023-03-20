@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.sql.SQLTransientConnectionException;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.uttara.phone.ContactBean;
@@ -131,7 +133,7 @@ public class MySqlService extends IOService {
     @Override
     public Boolean contactExists(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()){
-            int phonebook_ID = mWriter.getPhonebook_ID(contactBean);
+            int phonebook_ID = getPhonebook_ID(contactBean);
             ps1 = connection.prepareStatement(
             """
             SELECT fullname
@@ -145,6 +147,67 @@ public class MySqlService extends IOService {
             //rollbackSQLCommit(connection);    
             e.printStackTrace();
             return false;
+        }
+    }
+
+    int getPhonebook_ID(ContactBean contactBean) {
+        try(Connection connection = MySqlHelper.getConnection()) {
+            ps1 = connection.prepareStatement("""
+                SELECT ID 
+                FROM phonebook_master 
+                WHERE name = ?""" );
+            ps1.setString(1, contactBean.phoneBookName());
+            resultSet = ps1.executeQuery();
+            int phonebook_ID = -1;
+            while (resultSet.next()) {
+                phonebook_ID = ps1.getResultSet().getInt("ID");
+            }
+            Logger.getInstance().log("getPhonebook_ID method phonebook_ID= " + phonebook_ID);
+            return phonebook_ID != 0 ? phonebook_ID : -1 ;
+        } catch (SQLException e) {
+            Logger.getInstance().log("getPhonebook_ID\n" +  e.getStackTrace().toString());
+            return -1;
+        }
+    }
+
+    int getContacts_ID(String fullName) {
+        try(Connection connection = MySqlHelper.getConnection()) {
+            ps1 = connection.prepareStatement("""
+                SELECT ID 
+                FROM contactApp.contacts 
+                WHERE fullname = ?""" );
+            ps1.setString(1, fullName);
+            resultSet = ps1.executeQuery();
+            int contacts_ID = -1;
+            while (resultSet.next()) {
+                contacts_ID = ps1.getResultSet().getInt("ID");
+            }
+            Logger.getInstance().log("getContacts_ID method phonebook_ID= " + contacts_ID);
+            return contacts_ID;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1 ;
+        }
+    }
+
+    List<Integer> getTags_ID(int contacts_id) {
+        try(Connection connection = MySqlHelper.getConnection()) {
+            ps1 = connection.prepareStatement("""
+                SELECT tag_ID 
+                FROM contactApp.contacts_tags 
+                WHERE contacts_ID = ?""" );
+            ps1.setInt(1, contacts_id);
+            resultSet = ps1.executeQuery();
+            int phonebook_ID = -1;
+            List<Integer> returnList = new LinkedList<Integer>();
+            while (resultSet.next()) {
+                returnList.add(ps1.getResultSet().getInt("ID"));
+            }
+            Logger.getInstance().log("getTags_ID method tags_ID count = " + returnList.size());
+            return returnList.size() != 0 ? returnList : Collections.emptyList();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Collections.emptyList() ;
         }
     }
 
