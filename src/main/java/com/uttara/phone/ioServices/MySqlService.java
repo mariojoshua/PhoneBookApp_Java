@@ -198,7 +198,6 @@ public class MySqlService extends IOService {
                 WHERE contacts_ID = ?""" );
             ps1.setInt(1, contacts_id);
             resultSet = ps1.executeQuery();
-            int phonebook_ID = -1;
             List<Integer> returnList = new LinkedList<Integer>();
             while (resultSet.next()) {
                 returnList.add(ps1.getResultSet().getInt("ID"));

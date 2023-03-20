@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.sql.Date;
 
 import com.uttara.phone.ContactBean;
@@ -14,6 +17,7 @@ public class MySqlContactWriter {
 
     PreparedStatement ps1 = null;
     private PreparedStatement ps2 = null;
+    PreparedStatement ps3 = null;
     ResultSet resultSet = null;
 
     public MySqlContactWriter() {
@@ -70,10 +74,19 @@ public class MySqlContactWriter {
         }    
     }
 
-    int insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    int insertTags(int contacts_ID) {
+        // checkIfTagExists and add tag id to List of tags
+        // If not create tags in tags table and add tag id to List of tags
+        // with the ids generated insert into contacts_tags table, 
+        return -1;
+    }    
+
+    List<Integer> insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
+            int tag_ID = -1;
+            List<Integer> tagIDList = new LinkedList<>();
             for (String tag: contactBean.tags()) {
                 ps2 = connection.prepareStatement(
                     """
@@ -82,35 +95,44 @@ public class MySqlContactWriter {
                     VALUES(?)""", Statement.RETURN_GENERATED_KEYS);
                 ps2.setString(1, tag); 
                 rowsAffected += ps2.executeUpdate();
-                Logger.getInstance().log("insertIntoTagsTable executeUpdate return value = " + rowsAffected);
+                MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
                 resultSet = ps2.getGeneratedKeys();
-                int tag_ID = -1;
-                while(resultSet.next()) {
+                while (resultSet.next()) {
                     tag_ID = resultSet.getInt(1);
+                    tagIDList.add(tag_ID);
                 }
-                // insert into Contacts_tags link table
-                insertIntoContactsTagsLinkTable(tag_ID, contacts_ID);
+                Logger.getInstance().log("tag_Id = " + tag_ID);
             } 
-            return rowsAffected;
+            // insert into Contacts_tags link table
+            //insertIntoContactsTagsLinkTable(tagIDList, contacts_ID);
+            Logger.getInstance().log("insertIntoTagsTable executeUpdate rowsAffected = " + rowsAffected);
+            return tagIDList;
         } catch (SQLException e) {
             Logger.getInstance().log("insertIntoTagsTable\n" + e.getStackTrace().toString());
-            return -1;
+            return Collections.emptyList();
         }  
     }
 
-    int insertIntoContactsTagsLinkTable(int tag_ID,  int contacts_ID) throws SQLException {
-        try(Connection connection = MySqlHelper.getConnection()) {
+    int insertIntoContactsTagsLinkTable(List<Integer> tagIDList,  int contacts_ID)  {
+        try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
-            PreparedStatement ps3 = connection.prepareStatement
-            ("""
-            INSERT INTO contacts_tags
-            (contacts_ID, tag_ID)
-            VALUES(?,?)""");
-            ps3.setInt(1, contacts_ID);
-            ps3.setInt(2, tag_ID);
-            Logger.getInstance().log("insertIntoContactsTagsLinkTable executeUpdate value = " + ps3.executeUpdate());
-            return 0;
+            int rowsAffected = 0;
+            for (int tag_ID: tagIDList) {
+                System.out.println(tag_ID);
+                ps3 = connection.prepareStatement
+                    ("""
+                    INSERT INTO contactApp.contacts_tags
+                    (contacts_ID, tag_ID)
+                    VALUES(?,?)""");
+                ps3.setInt(1, contacts_ID);
+                ps3.setInt(2, tag_ID);
+                rowsAffected += ps3.executeUpdate();
+                MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
+            }
+            Logger.getInstance().log("insertIntoContactsTagsLinkTable rowsAffected = " + rowsAffected);
+            return rowsAffected;
         } catch (SQLException e) {
+            //Overload log method to take array of Stack Track elements as 2nd parameter
             Logger.getInstance().log("insertIntoContactsTagsLinkTable\n" +  e.getStackTrace().toString());
             return -1;
         }  

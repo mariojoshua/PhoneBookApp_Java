@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class MySqlContactWriterTest {
     MySqlService mySqlService = null;
     MySqlContactDeleter mDeleter = null;
     int contacts_ID = -1;
+    List<Integer> tagIDList = null;
 
     @BeforeEach 
     void init() {
@@ -56,16 +58,6 @@ public class MySqlContactWriterTest {
     }
 
     @Test
-    void testInsertIntoContactsTagsLinkTable() throws SQLException {
-        //assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
-        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
-        assertTrue(mySqlService.contactExists(contactBean));
-        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
-        assertNotEquals(-1, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
-        assertNotEquals(0, mDeleter.deleteFromEmailTable(contacts_ID));
-    }
-
-    @Test
     void testInsertIntoEmailTable() throws SQLException {
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
@@ -85,7 +77,20 @@ public class MySqlContactWriterTest {
 
     @Test
     void testInsertIntoTagsTable() throws SQLException {
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, mWriter.insertIntoTagsTable(contactBean, contacts_ID).size());
+    }
 
+    @Test
+    void testInsertIntoContactsTagsLinkTable() throws SQLException {
+        //assertNotEquals(-1,mWriter.insertIntoContactsTagsLinkTable(0, 0));
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));        
+        assertNotEquals(-1, mWriter.insertIntoContactsTagsLinkTable(tagIDList, contacts_ID));
     }
 
     @Test
