@@ -84,7 +84,10 @@ public class MySqlContactWriterTest {
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID);
         assertNotEquals(0, tagIDList.size());
-        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
     }
 
     @Test
@@ -98,7 +101,10 @@ public class MySqlContactWriterTest {
         List<Integer> expected = tagIDList;
         assertIterableEquals(expected, tagIDList = mySqlService.getTags_ID(contacts_ID));
         assertNotEquals(-1, mDeleter.deleteFromContactsTagsLinkTable(contacts_ID));
-        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
     }
 
     @Test

@@ -75,19 +75,17 @@ public class MySqlContactDeleter {
         }
     }
 
-    int deleteFromTagsTable(List<Integer> tagIDList) {
+    int deleteFromTagsTable(int tag_ID) {
         try (Connection connection = MySqlHelper.getConnection()){
             connection.setAutoCommit(false);
             int rowsAffected = 0;
-            for (int tag_ID: tagIDList) {
-                    ps1 = connection.prepareStatement(  
+            ps1 = connection.prepareStatement(  
                 """
                 DELETE FROM contactApp.tags
                 WHERE ID = ?;""");
-                ps1.setInt(1, tag_ID);
-                rowsAffected += ps1.executeUpdate();
-                MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
-            }
+            ps1.setInt(1, tag_ID);
+            rowsAffected = ps1.executeUpdate();
+            MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
             Logger.getInstance().log("deleteFromTagsTable executeUpdate rowsAffected = " + rowsAffected);
             return rowsAffected;
         } catch (SQLException e) { 
@@ -98,7 +96,13 @@ public class MySqlContactDeleter {
 
     int deleteTags(int contacts_ID) {
         //get tag_id's from contact id
+        List<Integer> tagsList =  mySqlService.getTags_ID(contacts_ID);
         // in contacts_tags table, if tag exists only for 1 contact
+        for (int tag_ID: tagsList) {
+            if (numberOfContactsLinkedWithTags(tag_ID) == 1) {
+                deleteFromTagsTable(tagsList);
+            }
+        }
         //delete tag
         //else keep tag and delete entries from contacts_tags table
         return -1;

@@ -96,7 +96,9 @@ public class MySqlContactDeleterTest {
         assertTrue(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertNotEquals(-1, tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));
-        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
     }
 
     @Test
@@ -105,8 +107,13 @@ public class MySqlContactDeleterTest {
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID);
         assertNotEquals(0, tagIDList.size());
-        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
-        assertEquals(0, mDeleter.deleteFromTagsTable(tagIDList));
+        //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
+        //assertEquals(0, mDeleter.deleteFromTagsTable(tagIDList));
+        assertEquals(0, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertEquals(0, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
     }
     
     @Test
@@ -119,7 +126,18 @@ public class MySqlContactDeleterTest {
         List<Integer> expected = tagIDList;
         assertIterableEquals(expected, tagIDList = mySqlService.getTags_ID(contacts_ID));
         assertNotEquals(-1, mDeleter.deleteFromContactsTagsLinkTable(contacts_ID));
-        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+    }
+
+    @Test
+    void testDeleteTags() {
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1,tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));        
+        assertNotEquals(-1, mWriter.insertIntoContactsTagsLinkTable(tagIDList, contacts_ID));
+        assertNotEquals(-1, mDeleter.deleteTags(contacts_ID));
     }
 
 
