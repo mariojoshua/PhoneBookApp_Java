@@ -36,7 +36,7 @@ public class MySqlContactWriter {
             Logger.getInstance().log("writeContacts method finished");
             return true;
         } catch (SQLException se) {
-            Logger.getInstance().log("write\n" +  se.getStackTrace().toString());
+            Logger.getInstance().log("write\n" +  se.getMessage());
             return false;
         }
     }
@@ -69,7 +69,7 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoContactsTable generatedKey contacts_ID= " + contacts_ID);
             return rowsAffected;
         }   catch (SQLException e) {
-            Logger.getInstance().log("insertIntoContactsTable\n" +  e.getStackTrace().toString());
+            Logger.getInstance().log("insertIntoContactsTable\n" +  e.getMessage());
             return -1;
         }    
     }
@@ -81,7 +81,7 @@ public class MySqlContactWriter {
         return -1;
     }    
 
-    List<Integer> insertIntoTagsTable(ContactBean contactBean, int contacts_ID) throws SQLException {
+    List<Integer> insertIntoTagsTable(ContactBean contactBean, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
@@ -108,7 +108,7 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoTagsTable executeUpdate rowsAffected = " + rowsAffected);
             return tagIDList;
         } catch (SQLException e) {
-            Logger.getInstance().log("insertIntoTagsTable\n" + e.getStackTrace().toString());
+            Logger.getInstance().log("insertIntoTagsTable\n" + e.getMessage());
             return Collections.emptyList();
         }  
     }
@@ -133,7 +133,7 @@ public class MySqlContactWriter {
             return rowsAffected;
         } catch (SQLException e) {
             //Overload log method to take array of Stack Track elements as 2nd parameter
-            Logger.getInstance().log("insertIntoContactsTagsLinkTable\n" +  e.getStackTrace().toString());
+            Logger.getInstance().log("insertIntoContactsTagsLinkTable\n" +  e.getMessage());
             return -1;
         }  
     }
@@ -157,7 +157,7 @@ public class MySqlContactWriter {
             Logger.getInstance().log("insertIntoEmailTable rowsAffected = " + rowsAffected);     
             return rowsAffected;
         } catch (SQLException e) {
-            Logger.getInstance().log("insertIntoEmailTable\n" +  e.getStackTrace().toString());
+            Logger.getInstance().log("insertIntoEmailTable\n" +  e.getMessage());
             return -1;
         }  
     }
@@ -181,7 +181,7 @@ public class MySqlContactWriter {
             return rowsAffected;
         } catch (SQLException e) {
             e.printStackTrace();
-            Logger.getInstance().log("insertIntoPhoneNumberTable\n" +  e.getStackTrace().toString());
+            Logger.getInstance().log("insertIntoPhoneNumberTable\n" +  e.getMessage());
             return -1;
         }  
     }

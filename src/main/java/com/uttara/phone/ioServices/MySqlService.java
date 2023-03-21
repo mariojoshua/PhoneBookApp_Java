@@ -200,7 +200,7 @@ public class MySqlService extends IOService {
             resultSet = ps1.executeQuery();
             List<Integer> returnList = new LinkedList<Integer>();
             while (resultSet.next()) {
-                returnList.add(ps1.getResultSet().getInt("ID"));
+                returnList.add(ps1.getResultSet().getInt("tag_ID"));
             }
             Logger.getInstance().log("getTags_ID method tags_ID count = " + returnList.size());
             return returnList.size() != 0 ? returnList : Collections.emptyList();

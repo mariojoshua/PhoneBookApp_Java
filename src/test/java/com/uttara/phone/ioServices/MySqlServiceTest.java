@@ -115,6 +115,10 @@ public class MySqlServiceTest {
         // assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", phoneBookName));
     }
 
+    @Test
+    void testGetTags_ID() {
+        mySqlService.getTags_ID(contacts_ID);
+    }
 
    
     @Test
