@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
@@ -74,16 +75,19 @@ public class MySqlContactDeleter {
         }
     }
 
-    int deleteFromTagsTable(int tag_ID) {
+    int deleteFromTagsTable(List<Integer> tagIDList) {
         try (Connection connection = MySqlHelper.getConnection()){
             connection.setAutoCommit(false);
-            ps1 = connection.prepareStatement(  
-            """
-            DELETE FROM contactApp.tags
-            WHERE ID = ?;""");
-            ps1.setInt(1, tag_ID);
-            int rowsAffected = ps1.executeUpdate();
-            MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
+            int rowsAffected = 0;
+            for (int tag_ID: tagIDList) {
+                    ps1 = connection.prepareStatement(  
+                """
+                DELETE FROM contactApp.tags
+                WHERE ID = ?;""");
+                ps1.setInt(1, tag_ID);
+                rowsAffected += ps1.executeUpdate();
+                MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
+            }
             Logger.getInstance().log("deleteFromTagsTable executeUpdate rowsAffected = " + rowsAffected);
             return rowsAffected;
         } catch (SQLException e) { 

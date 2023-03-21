@@ -80,7 +80,8 @@ public class MySqlContactWriterTest {
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
-        assertNotEquals(-1, mWriter.insertIntoTagsTable(contactBean, contacts_ID).size());
+        assertNotEquals(-1, tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
     }
 
     @Test
