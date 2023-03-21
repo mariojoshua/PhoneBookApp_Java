@@ -48,16 +48,16 @@ public class MySqlService extends IOService {
     public Boolean contactBookExists(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()){
             ps1 = connection.prepareStatement(
-            """
-            SELECT name
-            FROM contactApp.phonebook_master 
-            WHERE name LIKE ?;""");
+                """
+                SELECT name
+                FROM contactApp.phonebook_master 
+                WHERE name LIKE ?;""");
             ps1.setString(1,"%" + phoneBookName + "%");
             resultSet = ps1.executeQuery(); 
             String nameFromDatabase = "";
             while (resultSet.next()) {              
                 nameFromDatabase = resultSet.getString("name");       
-                Logger.getInstance().log("nameFromDatabase = " + nameFromDatabase);
+                Logger.getInstance().log("phoneBook nameFromDatabase = " + nameFromDatabase);
             }
             boolean returnValue = phoneBookName.toUpperCase().equals(nameFromDatabase) ? true : false;
             Logger.getInstance().log("contactBookExists method return value = " + returnValue );

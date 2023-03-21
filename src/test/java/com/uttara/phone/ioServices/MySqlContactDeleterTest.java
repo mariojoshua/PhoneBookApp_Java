@@ -56,7 +56,13 @@ public class MySqlContactDeleterTest {
 
     @Test
     void testDelete() {
-        
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertTrue(mySqlService.contactBookExists(contactBean.phoneBookName()));
+        assertNotEquals(0, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
+        assertNotEquals(0, mWriter.insertIntoPhoneNumberTable(contactBean, contacts_ID));
+        assertNotEquals(-1,tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));        
+        assertNotEquals(-1, mWriter.insertIntoContactsTagsLinkTable(tagIDList, contacts_ID));
+        assertNotEquals(-1, mDeleter.delete(contactBean.name().getFullName()));
     }
 
     @Test
@@ -73,7 +79,7 @@ public class MySqlContactDeleterTest {
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
         assertTrue(mySqlService.contactBookExists(contactBean.phoneBookName()));
         assertNotEquals(0, mWriter.insertIntoEmailTable(contactBean, contacts_ID));
-        Logger.getInstance().log("contacts_ID = " + contacts_ID);
+        //Logger.getInstance().log("contacts_ID = " + contacts_ID);
         assertNotEquals(0, mDeleter.deleteFromEmailTable(contacts_ID));
         assertNotEquals(0, mDeleter.deleteFromContactsTable(contactBean.name().getFullName()));
     }
@@ -129,6 +135,7 @@ public class MySqlContactDeleterTest {
         //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
+        assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
     }
 
     @Test
@@ -138,6 +145,7 @@ public class MySqlContactDeleterTest {
         assertNotEquals(-1,tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));        
         assertNotEquals(-1, mWriter.insertIntoContactsTagsLinkTable(tagIDList, contacts_ID));
         assertNotEquals(-1, mDeleter.deleteTags(contacts_ID));
+        //add two contact beans with shared tag and see if it gets deleted or not
     }
 
 

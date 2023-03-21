@@ -139,7 +139,6 @@ public class MySqlContactWriter {
     }
 
     int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) {
-        System.out.println(contacts_ID);
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
