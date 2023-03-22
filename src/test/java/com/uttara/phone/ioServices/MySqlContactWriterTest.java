@@ -133,7 +133,10 @@ public class MySqlContactWriterTest {
 
     @Test
     void testWrite() {
-
+        assertTrue(mWriter.write(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertTrue(mDeleter.delete(contactBean.name().getFullName()));
+        assertFalse(mySqlService.contactExists(contactBean));
     }
 
     @AfterEach  

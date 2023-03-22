@@ -29,13 +29,20 @@ public class MySqlContactWriter {
         try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             // insert into contacts table
-            int contacts_ID = insertIntoContactsTable(contactBean);
-            int phoneNumber_ID = insertIntoPhoneNumberTable(contactBean, contacts_ID);
-            int email_ID = insertIntoEmailTable(contactBean,contacts_ID);
-            //int tags_ID = insertIntoTagsTable(contactBean,contacts_ID);
-            connection.commit();
-            Logger.getInstance().log("writeContacts method finished");
-            return true;
+            if (mySqlService.contactExists(contactBean) == false) {
+                insertIntoContactsTable(contactBean);
+                int contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName());
+                insertIntoPhoneNumberTable(contactBean, contacts_ID);
+                insertIntoEmailTable(contactBean,contacts_ID);
+                insertTags(contactBean, contacts_ID);
+                //int tags_ID = insertIntoTagsTable(contactBean,contacts_ID);
+                connection.commit();
+                Logger.getInstance().log("writeContacts method finished");
+                return true;
+            } else {
+                return false;
+            }
+
         } catch (SQLException se) {
             Logger.getInstance().log("write\n" +  se.getMessage());
             return false;
