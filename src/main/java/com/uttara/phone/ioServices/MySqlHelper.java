@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.uttara.phone.Logger;
-
 class MySqlHelper {
     PreparedStatement ps1 = null, ps2 = null;
     ResultSet resultSet = null;

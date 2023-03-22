@@ -1,7 +1,5 @@
 package com.uttara.phone;
 
-import java.util.Objects;
-
 /**
  * Since address contains further dependencies, it has to have its own class
  * with to String, hashcode and equals ovveridden.

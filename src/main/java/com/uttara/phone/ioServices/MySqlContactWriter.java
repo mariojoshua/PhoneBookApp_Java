@@ -1,14 +1,13 @@
 package com.uttara.phone.ioServices;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.sql.Date;
 
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
@@ -107,7 +106,7 @@ public class MySqlContactWriter {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
             int tag_ID = -1;
-            List<Integer> tagIDList = new LinkedList<>();
+            // List<Integer> tagIDList = new LinkedList<>();
             ps2 = connection.prepareStatement(
                 """
                 INSERT INTO contactApp.tags

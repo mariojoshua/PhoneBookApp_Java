@@ -1,10 +1,5 @@
 package com.uttara.phone;
 
-/**
- * Utility class only for input validations
- *@author mariojoshuaaugustine
- */
-import java.util.Date;
 import java.util.Scanner;
 
 public class PhoneHelper {
