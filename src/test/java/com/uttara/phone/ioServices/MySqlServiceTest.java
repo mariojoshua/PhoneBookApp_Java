@@ -117,7 +117,7 @@ public class MySqlServiceTest {
 
     @Test
     void testGetTags_ID() {
-        mySqlService.getTags_ID(contacts_ID);
+        mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
     }
 
    

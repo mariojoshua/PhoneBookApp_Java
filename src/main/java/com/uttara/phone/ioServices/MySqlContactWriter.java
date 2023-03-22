@@ -19,9 +19,10 @@ public class MySqlContactWriter {
     private PreparedStatement ps2 = null;
     PreparedStatement ps3 = null;
     ResultSet resultSet = null;
+    MySqlService mySqlService = null;
 
     public MySqlContactWriter() {
-;
+       this.mySqlService = new MySqlService();
     }
 
     public boolean write(ContactBean contactBean) {
@@ -31,7 +32,7 @@ public class MySqlContactWriter {
             int contacts_ID = insertIntoContactsTable(contactBean);
             int phoneNumber_ID = insertIntoPhoneNumberTable(contactBean, contacts_ID);
             int email_ID = insertIntoEmailTable(contactBean,contacts_ID);
-            int tags_ID = insertIntoTagsTable(contactBean,contacts_ID);
+            //int tags_ID = insertIntoTagsTable(contactBean,contacts_ID);
             connection.commit();
             Logger.getInstance().log("writeContacts method finished");
             return true;
@@ -74,42 +75,50 @@ public class MySqlContactWriter {
         }    
     }
 
-    int insertTags(int contacts_ID) {
+    int insertTags(ContactBean contactBean, int contacts_ID) {
+        int tag_ID = 0;
+        List<Integer> tagIDList = new LinkedList<>();
         // checkIfTagExists and add tag id to List of tags
         // If not create tags in tags table and add tag id to List of tags
-        // with the ids generated insert into contacts_tags table, 
-        return -1;
+        for (String tag: contactBean.tags()) {
+            tag_ID = mySqlService.checkIfTagExistsInTagsTable(tag);
+            if (tag_ID != 0) { //if tag exists
+                tagIDList.add(tag_ID);
+            } else {
+                tag_ID = insertIntoTagsTable(tag, contacts_ID);
+                tagIDList.add(tag_ID);
+            }
+        }
+        Logger.getInstance().log("insertIntoTagsTable tagIDList= " + tagIDList.toString());
+        // with the ids generated insert into contacts_tags table
+        int rowsAffected = insertIntoContactsTagsLinkTable(tagIDList, contacts_ID);
+        return rowsAffected;
     }    
 
-    List<Integer> insertIntoTagsTable(ContactBean contactBean, int contacts_ID) {
+    int insertIntoTagsTable(String tag, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
             int tag_ID = -1;
             List<Integer> tagIDList = new LinkedList<>();
-            for (String tag: contactBean.tags()) {
-                ps2 = connection.prepareStatement(
-                    """
-                    INSERT INTO contactApp.tags
-                    (tag)
-                    VALUES(?)""", Statement.RETURN_GENERATED_KEYS);
-                ps2.setString(1, tag); 
-                rowsAffected += ps2.executeUpdate();
-                MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
-                resultSet = ps2.getGeneratedKeys();
-                while (resultSet.next()) {
-                    tag_ID = resultSet.getInt(1);
-                    tagIDList.add(tag_ID);
-                }
-                Logger.getInstance().log("tag_Id = " + tag_ID);
-            } 
-            // insert into Contacts_tags link table
-            //insertIntoContactsTagsLinkTable(tagIDList, contacts_ID);
+            ps2 = connection.prepareStatement(
+                """
+                INSERT INTO contactApp.tags
+                (tag)
+                VALUES(?)""", Statement.RETURN_GENERATED_KEYS);
+            ps2.setString(1, tag); 
+            rowsAffected += ps2.executeUpdate();
+            MySqlHelper.isUpdateExecutedOrNot(rowsAffected, connection);
+            resultSet = ps2.getGeneratedKeys();
+            while (resultSet.next()) {
+                tag_ID = resultSet.getInt(1);
+            }
+            Logger.getInstance().log("insertIntoTagsTable tag_Id = " + tag_ID);
             Logger.getInstance().log("insertIntoTagsTable executeUpdate rowsAffected = " + rowsAffected);
-            return tagIDList;
+            return tag_ID;
         } catch (SQLException e) {
             Logger.getInstance().log("insertIntoTagsTable\n" + e.getMessage());
-            return Collections.emptyList();
+            return -1;
         }  
     }
 

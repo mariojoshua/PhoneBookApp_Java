@@ -3,12 +3,10 @@ package com.uttara.phone.ioServices;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +25,7 @@ public class MySqlContactWriterTest {
     MySqlContactDeleter mDeleter = null;
     int contacts_ID = -1;
     List<Integer> tagIDList = null;
+    int tag_ID = -1;
 
     @BeforeEach 
     void init() {
@@ -82,7 +81,13 @@ public class MySqlContactWriterTest {
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
-        tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID);
+        tagIDList = new LinkedList<>();
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(0), contacts_ID));
+        tagIDList.add(tag_ID);
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(1), contacts_ID));
+        tagIDList.add(tag_ID);
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(2), contacts_ID));
+        tagIDList.add(tag_ID);
         assertNotEquals(0, tagIDList.size());
         //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
@@ -96,15 +101,34 @@ public class MySqlContactWriterTest {
         assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
         assertTrue(mySqlService.contactExists(contactBean));
         assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
-        assertNotEquals(-1,tagIDList = mWriter.insertIntoTagsTable(contactBean, contacts_ID));        
+        tagIDList = new LinkedList<>();
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(0), contacts_ID));
+        tagIDList.add(tag_ID);
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(1), contacts_ID));
+        tagIDList.add(tag_ID);
+        assertNotEquals(-1,  tag_ID = mWriter.insertIntoTagsTable(contactBean.tags().get(2), contacts_ID));
+        tagIDList.add(tag_ID);        
         assertNotEquals(-1, mWriter.insertIntoContactsTagsLinkTable(tagIDList, contacts_ID));
         List<Integer> expected = tagIDList;
-        assertIterableEquals(expected, tagIDList = mySqlService.getTags_ID(contacts_ID));
+        assertIterableEquals(expected, tagIDList = mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID));
         assertNotEquals(-1, mDeleter.deleteFromContactsTagsLinkTable(contacts_ID));
         //assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(0)));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(1)));
         assertNotEquals(-1, mDeleter.deleteFromTagsTable(tagIDList.get(2)));
+    }
+
+    @Test
+    void testInsertTags() {
+        assertNotEquals(-1, mWriter.insertIntoContactsTable(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean));
+        assertNotEquals(-1, contacts_ID = mySqlService.getContacts_ID(contactBean.name().getFullName()));
+        assertNotEquals(-1, mWriter.insertTags(contactBean, contacts_ID));
+        //assertNotEquals(-1, mWriter.insertTags(contactBean, contacts_ID));
+        assertNotEquals(0, mySqlService.checkIfTagExistsInTagsTable(contactBean.tags().get(0)));
+        assertNotEquals(0, mySqlService.checkIfTagExistsInTagsTable(contactBean.tags().get(1)));
+        assertNotEquals(0, mySqlService.checkIfTagExistsInTagsTable(contactBean.tags().get(2)));
+        assertNotEquals(-1, mDeleter.deleteTags(contacts_ID));   
     }
 
     @Test

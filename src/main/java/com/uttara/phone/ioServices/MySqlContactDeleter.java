@@ -106,9 +106,10 @@ public class MySqlContactDeleter {
     }
 
     int deleteTags(int contacts_ID) {
+        Logger.getInstance().log("deleteTags method contacts_ID = " + contacts_ID);
         int rowsAffected = 0;
         //get tag_id's from contact id
-        List<Integer> tagsList =  mySqlService.getTags_ID(contacts_ID);
+        List<Integer> tagsList =  mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
         // in contacts_tags table, if tag exists only for 1 contact     
         //delete tag
         Map<Integer,Integer>linkedContactsMap = new LinkedHashMap<>();
