@@ -91,12 +91,18 @@ public class MySqlServiceTest {
     @Test
     public void testWriteContacts() {  
         assertTrue (mySqlService.createContactBook(contactBean.phoneBookName()));
+        assertTrue (mySqlService.createContactBook(contactBean2.phoneBookName()));
         assertTrue (mySqlService.writeContacts(contactBean));
+        assertTrue (mySqlService.writeContacts(contactBean2));
         assertTrue(mySqlService.contactExists(contactBean));
+        assertTrue(mySqlService.contactExists(contactBean2));
         assertFalse (mySqlService.writeContacts(contactBean));
+        assertFalse (mySqlService.writeContacts(contactBean2));
         assertTrue(mySqlService.deleteContact(contactBean.phoneBookName(), contactBean.name().getFullName()));
+        assertTrue(mySqlService.deleteContact(contactBean2.phoneBookName(), contactBean2.name().getFullName()));
         assertFalse(mySqlService.contactExists(contactBean));
         assertTrue (mySqlService.deleteContactBook(contactBean.phoneBookName()));
+        assertTrue (mySqlService.deleteContactBook(contactBean2.phoneBookName()));
     }
 
     @Test
@@ -112,12 +118,20 @@ public class MySqlServiceTest {
 
     @Test
     public void testDeleteContact() {
-        // assertTrue (mySqlService.createContactBook(phoneBookName));
-        // assertTrue (mySqlService.writeContacts(contactBean));
-        // assertTrue (mySqlService.contactExists( new ContactBean("lake cleaning group", new Name("Nambi"))));
-        // assertFalse (mySqlService.writeContacts(contactBean));
-        // assertEquals(List.of(contactBean),mySqlService.readContact(phoneBookName));
-        // assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", phoneBookName));
+        assertTrue (mySqlService.createContactBook(contactBean3.phoneBookName()));
+        assertTrue (mySqlService.createContactBook(contactBean4.phoneBookName()));
+        assertTrue (mySqlService.writeContacts(contactBean3));
+        assertTrue (mySqlService.writeContacts(contactBean4));
+        assertTrue(mySqlService.contactExists(contactBean3));
+        assertTrue(mySqlService.contactExists(contactBean4));
+        assertFalse (mySqlService.writeContacts(contactBean3));
+        assertFalse (mySqlService.writeContacts(contactBean4));
+        assertTrue(mySqlService.deleteContact(contactBean3.phoneBookName(), contactBean3.name().getFullName()));
+        assertTrue(mySqlService.deleteContact(contactBean4.phoneBookName(), contactBean4.name().getFullName()));
+        assertFalse(mySqlService.contactExists(contactBean3));
+        assertFalse(mySqlService.contactExists(contactBean4));
+        assertTrue (mySqlService.deleteContactBook(contactBean3.phoneBookName()));
+        assertTrue (mySqlService.deleteContactBook(contactBean4.phoneBookName()));
     }
 
     @Test
