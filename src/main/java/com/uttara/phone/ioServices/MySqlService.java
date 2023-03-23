@@ -1,14 +1,9 @@
 package com.uttara.phone.ioServices;
 
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
-import java.sql.SQLTransientConnectionException;
-import java.sql.Statement;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +22,10 @@ public class MySqlService extends IOService {
         try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(
-                    """
-                            INSERT INTO contactApp.phonebook_master
-                            (name)
-                            VALUES(?)""");
+                """
+                INSERT INTO contactApp.phonebook_master
+                (name)
+                VALUES(?)""");
             ps1.setString(1, phoneBookName.toUpperCase());
             int returnValue = ps1.executeUpdate();
             Logger.getInstance().log("createContactBook method executeUpdate() return value = " + returnValue);
@@ -46,10 +41,10 @@ public class MySqlService extends IOService {
     public Boolean contactBookExists(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement(
-                    """
-                            SELECT name
-                            FROM contactApp.phonebook_master
-                            WHERE name LIKE ?;""");
+                """
+                SELECT name
+                FROM contactApp.phonebook_master
+                WHERE name LIKE ?;""");
             ps1.setString(1, "%" + phoneBookName + "%");
             resultSet = ps1.executeQuery();
             String nameFromDatabase = "";
@@ -74,9 +69,9 @@ public class MySqlService extends IOService {
             // deleteContact("IS NOT NULL", phoneBookName);
             connection.setAutoCommit(false);
             ps1 = connection.prepareStatement(
-                    """
-                            DELETE FROM contactApp.phonebook_master
-                            WHERE name = ?;""");
+                """
+                DELETE FROM contactApp.phonebook_master
+                WHERE name = ?;""");
             ps1.setString(1, phoneBookName);
             int returnValue = ps1.executeUpdate();
             Logger.getInstance().log("deleteContactBook method executeUpdate() return value = " + returnValue);
@@ -87,16 +82,38 @@ public class MySqlService extends IOService {
         }
     }
 
-    @Override
-    public List<ContactBean> readContact(String phoneBookName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public Boolean writeContacts(ContactBean contactBean) {
         MySqlContactWriter contactWriter = new MySqlContactWriter();
         return contactWriter.write(contactBean);
+    }
+
+    @Override
+    public Boolean contactExists(ContactBean contactBean) {
+        try (Connection connection = MySqlHelper.getConnection()) {
+            int phonebook_ID = getPhonebook_ID(contactBean);
+            ps1 = connection.prepareStatement(
+                """
+                SELECT fullname
+                FROM contacts
+                WHERE phonebook_ID = ?
+                    AND fullname LIKE ? ;""");
+            ps1.setInt(1, phonebook_ID);
+            ps1.setString(2, contactBean.name().getFullName());
+            boolean returnValue = ps1.executeQuery().next();
+            Logger.getInstance().log("contactExists method executeQuery() return value = " + returnValue);
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean deleteContact(String phoneBookName, String fullName) {
+        MySqlContactDeleter mySqlContactDeletor = new MySqlContactDeleter();
+        return mySqlContactDeletor.delete(fullName);
     }
 
     @Override
@@ -120,30 +137,12 @@ public class MySqlService extends IOService {
         }
     }
 
-    @Override
-    public Boolean deleteContact(String phoneBookName, String fullName) {
-        MySqlContactDeleter mySqlContactDeletor = new MySqlContactDeleter();
-        return mySqlContactDeletor.delete(fullName);
-    }
+
 
     @Override
-    public Boolean contactExists(ContactBean contactBean) {
-        try (Connection connection = MySqlHelper.getConnection()) {
-            int phonebook_ID = getPhonebook_ID(contactBean);
-            ps1 = connection.prepareStatement(
-                    """
-                            SELECT fullname
-                            FROM contacts
-                            WHERE phonebook_ID = ?
-                              AND fullname LIKE ? ;""");
-            ps1.setInt(1, phonebook_ID);
-            ps1.setString(2, contactBean.name().getFullName());
-            return ps1.executeQuery().next();
-        } catch (SQLException e) {
-            // rollbackSQLCommit(connection);
-            e.printStackTrace();
-            return false;
-        }
+    public List<ContactBean> readContact(String phoneBookName) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     int getPhonebook_ID(ContactBean contactBean) {
