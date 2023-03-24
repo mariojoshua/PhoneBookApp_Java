@@ -1,5 +1,6 @@
 package com.uttara.phone.ioServices;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -25,9 +26,8 @@ public class MySqlServiceTest {
     @BeforeEach
     public void init() {
         mySqlService = new MySqlService();
-        phoneBookName = "lake cleaning group";
         contactBean = new ContactBean(
-            phoneBookName, 
+            "South Army", 
             new Name(Gender.M, "Arulmozhi Varman", "Arul"), List.of("9532142666", "4266695321"), 
             "No 95, Viharam road, Anuradhapuram, Srilanka - 321579", 
             List.of("lake","asia" , "chola"), 
@@ -134,50 +134,43 @@ public class MySqlServiceTest {
         assertTrue (mySqlService.deleteContactBook(contactBean4.phoneBookName()));
     }
 
+   
+    @Test
+    public void testReadContact() {
+        assertTrue (mySqlService.createContactBook(contactBean.phoneBookName()));
+        assertTrue (mySqlService.writeContacts(contactBean));
+        assertTrue (mySqlService.contactExists(contactBean));
+        assertTrue (mySqlService.writeContacts(contactBean3));
+        assertTrue (mySqlService.contactExists(contactBean3));
+        //assertEquals(List.of(contactBean),mySqlService.readContact(contactBean.phoneBookName()));
+        // assertTrue(mySqlService.deleteContact(contactBean.phoneBookName(), contactBean.name().getFullName()));
+        // assertTrue(mySqlService.deleteContact(contactBean3.phoneBookName(), contactBean3.name().getFullName()));
+        // assertTrue (mySqlService.deleteContactBook(contactBean3.phoneBookName()));
+    }
+
+    @Test
+    public void testUpdateContacts() {
+        //fail("Not yet Implemented");
+    }
+
     @Test
     void testGetTags_ID() {
         // mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
     }
 
-   
     @Test
-    public void testReadContact() {
-        // String phoneBookName = "South Army";
-        // ContactBean contactBean = new ContactBean(
-        //     phoneBookName, 
-        //     new Name(Gender.M, "Arulmozhi Varman", "Arul"), List.of("9532142666", "4266695321"), 
-        //     "No 95, Viharam road, Anuradhapuram, Srilanka - 321579", 
-        //     List.of("army","asia", "chola"), 
-        //     List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
-        //     Map.of("dateOfBirth",
-        //     LocalDate.of(1723, 2, 14)));
-        // assertTrue (mySqlService.createContactBook(phoneBookName));
-        // assertTrue (mySqlService.writeContacts(contactBean));
-        // assertTrue (mySqlService.contactExists(contactBean));
-        
-        // contactBean = new ContactBean(
-        //     phoneBookName, 
-        //     new Name(Gender.M, "Vallavan Vandiyathevan", "Vandi"), List.of("1429532666", "5324266691"), 
-        //     "No 49, Beach palace road, Naagaipattinam, India - 503205", 
-        //     List.of("army","asia" ,"prince", "chola"), 
-        //     List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
-        //     Map.of("dateOfBirth",
-        //     LocalDate.of(1622, 2, 14)));
-        // ContactBean contactBean1 = new ContactBean("lake cleaning group",new Name("Aditha"));    
-        // assertTrue (mySqlService.createContactBook(phoneBookName));
-        // assertTrue (mySqlService.writeContacts(contactBean));
-        // assertFalse (mySqlService.contactExists(contactBean));
-        // assertTrue (mySqlService.contactExists(contactBean1 ));
-        // assertFalse (mySqlService.writeContacts(contactBean));
-        // assertFalse (mySqlService.writeContacts(contactBean));
-        // assertTrue (mySqlService.contactExists(contactBean1));
-        // assertEquals(List.of(contactBean),mySqlService.readContact(phoneBookName));
-        // assertTrue (mySqlService.deleteContact("Arulmozhi.Varman@gmail.com", phoneBookName));
+    void testgetPhonebook_ID() {
+        // mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
     }
 
     @Test
-    public void testUpdateContacts() {
-        fail("Not yet Implemented");
+    void testgetTags_IDFromContacts_TagsTable() {
+        // mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
+    }
+
+    @Test
+    void testcheckIfTagExistsInTagsTable() {
+        // mySqlService.getTags_IDFromContacts_TagsTable(contacts_ID);
     }
 
 

@@ -116,16 +116,22 @@ public class MySqlService extends IOService {
         return mySqlContactDeletor.delete(fullName);
     }
 
+
+    @Override
+    public List<ContactBean> readContact(String phoneBookName) {
+        //see if phone number exists
+        MySqlContactReader mySqlContactReader= new MySqlContactReader();
+        return mySqlContactReader.read(phoneBookName);
+    }
+
     @Override
     public Boolean updateContacts(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false);
-            ps1 = connection.prepareStatement(
-                    """
-                            UPDATE users
-                            SET name = 'barfoo', email = 'bar@foo.com'
-                            WHERE email = 'foo@bar.com';
-                            """);
+            ps1 = connection.prepareStatement("""
+                UPDATE users
+                SET name = 'barfoo', email = 'bar@foo.com'
+                WHERE email = 'foo@bar.com';""");
             int rowsAffected = ps1.executeUpdate();
             System.out.println(rowsAffected + " row(s) has been deleted!");
             connection.commit();
@@ -137,20 +143,12 @@ public class MySqlService extends IOService {
         }
     }
 
-
-
-    @Override
-    public List<ContactBean> readContact(String phoneBookName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     int getPhonebook_ID(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
-                    SELECT ID
-                    FROM phonebook_master
-                    WHERE name = ?""");
+                SELECT ID
+                FROM phonebook_master
+                WHERE name = ?""");
             ps1.setString(1, contactBean.phoneBookName());
             resultSet = ps1.executeQuery();
             int phonebook_ID = -1;
