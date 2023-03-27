@@ -25,4 +25,11 @@ public class MySqlContactReaderTest {
         mySqlContactReader.getAllData("South Army").forEach(list -> System.out.println(list + "\n"));
        
     }
+
+    @Test
+    void testGetNameObjects() {
+        mySqlContactReader.getNameObjects(mySqlContactReader.getAllData("South Army"));
+    }
+
+
 }

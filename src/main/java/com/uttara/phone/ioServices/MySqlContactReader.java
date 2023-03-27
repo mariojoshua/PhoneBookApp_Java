@@ -10,9 +10,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
+import com.uttara.phone.Name;
+import com.uttara.phone.Name.Gender;
 
 class MySqlContactReader {
     PreparedStatement ps1;
@@ -33,9 +36,30 @@ class MySqlContactReader {
     // When scaling test both approaches using sqlfiddle.com  
     List<ContactBean> read(String phoneBookName) {
         List<HashMap<String,Object>> allDataForPhonebook= getAllData(phoneBookName);
+        //List<Name> nameObjects = getNameObjects(allDataForPhonebook);
+        // Name name = new Name(gender, phoneBookName, phoneBookName);
+        // List<String> phoneNumbers
+        // String address,
+        // List<String> tags,
+        // List<String> email,
+        // Map<String, LocalDate> dates
         return Collections.emptyList();
     }
 
+    List<Name> getNameObjects( List<HashMap<String,Object>> allDataFromPhonebook) {
+        System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
+        List<Name> nameObjects
+            = allDataFromPhonebook.stream()
+            .map(hashmap -> new Name(Gender.valueOf((String)hashmap.get("gender")),
+                                    (String)hashmap.get("fullname"),
+                                    (String)hashmap.get("petname")))
+            .distinct()
+            .collect(Collectors.toUnmodifiableList());
+            Logger.getInstance().log("nameObject from db = " + nameObjects);                                            
+        return nameObjects;
+    }
+
+    // Add generics to avoid type casting when accessing the object
     List<HashMap<String,Object>> getAllData(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
@@ -64,23 +88,21 @@ class MySqlContactReader {
         }  
     }
 
-    List<HashMap<String,Object>> getResultSetData(ResultSet resultSet)  throws SQLException {
-        List <HashMap<String,Object>> queryList = new LinkedList<>();
+    List<HashMap<String, Object>> getResultSetData(ResultSet resultSet)  throws SQLException {
+        List <HashMap<String, Object>> queryList = new LinkedList<>();
         //String key = "";
-        HashMap<String,Object> hashMap = null;
+        HashMap<String, Object> hashMap = null;
         List<String> columnLabelkeys = new LinkedList<>();
         columnLabelkeys = getResultSetColumnNames(resultSet);
         Map<String, Class<?>> typeMap = resultSet.getStatement().getConnection().getTypeMap();
 
         while (resultSet.next()) {
-            hashMap = new HashMap<String,Object>();
+            hashMap = new HashMap<String, Object>();
             for(String key: columnLabelkeys) {
                 hashMap.put(key, resultSet.getObject(key,  typeMap));
                 //System.out.println(hashMap + "\n");
-                
             }
-            queryList.add(hashMap);
-            
+            queryList.add(hashMap);   
         }
         Logger.getInstance().log("queryList.size() =" +queryList.size());
         return queryList;
