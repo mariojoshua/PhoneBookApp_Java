@@ -27,8 +27,13 @@ public class MySqlContactReaderTest {
     }
 
     @Test
-    void testGetNameObjects() {
-        mySqlContactReader.getNameObjects(mySqlContactReader.getAllData("South Army"));
+    void testGetNameFromAllData() {
+        mySqlContactReader.getNameFromAllData(mySqlContactReader.getAllData("South Army"));
+    }
+
+    @Test
+    void testGetPhoneNumbers() {
+        mySqlContactReader.extractPhoneNumbers("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
 

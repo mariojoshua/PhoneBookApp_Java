@@ -35,19 +35,34 @@ class MySqlContactReader {
         //get individual data/list using streams  
     // When scaling test both approaches using sqlfiddle.com  
     List<ContactBean> read(String phoneBookName) {
+        List<ContactBean> contactBeanList = null;
         List<HashMap<String,Object>> allDataForPhonebook= getAllData(phoneBookName);
-        //List<Name> nameObjects = getNameObjects(allDataForPhonebook);
-        // Name name = new Name(gender, phoneBookName, phoneBookName);
-        // List<String> phoneNumbers
-        // String address,
-        // List<String> tags,
-        // List<String> email,
-        // Map<String, LocalDate> dates
+        List<Name> nameObjects = getNameFromAllData(allDataForPhonebook);
+        for(Name name: nameObjects) {
+            // Name name = new Name(gender, phoneBookName, phoneBookName);
+            List<String> phoneNumbers = extractPhoneNumbers(name.getFullName(), allDataForPhonebook);
+            String address = extractAddress(name.getFullName(), allDataForPhonebook);
+            List<String> tags = extractTags(name.getFullName(), allDataForPhonebook);
+            List<String> email = extractEmailIds(name.getFullName(), allDataForPhonebook);
+            // Map<String, LocalDate> dates
+            // contactBeanList
+        }
+
         return Collections.emptyList();
     }
 
-    List<Name> getNameObjects( List<HashMap<String,Object>> allDataFromPhonebook) {
-        System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
+    List<String> extractPhoneNumbers(String fullname,List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> phoneNumbers = allDataForPhonebook.stream()
+                .filter(hashmap -> hashmap.get("fullname").equals(fullname))
+                .map(hashmap -> (String)hashmap.get("phoneNumber"))
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
+                Logger.getInstance().log("phoneNumbers from db" + phoneNumbers);
+        return phoneNumbers;
+    }
+
+    List<Name> getNameFromAllData(List<HashMap<String,Object>> allDataFromPhonebook) {
+        // System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
         List<Name> nameObjects
             = allDataFromPhonebook.stream()
             .map(hashmap -> new Name(Gender.valueOf((String)hashmap.get("gender")),
