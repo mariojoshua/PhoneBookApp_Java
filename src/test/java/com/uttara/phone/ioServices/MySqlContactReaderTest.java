@@ -17,7 +17,7 @@ public class MySqlContactReaderTest {
     }
     
     @Test
-    void testGetAllData() {
+    void testExtractAllData() {
         //mySqlContactReader.getAllData("South Army").forEach(map -> System.out.println(map.toString()));
         // for(Map m: mySqlContactReader.getAllData("South Army")) {
         //     System.out.println(m + "\n");
@@ -27,13 +27,28 @@ public class MySqlContactReaderTest {
     }
 
     @Test
-    void testGetNameFromAllData() {
-        mySqlContactReader.getNameFromAllData(mySqlContactReader.getAllData("South Army"));
+    void testExtractNameFromAllData() {
+        mySqlContactReader.extractNames(mySqlContactReader.getAllData("South Army"));
     }
 
     @Test
-    void testGetPhoneNumbers() {
+    void testExtractPhoneNumbers() {
         mySqlContactReader.extractPhoneNumbers("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
+    }
+
+    @Test
+    void testExtractEmailIds() {
+        mySqlContactReader.extractEmailIds("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
+    }
+
+    @Test
+    void testExtractAddress() {
+        mySqlContactReader.extractAddress("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
+    }
+
+    @Test
+    void testExtractTags() {
+        mySqlContactReader.extractTags("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
 

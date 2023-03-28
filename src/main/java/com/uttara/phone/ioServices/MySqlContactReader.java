@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.uttara.phone.ContactBean;
@@ -51,6 +52,36 @@ class MySqlContactReader {
         return Collections.emptyList();
     }
 
+    List<String> extractEmailIds(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> emailIds = allDataForPhonebook.stream()
+                .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+                .map(hashmap -> (String)hashmap.get("emailid"))
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
+                Logger.getInstance().log("emaild id's for "+ fullName +" from db" + emailIds);
+        return emailIds;
+    }
+
+    List<String> extractTags(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> tagsList = allDataForPhonebook.stream()
+        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+        .map(hashmap -> (String)hashmap.get("tag"))
+        .distinct()
+        .collect(Collectors.toUnmodifiableList());
+        Logger.getInstance().log("tags for "+ fullName +" from db" + tagsList);
+        return tagsList;
+    }
+
+    String extractAddress(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        Optional address = allDataForPhonebook.stream()
+        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+        .map(hashmap -> (String)hashmap.get("address"))
+        .distinct()
+        .findFirst();
+        Logger.getInstance().log("address for "+ fullName +" from db" + address);
+    return address.isPresent() ? (String)address.get() : "Address not Available";
+    }
+
     List<String> extractPhoneNumbers(String fullname,List<HashMap<String, Object>> allDataForPhonebook) {
         List<String> phoneNumbers = allDataForPhonebook.stream()
                 .filter(hashmap -> hashmap.get("fullname").equals(fullname))
@@ -61,7 +92,7 @@ class MySqlContactReader {
         return phoneNumbers;
     }
 
-    List<Name> getNameFromAllData(List<HashMap<String,Object>> allDataFromPhonebook) {
+    List<Name> extractNames(List<HashMap<String,Object>> allDataFromPhonebook) {
         // System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
         List<Name> nameObjects
             = allDataFromPhonebook.stream()
@@ -107,8 +138,8 @@ class MySqlContactReader {
         List <HashMap<String, Object>> queryList = new LinkedList<>();
         //String key = "";
         HashMap<String, Object> hashMap = null;
-        List<String> columnLabelkeys = new LinkedList<>();
-        columnLabelkeys = getResultSetColumnNames(resultSet);
+        // Save this as an enum instead of a list of Strings, less errors while accessing
+        List<String> columnLabelkeys = getResultSetColumnNames(resultSet);
         Map<String, Class<?>> typeMap = resultSet.getStatement().getConnection().getTypeMap();
 
         while (resultSet.next()) {
