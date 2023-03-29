@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class MySqlContactWriter {
             ps1.setString(2, contactBean.name().getGender().name());
             ps1.setString(3,contactBean.name().getFullName());
             ps1.setString(4, contactBean.name().getPetName());
-            Date date = new java.sql.Date(Date.valueOf(contactBean.dates().get("dateOfBirth")).getTime());
+            Date date = Date.valueOf((contactBean.dates().get("dateOfBirth")).toLocalDate());
             ps1.setDate(5, date);
             ps1.setString(6, contactBean.address());
             int rowsAffected = ps1.executeUpdate();

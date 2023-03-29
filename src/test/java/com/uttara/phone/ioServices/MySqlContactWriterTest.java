@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class MySqlContactWriterTest {
             List.of("army","asia" , "chola"), 
             List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1922, 2, 14)));  
+            LocalDate.of(1922, 2, 14).atStartOfDay()));  
     }
 
     @Test

@@ -41,7 +41,7 @@ public class MySqlContactDeleterTest {
             List.of("lake","asia" , "chola"), 
             List.of("Arulmozhi.Varman@gmail.com", "Varman.Arulmozhi@gmail.com"), 
             Map.of("dateOfBirth",
-            LocalDate.of(1525, 2, 14)));
+            LocalDate.of(1525, 2, 14).atStartOfDay()));
             mWriter.insertIntoContactsTable(contactBean);
             contacts_ID = mySqlService.getContacts_ID(phoneBookName);
     }
