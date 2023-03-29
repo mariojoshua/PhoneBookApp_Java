@@ -1,16 +1,20 @@
 package com.uttara.phone.ioServices;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.uttara.phone.ContactBean;
@@ -22,91 +26,40 @@ class MySqlContactReader {
     PreparedStatement ps1;
     ResultSet resultSet;
 
-        // get list of contactID's for phoneBookname
-    //for each contact ID
-        // get list of attributes from contacts tables
-        // get list of emails from contacts tables
-        // get list of phonenumbers from contacts tables
-        // get list of tags
-        // put all the attributes in a contacts bean and return
-
-    //OR
-        //get joined table
-        // put each row into a list/map of objects with metadata as key
-        //get individual data/list using streams  
+        
+    //get joined table
+    // put each row into a list/map of objects with metadata as key
+    //get individual data/list using streams  
     // When scaling test both approaches using sqlfiddle.com  
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     List<ContactBean> read(String phoneBookName) {
-        List<ContactBean> contactBeanList = null;
-        List<HashMap<String,Object>> allDataForPhonebook= getAllData(phoneBookName);
-        List<Name> nameObjects = getNameFromAllData(allDataForPhonebook);
+        List<ContactBean> contactBeanList = new LinkedList<>();
+        List<HashMap<String, Object>> allDataForPhonebook = getAllData(phoneBookName);
+        List<Name> nameObjects = extractNames(allDataForPhonebook);
         for(Name name: nameObjects) {
             // Name name = new Name(gender, phoneBookName, phoneBookName);
             List<String> phoneNumbers = extractPhoneNumbers(name.getFullName(), allDataForPhonebook);
             String address = extractAddress(name.getFullName(), allDataForPhonebook);
             List<String> tags = extractTags(name.getFullName(), allDataForPhonebook);
             List<String> email = extractEmailIds(name.getFullName(), allDataForPhonebook);
-            // Map<String, LocalDate> dates
-            // contactBeanList
+            Map<String, LocalDateTime> dates = extractDates(name.getFullName(), allDataForPhonebook);
+            contactBeanList.add(new ContactBean(phoneBookName, name, phoneNumbers, address, tags, email, dates));
         }
-
-        return Collections.emptyList();
-    }
-
-    List<String> extractEmailIds(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
-        List<String> emailIds = allDataForPhonebook.stream()
-                .filter(hashmap -> hashmap.get("fullname").equals(fullName))
-                .map(hashmap -> (String)hashmap.get("emailid"))
-                .distinct()
-                .collect(Collectors.toUnmodifiableList());
-                Logger.getInstance().log("emaild id's for "+ fullName +" from db" + emailIds);
-        return emailIds;
-    }
-
-    List<String> extractTags(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
-        List<String> tagsList = allDataForPhonebook.stream()
-        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
-        .map(hashmap -> (String)hashmap.get("tag"))
-        .distinct()
-        .collect(Collectors.toUnmodifiableList());
-        Logger.getInstance().log("tags for "+ fullName +" from db" + tagsList);
-        return tagsList;
-    }
-
-    String extractAddress(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
-        Optional address = allDataForPhonebook.stream()
-        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
-        .map(hashmap -> (String)hashmap.get("address"))
-        .distinct()
-        .findFirst();
-        Logger.getInstance().log("address for "+ fullName +" from db" + address);
-    return address.isPresent() ? (String)address.get() : "Address not Available";
-    }
-
-    List<String> extractPhoneNumbers(String fullname,List<HashMap<String, Object>> allDataForPhonebook) {
-        List<String> phoneNumbers = allDataForPhonebook.stream()
-                .filter(hashmap -> hashmap.get("fullname").equals(fullname))
-                .map(hashmap -> (String)hashmap.get("phoneNumber"))
-                .distinct()
-                .collect(Collectors.toUnmodifiableList());
-                Logger.getInstance().log("phoneNumbers from db" + phoneNumbers);
-        return phoneNumbers;
-    }
-
-    List<Name> extractNames(List<HashMap<String,Object>> allDataFromPhonebook) {
-        // System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
-        List<Name> nameObjects
-            = allDataFromPhonebook.stream()
-            .map(hashmap -> new Name(Gender.valueOf((String)hashmap.get("gender")),
-                                    (String)hashmap.get("fullname"),
-                                    (String)hashmap.get("petname")))
-            .distinct()
-            .collect(Collectors.toUnmodifiableList());
-            Logger.getInstance().log("nameObject from db = " + nameObjects);                                            
-        return nameObjects;
+        Logger.getInstance().log("List of contactbeans from db for phonebook :" 
+                                        + phoneBookName + "" + contactBeanList );
+        return contactBeanList;
     }
 
     // Add generics to avoid type casting when accessing the object
-    List<HashMap<String,Object>> getAllData(String phoneBookName) {
+     List<HashMap<String,Object>> getAllData(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
                 SELECT name AS phonebookName, gender, fullname, petname, address, emailid , phoneNumber, tag, dateOfBirth, createdDate, modifiedDate 
@@ -165,40 +118,101 @@ class MySqlContactReader {
         return columnNames;
     }
 
-    
-
-    List<ContactBean> selectFromContactsTable() {
-        List <? extends Object> list = new LinkedList<>();
-        try (Connection connection = MySqlHelper.getConnection()) {
-            ps1 = connection.prepareStatement(
-                """
-                SELECT fullname
-                FROM contacts
-                WHERE phonebook_ID = ?
-                    AND fullname LIKE ? ;""");
-            ps1.setInt(1, phonebook_ID);
-            ps1.setString(2, contactBean.name().getFullName());
-            boolean returnValue = ps1.executeQuery().next();
-            resultSet.getArray(null)
-            Logger.getInstance().log("contactExists method executeQuery() return value = " + returnValue);
-            return returnValue;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        } 
+    List<Name> extractNames(List<HashMap<String,Object>> allDataFromPhonebook) {
+        // System.out.println(allDataFromPhonebook.get(1).get("emailid").getClass().getName());
+        List<Name> nameObjects
+            = allDataFromPhonebook.stream()
+            .map(hashmap -> new Name(Gender.valueOf((String)hashmap.get("gender")),
+                                    (String)hashmap.get("fullname"),
+                                    (String)hashmap.get("petname")))
+            .distinct()
+            .collect(Collectors.toUnmodifiableList());
+            Logger.getInstance().log("nameObject from db = " + nameObjects);                                            
+        return nameObjects;
     }
 
-    List<String> selectFromEmailTable() {
-        return Collections.emptyList();
+    List<String> extractEmailIds(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> emailIds = allDataForPhonebook.stream()
+                .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+                .map(hashmap -> (String)hashmap.get("emailid"))
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
+                Logger.getInstance().log("emaild id's for "+ fullName +" from db" + emailIds);
+        return emailIds;
     }
 
-    List<String> selectFromPhoneNumberTable() {
-        return Collections.emptyList();
+    List<String> extractTags(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> tagsList = allDataForPhonebook.stream()
+        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+        .map(hashmap -> (String)hashmap.get("tag"))
+        .distinct()
+        .collect(Collectors.toUnmodifiableList());
+        Logger.getInstance().log("tags for "+ fullName +" from db" + tagsList);
+        return tagsList;
     }
 
-    List<String> selectFromTabsTable() {
-        return Collections.emptyList();
+    String extractAddress(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        Optional<String> address = allDataForPhonebook.stream()
+        .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+        .map(hashmap -> (String)hashmap.get("address"))
+        .distinct()
+        .findFirst();
+        Logger.getInstance().log("address for "+ fullName +" from db" + address);
+    return address.isPresent() ? (String)address.get() : "Address not Available";
     }
+
+    List<String> extractPhoneNumbers(String fullname,List<HashMap<String, Object>> allDataForPhonebook) {
+        List<String> phoneNumbers = allDataForPhonebook.stream()
+                .filter(hashmap -> hashmap.get("fullname").equals(fullname))
+                .map(hashmap -> (String)hashmap.get("phoneNumber"))
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
+                Logger.getInstance().log("phoneNumbers from db" + phoneNumbers);
+        return phoneNumbers;
+    }
+
+    Map<String, LocalDateTime> extractDates(String fullName, List<HashMap<String, Object>> allDataForPhonebook) {
+        Map<String, LocalDateTime> dateMap = null;
+        Optional<HashMap<String,Object>> resultMap = allDataForPhonebook.stream()
+                .filter(hashmap -> hashmap.get("fullname").equals(fullName))
+                .findFirst();
+        if (resultMap.isPresent() ) {
+            dateMap = Map.of("dateOfBirth", ((Date)resultMap.get().get("dateOfBirth")).toLocalDate().atStartOfDay(), 
+                             "createdDate", (LocalDateTime)resultMap.get().get("createdDate"),
+                             "modifiedDate",(LocalDateTime)resultMap.get().get("modifiedDate"));
+        }
+        Logger.getInstance().log("extract dates method map of dates" + dateMap);      
+        return dateMap;
+    }
+
+
+        // get list of contactID's for phoneBookname
+    //for each contact ID
+        // get list of attributes from contacts tables
+        // get list of emails from contacts tables
+        // get list of phonenumbers from contacts tables
+        // get list of tags
+        // put all the attributes in a contacts bean and return
+    // List<ContactBean> selectFromContactsTable() {
+    //     List <? extends Object> list = new LinkedList<>();
+    //     try (Connection connection = MySqlHelper.getConnection()) {
+    //         ps1 = connection.prepareStatement(
+    //             """
+    //             SELECT fullname
+    //             FROM contacts
+    //             WHERE phonebook_ID = ?
+    //                 AND fullname LIKE ? ;""");
+    //         ps1.setInt(1, phonebook_ID);
+    //         ps1.setString(2, contactBean.name().getFullName());
+    //         boolean returnValue = ps1.executeQuery().next();
+    //         resultSet.getArray(null)
+    //         Logger.getInstance().log("contactExists method executeQuery() return value = " + returnValue);
+    //         return returnValue;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return Collections.emptyList();
+    //     } 
+    // }
 
 
 

@@ -15,13 +15,15 @@ public class MySqlContactReaderTest {
     void init() {
         mySqlContactReader = new MySqlContactReader();
     }
+
+    @Test 
+    void testRead() {
+        mySqlContactReader.read("South Army");
+        
+    }
     
     @Test
     void testExtractAllData() {
-        //mySqlContactReader.getAllData("South Army").forEach(map -> System.out.println(map.toString()));
-        // for(Map m: mySqlContactReader.getAllData("South Army")) {
-        //     System.out.println(m + "\n");
-        // }
         mySqlContactReader.getAllData("South Army").forEach(list -> System.out.println(list + "\n"));
        
     }
@@ -49,6 +51,11 @@ public class MySqlContactReaderTest {
     @Test
     void testExtractTags() {
         mySqlContactReader.extractTags("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
+    }
+
+    @Test
+    void testDates() {
+        mySqlContactReader.extractDates("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
 

@@ -2,6 +2,7 @@ package com.uttara.phone;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public record ContactBean (String phoneBookName,
 						  String address,
 						  List<String> tags,
 						  List<String> email,
-						  Map<String, LocalDate> dates) 
+						  Map<String, LocalDateTime> dates) 
 						  implements Serializable {
 
     public ContactBean (String phoneBookName, Name name) {
