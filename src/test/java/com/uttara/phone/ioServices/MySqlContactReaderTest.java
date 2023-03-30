@@ -1,11 +1,17 @@
 package com.uttara.phone.ioServices;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +35,7 @@ public class MySqlContactReaderTest {
         mySqlContactReader = new MySqlContactReader();
         mWriter = new MySqlContactWriter();
         mDeleter = new MySqlContactDeleter();
-        String phoneBookName = "South Army";
-        mySqlService.createContactBook(phoneBookName);
+    
         contactBean = new ContactBean(
             "South Army", 
             new Name(Gender.M, "Arulmozhi Varman", "Arul"), List.of("9532142666", "4266695321"), 
@@ -47,8 +52,9 @@ public class MySqlContactReaderTest {
             List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
             Map.of("dateOfBirth",
             LocalDate.of(1622, 2, 14).atStartOfDay()));    
-        mWriter.insertIntoContactsTable(contactBean);
-        mWriter.insertIntoContactsTable(contactBean3);
+         mySqlService.createContactBook(contactBean.phoneBookName());
+         mWriter.write(contactBean);
+         mWriter.write(contactBean3);
     }
 
     @Test 
@@ -56,48 +62,54 @@ public class MySqlContactReaderTest {
         assertTrue(mySqlService.contactBookExists(contactBean.phoneBookName()));
         assertTrue(mySqlService.contactExists(contactBean));
         assertTrue(mySqlService.contactExists(contactBean3));
-        mySqlContactReader.read(contactBean.phoneBookName());
+        assertEquals(2,mySqlContactReader.read(contactBean.phoneBookName()).size());
 
     }
     
-    @Disabled("private method")
     @Test
     void testExtractAllData() {
-        mySqlContactReader.getAllData(contactBean.phoneBookName()).forEach(list -> System.out.println(list + "\n"));
-       
+        assertEquals(28, mySqlContactReader.getAllData(contactBean.phoneBookName()).size());
     }
 
-    @Disabled("private method")
     @Test
     void testExtractNameFromAllData() {
-        mySqlContactReader.extractNames(mySqlContactReader.getAllData(contactBean.phoneBookName()));
+        Name expected = contactBean.name();
+        List<HashMap<String,Object>> data = mySqlContactReader.getAllData(contactBean.phoneBookName());
+        Optional<Name> nameFromDatabase =  mySqlContactReader.extractNames(data).stream()
+                                .filter(name -> name.equals(expected))
+                                .findFirst();
+        Name actual = nameFromDatabase.isPresent() ? nameFromDatabase.get(): new Name();
+        assertEquals(expected,actual);
     }
 
-    @Disabled("private method")
     @Test
     void testExtractPhoneNumbers() {
-        mySqlContactReader.extractPhoneNumbers("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
+        List<String>expectedList = contactBean3.phoneNumbers();
+        String fullName = contactBean3.name().getFullName();
+        List<HashMap<String,Object>> data = mySqlContactReader.getAllData(contactBean3.phoneBookName())
+                                                .stream()
+                                                .filter(obj -> obj.get("fullname").equals(fullName))
+                                                .sorted((obj1, obj2) -> ((String)obj1.get("phoneNumber")).compareTo((String)obj2.get("phoneNumber")))
+                                                .collect(Collectors.toUnmodifiableList());
+        List<String> actualList =  mySqlContactReader.extractPhoneNumbers(fullName, data);
+        assertEquals(expectedList, actualList);                               
     }
 
-    @Disabled("private method")
     @Test
     void testExtractEmailIds() {
         mySqlContactReader.extractEmailIds("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
-    @Disabled("private method")
     @Test
     void testExtractAddress() {
         mySqlContactReader.extractAddress("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
-    @Disabled("private method")
     @Test
     void testExtractTags() {
         mySqlContactReader.extractTags("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
     }
 
-    @Disabled("private method")
     @Test
     void testDates() {
         mySqlContactReader.extractDates("Arulmozhi Varman", mySqlContactReader.getAllData("South Army"));
@@ -105,8 +117,8 @@ public class MySqlContactReaderTest {
 
     @AfterEach
     void clean() {
-        mDeleter.deleteFromContactsTable(contactBean.name().getFullName());
-        mDeleter.deleteFromContactsTable(contactBean3.name().getFullName());
+        mDeleter.delete(contactBean.name().getFullName());
+        mDeleter.delete(contactBean3.name().getFullName());
         mySqlService.deleteContactBook(contactBean.phoneBookName());
     }
 

@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.uttara.phone.ContactBean;
@@ -59,7 +56,7 @@ class MySqlContactReader {
     }
 
     // Add generics to avoid type casting when accessing the object
-     List<HashMap<String,Object>> getAllData(String phoneBookName) {
+    List<HashMap<String,Object>> getAllData(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
                 SELECT name AS phonebookName, gender, fullname, petname, address, emailid , phoneNumber, tag, dateOfBirth, createdDate, modifiedDate 
@@ -79,7 +76,7 @@ class MySqlContactReader {
             //boolean returnValue = ps1.executeQuery().next();
             resultSet = ps1.executeQuery();
             System.out.println(connection.getTypeMap());
-            //Logger.getInstance().log("contactExists method executeQuery() return value = " + returnValue);
+            //Logger.getInstance().log("contactExists method executeQuery() return value = " + resultSet.);
             return getResultSetData(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,7 +96,7 @@ class MySqlContactReader {
             hashMap = new HashMap<String, Object>();
             for(String key: columnLabelkeys) {
                 hashMap.put(key, resultSet.getObject(key,  typeMap));
-                //System.out.println(hashMap + "\n");
+                System.out.println(hashMap + "\n");
             }
             queryList.add(hashMap);   
         }
