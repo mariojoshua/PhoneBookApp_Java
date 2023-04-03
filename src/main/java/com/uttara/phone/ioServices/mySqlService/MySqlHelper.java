@@ -1,10 +1,20 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
 
 class MySqlHelper {
     PreparedStatement ps1 = null, ps2 = null;

@@ -4,6 +4,17 @@ import java.util.List;
 
 import com.uttara.phone.ContactBean;
 
+/**
+ * This is an abstract class giving the headers for the methods to be implemented 
+ * by any form of persistence technology like plaintex,sql,nosql 
+ * which extends this class.
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
+
 public abstract class IOService {
 
     public abstract List<ContactBean> readContact(String phoneBookName);

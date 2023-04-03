@@ -2,10 +2,14 @@ package com.uttara.phone;
 
 import java.util.Scanner;
 
-public class PhoneHelper {
-	// This class contains all the static utility methods required by the app
+/**
+ * This class contains all the static utility methods used by 
+ * multiple classes in the app by the app
+ */
 
-	/*
+public class PhoneHelper { 
+
+	/**
 	 * This method will validate the string given to check if it contains multiple
 	 * words or special chars. If7 yes, it returns an error message else it returns constant
 	 * string success!

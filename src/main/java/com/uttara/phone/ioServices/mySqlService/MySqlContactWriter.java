@@ -1,4 +1,4 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -6,12 +6,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
+
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
 
 public class MySqlContactWriter {
 
@@ -25,7 +34,15 @@ public class MySqlContactWriter {
        this.mySqlService = new MySqlService();
     }
 
-    public boolean write(ContactBean contactBean) {
+     /**
+	 * This method writes a ContactBean class object to the 
+     * various tables in the the MySql database. 
+     * 
+	 * @param
+	 * @return a boolean depending on if the write was succesful
+	 * 
+	 */
+    boolean write(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
             // insert into contacts table

@@ -1,6 +1,8 @@
 package com.uttara.phone;
 
 /**
+ * @hidden
+ * @deprecated
  * Since address contains further dependencies, it has to have its own class
  * with to String, hashcode and equals ovveridden.
  * 

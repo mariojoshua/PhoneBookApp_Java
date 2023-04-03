@@ -1,4 +1,4 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,16 @@ import java.util.Map;
 //import java.util.stream.Collectors;
 //import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
+
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
 
 public class MySqlContactDeleter {
     

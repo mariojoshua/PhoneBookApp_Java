@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 /* 
+* This is the main data object the whole app is based on, 
+* it stores the input taken from the user
+*
 * @author mariojoshuaaugustine
 */
 

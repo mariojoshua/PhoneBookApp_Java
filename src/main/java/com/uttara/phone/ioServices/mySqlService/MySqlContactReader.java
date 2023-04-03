@@ -1,4 +1,4 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -23,11 +23,6 @@ class MySqlContactReader {
     PreparedStatement ps1;
     ResultSet resultSet;
 
-        
-    //get joined table
-    // put each row into a list/map of objects with metadata as key
-    //get individual data/list using streams  
-    // When scaling test both approaches using sqlfiddle.com  
     /**
 	 * This method get the joined table from the MySql database, 
      * processes the data using streams and puts it into a 
@@ -38,6 +33,10 @@ class MySqlContactReader {
 	 * ArrayList<ContactBean>
 	 */
     List<ContactBean> read(String phoneBookName) {
+        //get joined table
+        // put each row into a list/map of objects with metadata as key
+        //get individual data/list using streams  
+        // When scaling, test both approaches using sqlfiddle.com  
         List<ContactBean> contactBeanList = new LinkedList<>();
         List<HashMap<String, Object>> allDataForPhonebook = getAllData(phoneBookName);
         List<Name> nameObjects = extractNames(allDataForPhonebook);

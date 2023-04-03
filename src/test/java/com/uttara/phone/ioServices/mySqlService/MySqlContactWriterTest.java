@@ -1,4 +1,4 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;

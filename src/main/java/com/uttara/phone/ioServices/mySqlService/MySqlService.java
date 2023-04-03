@@ -1,4 +1,4 @@
-package com.uttara.phone.ioServices;
+package com.uttara.phone.ioServices.mySqlService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,17 @@ import java.util.List;
 
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
+import com.uttara.phone.ioServices.IOService;
+
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
 
 public class MySqlService extends IOService {
 
@@ -17,6 +28,15 @@ public class MySqlService extends IOService {
     ResultSet resultSet = null;
     Connection connection = null;
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean createContactBook(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -37,6 +57,15 @@ public class MySqlService extends IOService {
 
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean contactBookExists(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -61,6 +90,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean deleteContactBook(String phoneBookName) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -83,12 +121,30 @@ public class MySqlService extends IOService {
     }
 
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean writeContacts(ContactBean contactBean) {
         MySqlContactWriter contactWriter = new MySqlContactWriter();
         return contactWriter.write(contactBean);
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean contactExists(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -110,6 +166,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean deleteContact(String phoneBookName, String fullName) {
         MySqlContactDeleter mySqlContactDeletor = new MySqlContactDeleter();
@@ -117,6 +182,15 @@ public class MySqlService extends IOService {
     }
 
 
+    /**
+	 * This method gets the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public List<ContactBean> readContact(String phoneBookName) {
         //see if phone number exists
@@ -124,6 +198,15 @@ public class MySqlService extends IOService {
         return mySqlContactReader.read(phoneBookName);
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     @Override
     public Boolean updateContacts(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -143,6 +226,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     int getPhonebook_ID(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
@@ -163,6 +255,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     int getContacts_ID(String fullName) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
@@ -183,6 +284,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     List<Integer> getTags_IDFromContacts_TagsTable(int contacts_id) {
         try (Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement("""
@@ -203,6 +313,15 @@ public class MySqlService extends IOService {
         }
     }
 
+    /**
+	 * This method get the joined table from the MySql database, 
+     * processes the data using streams and puts it into a 
+     * list of ContactBean elements and returns the list 
+	 * 
+	 * @param 
+	 * @return 
+	 * ArrayList<ContactBean>
+	 */
     int checkIfTagExistsInTagsTable(String tag) {
         int tag_ID = 0;
         try(Connection connection = MySqlHelper.getConnection()) {
@@ -220,6 +339,24 @@ public class MySqlService extends IOService {
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
+        }    
+    }
+
+    //Only for testing to clear the database when a test fail
+    // and remenant data exists from the last test
+    void deleteAll() {
+        try(Connection connection = MySqlHelper.getConnection()) {
+            ps1 = connection.prepareStatement(
+                """
+                DELETE FROM contactApp.contacts_tags;
+                DELETE FROM contactApp.tags;
+                DELETE FROM contactApp.phonenumber;
+                DELETE FROM contactApp.email;
+                DELETE FROM contactApp.contacts;
+                DELETE FROM contactApp.phonebook_master;""");
+            resultSet = ps1.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }    
     }
 

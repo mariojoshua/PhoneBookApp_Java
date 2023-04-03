@@ -14,7 +14,15 @@ import java.util.stream.Collector;
 
 import com.uttara.phone.ContactBean;
 
-
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
 
 public class SerializedTextIOService extends IOService {
 

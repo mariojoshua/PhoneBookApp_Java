@@ -6,6 +6,16 @@ import com.uttara.phone.Address;
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
 
+/**
+ * This class will hold the view and the controller in flavor 1 of MVC(Desktop
+ * App) design pattern
+ * 
+ * @author mariojoshuaaugustine
+ * @version 1.0
+ * @since 2021-12-01
+ * 
+ */
+
 public class PlainTextIOService extends IOService {
 
 
