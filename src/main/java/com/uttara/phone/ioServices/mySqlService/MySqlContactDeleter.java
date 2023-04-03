@@ -21,7 +21,7 @@ import com.uttara.phone.Logger;
  * 
  */
 
-public class MySqlContactDeleter {
+class MySqlContactDeleter {
     
     PreparedStatement ps1 = null, ps2 = null;
     ResultSet resultSet = null;
@@ -31,7 +31,7 @@ public class MySqlContactDeleter {
         this.mySqlService = new MySqlService();
     }
 
-    public Boolean delete(String fullName) {
+    Boolean delete(String fullName) {
         int contacts_ID = mySqlService.getContacts_ID(fullName);
         deleteTags(contacts_ID);
         deleteFromEmailTable(contacts_ID);
