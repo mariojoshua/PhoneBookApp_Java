@@ -19,18 +19,25 @@ import com.uttara.phone.Logger;
 import com.uttara.phone.Name;
 import com.uttara.phone.Name.Gender;
 
+/** This class does all the reading operations from the database
+* 
+* @author mariojoshuaaugustine
+* @version 1.0
+* @since 2021-12-01
+* 
+*/
+
 class MySqlContactReader {
     PreparedStatement ps1;
     ResultSet resultSet;
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method takes the phoneBookName and gets all the contacts
+     * with all details for that particular phoneBookName
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * List of ContactBeans 
 	 */
     List<ContactBean> read(String phoneBookName) {
         //get joined table

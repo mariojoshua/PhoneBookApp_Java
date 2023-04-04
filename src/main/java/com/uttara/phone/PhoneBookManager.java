@@ -41,17 +41,17 @@ public class PhoneBookManager {
 		int result = 0;
 		choice = 0;
 		while (choice != 6) {
-			System.out.println("\n\tContacts Book Menu");
-			System.out.println("*********************************\n");
-			System.out.println("Press [1] to Create Contacts Book");
-			System.out.println("Press [2] to Load Contact Books");
-			System.out.println("Press [3] to Search contacts");
-			System.out.println("Press [4] to List contacts");
-			System.out.println("Press [5] for Birthday reminders");
-			System.out.println("Press [6] to Exit");
-			System.out.println("\n*********************************");
-			System.out.println("Enter choice\f");
-
+			System.out.println("""
+				\n\tContacts Book Menu
+				*********************************\n
+				Press [1] to Create Contacts Book
+				Press [2] to Load Contact Books
+				Press [3] to Search contacts
+				Press [4] to List contacts
+				Press [5] for Birthday reminders
+				Press [6] to Exit
+				\n*********************************
+				Enter choice\f""");
 			/*
 				* until user gives only an int value, keep showing message
 				*/
@@ -118,15 +118,16 @@ public class PhoneBookManager {
 	public void showsContactsMenu() {
 		choice = 0;
 		while (choice != 6) {
-			System.out.println("\f\tContacts Menu");
-			System.out.println("-------------------------------\n");
-			System.out.println("Press [1] to Add contact");
-			System.out.println("Press [2] to Edit a contact");
-			System.out.println("Press [3] to Remove a contact");
-			System.out.println("Press [4] to List contacts");
-			System.out.println("Press [5] to Search contact");
-			System.out.println("Press [6] to go back");
-			System.out.println("\n-------------------------------");
+			System.out.println("""
+				\f\tContacts Menu
+				-------------------------------\n
+				Press [1] to Add contact
+				Press [2] to Edit a contact
+				Press [3] to Remove a contact
+				Press [4] to List contacts
+				Press [5] to Search contact
+				Press [6] to go back
+				\n-------------------------------""");
 			while ( choice < 1 || choice > 6) {
 				choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
 				Logger.getInstance().log("mainMenu choice = " + choice);
@@ -196,10 +197,12 @@ public class PhoneBookManager {
 
 	private void showsListContactMenu() {
 		choice = 0;
-		System.out.println("Press 1 to list contacts by alphabetical listing by name");
-		System.out.println("Press 2 to list contacts by alphabetical ordering of tags");
-		System.out.println("Press 3 to list contacts by created date");
-		System.out.println("Press 4 to list contacts by string length (length of entire line info on contact)");
+		System.out.println("""
+			Press 1 to list contacts by alphabetical listing by name
+			Press 2 to list contacts by alphabetical ordering of tags
+			Press 3 to list contacts by created date
+			Press 4 to list contacts by string length (length of entire line info on contact)""");
+
 		while ( choice < 1 || choice > 4) {
 			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
 			Logger.getInstance().log("mainMenu choice = " + choice);
@@ -316,14 +319,15 @@ public class PhoneBookManager {
 		}
 
 		while (choice != 7) {
-			System.out.println("Press [1] to edit phone number");
-			System.out.println("Press [2] to remove phone number");
-			System.out.println("Press [3] to add new phone number");
-			System.out.println("Press [4] to edit email id");
-			System.out.println("Press [5] to remove email id");
-			System.out.println("Press [6] to add new email id");
-			System.out.println("Press [7] to go back\n");
-			System.out.println("Enter a choice to proceed");
+			System.out.println("""
+				Press [1] to edit phone number
+				Press [2] to remove phone number
+				Press [3] to add new phone number
+				Press [4] to edit email id
+				Press [5] to remove email id
+				Press [6] to add new email id
+				Press [7] to go back\n
+				Enter a choice to proceed""");
 
 			//
 			while (!numberScanner.hasNextInt()) {

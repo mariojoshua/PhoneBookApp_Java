@@ -12,8 +12,7 @@ import java.util.Map;
 import com.uttara.phone.Logger;
 
 /**
- * This class will hold the view and the controller in flavor 1 of MVC(Desktop
- * App) design pattern
+ * This class has the delete operations to delete the contacts from the database
  * 
  * @author mariojoshuaaugustine
  * @version 1.0

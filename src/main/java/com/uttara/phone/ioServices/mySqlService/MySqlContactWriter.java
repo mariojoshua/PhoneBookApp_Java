@@ -13,8 +13,7 @@ import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
 
 /**
- * This class will hold the view and the controller in flavor 1 of MVC(Desktop
- * App) design pattern
+ * This class does all the writing(INSERT) of the data into the various databases
  * 
  * @author mariojoshuaaugustine
  * @version 1.0
@@ -39,8 +38,8 @@ public class MySqlContactWriter {
      * various tables in the the MySql database. 
      * 
 	 * @param
-	 * @return a boolean depending on if the write was succesful
-	 * 
+	 * @return 
+	 * true if the write was successfull, false if it failed
 	 */
     boolean write(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -66,6 +65,9 @@ public class MySqlContactWriter {
         }
     }
 
+    /**
+     * @hidden
+     */ 
     int insertIntoContactsTable(ContactBean contactBean) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
@@ -99,6 +101,9 @@ public class MySqlContactWriter {
         }    
     }
 
+     /**
+     * @hidden
+     */
     int insertTags(ContactBean contactBean, int contacts_ID) {
         int tag_ID = 0;
         List<Integer> tagIDList = new LinkedList<>();
@@ -119,6 +124,9 @@ public class MySqlContactWriter {
         return rowsAffected;
     }    
 
+     /**
+     * @hidden
+     */
     int insertIntoTagsTable(String tag, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
@@ -146,6 +154,9 @@ public class MySqlContactWriter {
         }  
     }
 
+     /**
+     * @hidden
+     */
     int insertIntoContactsTagsLinkTable(List<Integer> tagIDList,  int contacts_ID)  {
         try (Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
@@ -171,6 +182,9 @@ public class MySqlContactWriter {
         }  
     }
 
+     /**
+     * @hidden
+     */
     int insertIntoEmailTable(ContactBean contactBean, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 
@@ -194,6 +208,9 @@ public class MySqlContactWriter {
         }  
     }
 
+     /**
+     * @hidden
+     */
     int insertIntoPhoneNumberTable(ContactBean contactBean, int contacts_ID) {
         try(Connection connection = MySqlHelper.getConnection()) {
             connection.setAutoCommit(false); 

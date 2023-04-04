@@ -29,13 +29,12 @@ public class MySqlService extends IOService {
     Connection connection = null;
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method creates a phoneBookName record in the MySQL phonebook_master
+     * table 
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * true if it was successfully created or false if theres an exception
 	 */
     @Override
     public Boolean createContactBook(String phoneBookName) {
@@ -58,13 +57,13 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method checks if a phone books name exists in the in 
+     * phonebook_master table
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * true if the contactBook exists , false if
+     * it doesnt exist or if there's an exception
 	 */
     @Override
     public Boolean contactBookExists(String phoneBookName) {
@@ -91,13 +90,12 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method is used to delete the phoneBookName from the 
+     * phonebook_master database 
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * true if the deletion was succesful, false if it failed
 	 */
     @Override
     public Boolean deleteContactBook(String phoneBookName) {
@@ -122,13 +120,11 @@ public class MySqlService extends IOService {
 
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method is used to input the contact details into the mysql database
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * true if succesfully written, false if it failed
 	 */
     @Override
     public Boolean writeContacts(ContactBean contactBean) {
@@ -137,13 +133,12 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method check if a contact, specifically the full name exists in
+     * the contacts table
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * true if the contact exists, false if it doesnt.
 	 */
     @Override
     public Boolean contactExists(ContactBean contactBean) {
@@ -183,13 +178,12 @@ public class MySqlService extends IOService {
 
 
     /**
-	 * This method gets the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method gets all the data from the mysql database which are
+     * linked to a phoneBookNAme
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * A list of contactBean Objects
 	 */
     @Override
     public List<ContactBean> readContact(String phoneBookName) {
@@ -202,7 +196,7 @@ public class MySqlService extends IOService {
 	 * This method get the joined table from the MySql database, 
      * processes the data using streams and puts it into a 
      * list of ContactBean elements and returns the list 
-	 * 
+	 * @hidden
 	 * @param 
 	 * @return 
 	 * ArrayList<ContactBean>
@@ -227,13 +221,13 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method gets the id associated with the phonebook name in the 
+     * phonebook_master mysql database table when it got created in the database
+     * to be used as a foreign key
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * int id associated with a phoneBookName
 	 */
     int getPhonebook_ID(ContactBean contactBean) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -256,13 +250,13 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method gets the id associated with the contact name in the 
+     * contacts mysql database table when it got created in the database
+     * to be used as a foreign key
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * int id associated with a contact
 	 */
     int getContacts_ID(String fullName) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -285,13 +279,13 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method gets the tag id from the Contacts_tags link table in
+     * order to be used to find the tag associated with a contact
+     * for quick searching
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * List id's associated with a contacts_tag link table record
 	 */
     List<Integer> getTags_IDFromContacts_TagsTable(int contacts_id) {
         try (Connection connection = MySqlHelper.getConnection()) {
@@ -314,13 +308,13 @@ public class MySqlService extends IOService {
     }
 
     /**
-	 * This method get the joined table from the MySql database, 
-     * processes the data using streams and puts it into a 
-     * list of ContactBean elements and returns the list 
+	 * This method checks if a tag exists in the tags table and returns 
+     * the id associated with a tag to be used a foreign key in the
+     * contacts_tags table
 	 * 
 	 * @param 
 	 * @return 
-	 * ArrayList<ContactBean>
+	 * tag id if it exists, 0 if the tag doesnt exist
 	 */
     int checkIfTagExistsInTagsTable(String tag) {
         int tag_ID = 0;
@@ -342,8 +336,8 @@ public class MySqlService extends IOService {
         }    
     }
 
-    //Only for testing to clear the database when a test fail
-    // and remenant data exists from the last test
+    //Only for testing 
+    //used to clear the remnant data from the database when a test fail
     void deleteAll() {
         try(Connection connection = MySqlHelper.getConnection()) {
             ps1 = connection.prepareStatement(

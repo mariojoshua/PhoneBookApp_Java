@@ -53,7 +53,9 @@ public class PhoneBookService {
 	}
 
 
-	public String createContactsBook(String phoneBookName) {	
+	public String createContactsBook(String phoneBookName) {
+		// check if contact exists, if no then create
+		//if yes return message that it already exists	
 		if (ioService.createContactBook(phoneBookName) == true) {
 			return phoneBookName + "phone book successfully created";
 		} else {
@@ -66,9 +68,9 @@ public class PhoneBookService {
 		return ioService.contactBookExists(phoneBookName);
 	}
 
-	public boolean contactNameExists(String phoneBookName, String contactName) {
-		Logger.getInstance().log("Checking if contact name " + contactName + " exists in " + phoneBookName);
-		return ioService.contactExists(contactName, phoneBookName);
+	public boolean contactNameExists(String phoneBookName, String fullName) {
+		Logger.getInstance().log("Checking if contact name " + fullName + " exists in " + phoneBookName);
+		return ioService.contactExists(new ContactBean(phoneBookName, new Name(fullName))) ;
 	}
 
 	
