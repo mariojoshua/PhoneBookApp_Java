@@ -23,25 +23,34 @@ public class IOServiceFactory {
         MYSQL_DATABASE;
     }
 
+    private static IOService ioService = null;
+
+    private IOServiceFactory() {
+    }
+
     /**
 	 * This method takes in the name of the persistence technology we need
-     * and gives us a created instance of it.
+     * and gives us a created instance of it. 
+     * It is implemented as a singleton factory method.
 	 * 
 	 * @param
 	 * @return an instance of either PlainTextIOService, 
      * SerializedTextIOService, MySqlService.
 	 */
-    public IOService getIoService(Enum<?> IOServiceType){		
-        if (IOServiceType == IOServiceName.PLAIN_TEXT) {
-           return new PlainTextIOService();
-           
-        } else if(IOServiceType == IOServiceName.SERIALIZED_TEXT) {
-           return new SerializedTextIOService();
-           
-        } else if(IOServiceType == IOServiceName.MYSQL_DATABASE) {
-           return new MySqlService();
-        } else {
-            return null;
-        }  
+    public static IOService getIoService (Enum<?> ioServiceType) {		
+        if (ioService == null) {
+            if (ioServiceType == IOServiceName.PLAIN_TEXT) {
+                ioService = new PlainTextIOService();   
+            } else if(ioServiceType == IOServiceName.SERIALIZED_TEXT) {
+                ioService = new SerializedTextIOService();     
+            } else if(ioServiceType == IOServiceName.MYSQL_DATABASE) {
+                ioService = new MySqlService();
+            } else {
+                // throw custom invalid io service exception
+                ioService =  null;
+            } 
+        }
+        return ioService; 
     }
+
 }

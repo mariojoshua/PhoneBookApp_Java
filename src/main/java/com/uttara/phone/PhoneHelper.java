@@ -1,6 +1,8 @@
 package com.uttara.phone;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * This class contains all the static utility methods used by 
@@ -9,49 +11,52 @@ import java.util.Scanner;
 
 public class PhoneHelper { 
 
+	// early instantiation
+	private static BufferedReader bufferedReader 
+	  = new BufferedReader(new InputStreamReader(System.in));
+
+	// constructor set to private so that it can be instantiated
+	// and only a single instance will be used
+	private PhoneHelper() {
+	}
+
 	/**
 	 * This method will validate the string given to check if it contains multiple
 	 * words or special chars. If7 yes, it returns an error message else it returns constant
 	 * string success!
 	 */
 	public static String validateName(String n) {
-		if (n == null || n.trim().equals(""))
-			throw new IllegalArgumentException("name cannot be null");
+		// if (n == null || n.trim().equals(""))
+		// 	throw new IllegalArgumentException("name cannot be null");
 
-		String[] sa = n.split(" ");
-		if (sa.length > 1)
-			return "Name cannot contain multiple words! Enter a single worded string as input!";
+		// String[] sa = n.split(" ");
+		// if (sa.length > 1)
+		// 	return "Name cannot contain multiple words! Enter a single worded string as input!";
 
-		for (int i = 0; i < n.length(); i++) {
-			char c = n.charAt(i);
+		// for (int i = 0; i < n.length(); i++) {
+		// 	char c = n.charAt(i);
 
-			if (!(Character.isDigit(c) || Character.isLetter(c)))
-				return "Name should not contain special chars!";
-		}
+		// 	if (!(Character.isDigit(c) || Character.isLetter(c)))
+		// 		return "Name should not contain special chars!";
+		// }
 		return Constants.SUCCESS;
 	}
 	
 	public static int getUserNumberInput(String prompt) {
-		try(Scanner scanner = new Scanner(System.in)) {
-			System.out.print(prompt +  ": ");
-			return scanner.nextInt();
-		} catch(Exception ioEx) {
-			ioEx.printStackTrace();
-			return -1;
-		}	
+		return Integer.parseInt(getUserStringInput(prompt));
 	}
-
+	
 	public static String getUserStringInput(String prompt) {
-		try(Scanner scanner = new Scanner(System.in)) {
+		String result = "";
+		try {
 			System.out.print(prompt +  ": ");
-			return scanner.nextLine();
-		} catch(Exception ioEx) {
-			ioEx.printStackTrace();
-			return "invalid String";
-		}	
+			result = bufferedReader.readLine();
+			Logger.getInstance().log(prompt + " : " + result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return result;
 	}
-
-
 	public static String validateDate(String date) {
 		//Check if input date is before current date
 		//To validate current date and time
@@ -68,27 +73,16 @@ public class PhoneHelper {
 		return Constants.SUCCESS;
 		
 	}
-	
 	public static String validateEmail(String email) {
 		return Constants.SUCCESS;
 	}
-	
 	public static String validatePhoneNumber(String num) {
 		//Use Regex  or starts with to check if it begins with right numbers
 		return Constants.SUCCESS;
 	}
-	
 	public static String validateTags(String tag) {
 		return Constants.SUCCESS;
 	}
-	
-	//	Address Validations
-	public static String homeNumber;
-	public static String streetAddress;
-	public static String pincode;
-	public static String city;
-	public static String state;
-	public static String country;
 	
 	static String validateHomeNumber(String homeNumber) {
 		return Constants.SUCCESS;
@@ -118,6 +112,9 @@ public class PhoneHelper {
 	static String validateCountry(String country) {
 		return Constants.SUCCESS;
 	}
+
+    public static void closeResources() {
+    }
 	
 	
 	

@@ -37,10 +37,8 @@ public class PhoneBookService {
 	/*
 	 * BUSINESS LOGIC
 	 */
-	public PhoneBookService() {
-		ioService = getIOService();
-	}
-	 
+
+	
 
 	public IOService getIOService() {
 		/* 
@@ -49,7 +47,12 @@ public class PhoneBookService {
          * SERIALIZED_TEXT,
          * MYSQL_DATABASE;
 		*/
-		return new IOServiceFactory().getIoService(IOServiceName.MYSQL_DATABASE);
+		return IOServiceFactory.getIoService(IOServiceName.MYSQL_DATABASE);
+	}
+
+
+	public PhoneBookService() {
+		ioService = getIOService();
 	}
 
 
