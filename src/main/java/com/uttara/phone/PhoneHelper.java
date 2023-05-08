@@ -2,7 +2,12 @@ package com.uttara.phone;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * This class contains all the static utility methods used by 
@@ -14,8 +19,9 @@ public class PhoneHelper {
 	// early instantiation
 	private static BufferedReader bufferedReader 
 	  = new BufferedReader(new InputStreamReader(System.in));
-
-	// constructor set to private so that it can be instantiated
+	private static Scanner scanner 
+	  = new Scanner(System.in);
+	// constructor set to private so that it cannot be instantiated
 	// and only a single instance will be used
 	private PhoneHelper() {
 	}
@@ -41,17 +47,33 @@ public class PhoneHelper {
 		// }
 		return Constants.SUCCESS;
 	}
+
+	public static int choiceInputandValidation(int choice, int upperLimit) {
+		while ( choice < 1 || choice > upperLimit) {
+			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+			Logger.getInstance().log("mainMenu choice = " + choice);
+		}
+		return choice;	
+	}
 	
 	public static int getUserNumberInput(String prompt) {
-		return Integer.parseInt(getUserStringInput(prompt));
+		int choice = 0;
+		try {
+			choice = Integer.parseInt(getUserStringInput(prompt));
+		} catch (NumberFormatException ne) {
+			getUserNumberInput(prompt);
+		}
+		return choice;
 	}
 	
 	public static String getUserStringInput(String prompt) {
 		String result = "";
 		try {
-			System.out.print(prompt +  ": ");
-			result = bufferedReader.readLine();
-			Logger.getInstance().log(prompt + " : " + result);
+			while (result.isBlank()) {
+				System.out.print(prompt +  ": ");
+				result = bufferedReader.readLine();
+				Logger.getInstance().log(prompt + " : " + result);
+			}	
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -114,7 +136,20 @@ public class PhoneHelper {
 	}
 
     public static void closeResources() {
-    }
+		bufferedReaderCloser();
+		scanner.close();
+
+	}
+
+	public static void bufferedReaderCloser() {
+		if (bufferedReader != null) {
+			try {
+				bufferedReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	
 	

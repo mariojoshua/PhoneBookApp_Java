@@ -36,70 +36,60 @@ public class PhoneBookManager {
 		System.out.println("In run method");
 		this.phoneBookService = new PhoneBookService();
 		//System.out.println(this.phoneBookService);
-		showsMainMenu();	
+		mainMenuController();	
 	} 
 
-	public void showsMainMenu() {
-		int result = 0;
-		choice = 0;
-		while (choice != 6) {
-			System.out.println("""
-				\n\tContacts Book Menu
-				*********************************\n
-				Press [1] to Create Contacts Book
-				Press [2] to Load Contact Books
-				Press [3] to Search contacts
-				Press [4] to List contacts
-				Press [5] for Birthday reminders
-				Press [6] to Exit
-				\n*********************************
-				Enter choice\f""");
-			/*
-				* until user gives only an int value, keep showing message
-				*/
-			// System.out.println("Enter a choice");	
-			while ( choice < 1 || choice > 6) {
-				choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
-				Logger.getInstance().log("mainMenu choice = " + choice);
-			}
-			//choice = PhoneHelper.getUserNumberInput("");	
-			choice = mainMenuController(choice);
-			
-		}
- 
+	public int showsMainMenu() {
+		int menuSize = 6;
+		System.out.println("""
+			\n\tContacts Book Menu
+			*********************************\n
+			Press [1] to Create Contacts Book
+			Press [2] to Load Contact Books
+			Press [3] to Search contacts
+			Press [4] to List contacts
+			Press [5] for Birthday reminders
+			Press [6] to Exit
+			\n*********************************
+			Enter choice\f""");		
+		return menuSize;				
 	}
 
-	public int mainMenuController (int choice) {
-		switch (choice) {
-			case 1: // Creates a Contacts Book file on disk/sql entry
-				createContactsBook();
-				//showsContactsMenu();
-				break;
-			case 2: // Loads Contacts Book Name from file
-			//	phoneBookService.loadsContactsBook();
-				System.out.println("Contact book loaded");
-				break;
-			case 3:
-				System.out.println("searching phone book...");
-				break;
-			case 4:
+	public void mainMenuController () {
+		int choice = 0;
+		while (choice != 6) {
+			int menuSize = showsMainMenu();
+			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
+			switch (choice) {
+				case 1: // Creates a Contacts Book file/entry on disk/sql 
+					createContactsBook();
+					//showsContactsMenu();
+					break;
+				case 2: // Loads Contacts Book Name from file
+				//	phoneBookService.loadsConta6ctsBook();
+					System.out.println("Contact book loaded");
+					break;
+				case 3:
+					System.out.println("searching phone book...");
+					break;
+				case 4:
 
-				System.out.println("listing phone book...");
-			//	System.out.println(phoneBookService.listContacts(phoneBookName));
-				break;
-			case 5:
-				System.out.println("listing birthday reminders...");
-				break;
-			case 6:
-				System.out.println("Exiting...Have a great day");
-				PhoneHelper.closeResources();
-				break;
-			default:
-				System.out.println("Kindly enter choice between 1 to 6\n");
-				break;
+					System.out.println("listing phone book...");
+				//	System.out.println(phoneBookService.listContacts(phoneBookName));
+					break;
+				case 5:
+					System.out.println("listing birthday reminders...");
+					break;
+				case 6:
+					System.out.println("Exiting...Have a great day");
+					PhoneHelper.closeResources();
+					break;
+				default:
+					System.out.println("Kindly enter choice between 1 to 6\n");
+					break;
 
-			}
-			return 6;
+				}
+		}
 	}
 
 	
