@@ -19,8 +19,6 @@ public class PhoneHelper {
 	// early instantiation
 	private static BufferedReader bufferedReader 
 	  = new BufferedReader(new InputStreamReader(System.in));
-	private static Scanner scanner 
-	  = new Scanner(System.in);
 	// constructor set to private so that it cannot be instantiated
 	// and only a single instance will be used
 	private PhoneHelper() {
@@ -137,8 +135,6 @@ public class PhoneHelper {
 
     public static void closeResources() {
 		bufferedReaderCloser();
-		scanner.close();
-
 	}
 
 	public static void bufferedReaderCloser() {

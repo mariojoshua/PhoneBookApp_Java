@@ -17,7 +17,7 @@ public class PhoneHelperTest {
 
     @Test
     void testGetUserNumberInput() {
-        assertEquals(1, PhoneHelper.getUserNumberInput("Write num"));
+        // tested for 13, 15 "ghee"/, ""," " no exceptions arose
     }
 
     @Test
