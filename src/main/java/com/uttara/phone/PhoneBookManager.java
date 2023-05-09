@@ -12,8 +12,6 @@ import java.util.List;
  * 
  */
 
-
-
 public class PhoneBookManager {
 
 	private PhoneBookService phoneBookService = null;
@@ -56,8 +54,8 @@ public class PhoneBookManager {
 			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
 			switch (choice) {
 				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					//createContactsBook();
-					//showsContactsMenu();
+					createContactsBook();
+					contactsMenuController();
 					choice = 0;
 					break;
 				case 2: // Loads Contacts Book Name from file
@@ -92,62 +90,7 @@ public class PhoneBookManager {
 		}
 	}
 
-	private int listContactsMenuView() {
-		int menuSize = 5;
-		System.out.println("""
-			\n\tList Contacts Menu
-			*********************************\n
-			Press [1] to list contacts by alphabetical listing by name
-			Press [2] to list contacts by alphabetical ordering of tags
-			Press [3] to list contacts by created date
-			Press [4] to list contacts by string length 
-			Press [5] to go back
-			\n*********************************
-			Enter choice\f""");		
-		return menuSize;				
-	}
-
-	private void listContactsController() {
-		int choice = 0;
-		while (choice != 5) {
-			int menuSize = listContactsMenuView();
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Adding a contact menu 
-					System.out.println("\f");
-					Logger.getInstance().log("Adding contact");
-					//showsAddContactMenu();
-					choice = 0;
-					break;
-				case 2:
-					// Edit contact Menu
-					Logger.getInstance().log("Editing contact");
-					//showsEditContactMenu();
-					choice = 0;
-					break;
-				case 3:
-					/*
-					* To Remove a contact validation - Check if contact exits IF contact is removed
-					* return success message or else Display"Unable to remove"
-					*/
-					Logger.getInstance().log("removing contact");
-					//showsRemoveContactMenu();
-					choice = 0;
-					break;
-				case 4:
-					// List Contact Menu 
-					//showsListContactMenu();
-					choice = 0;
-					break;
-				case 5:
-					System.out.println("Going back to Main Menu");
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 and 5\n");
-					break;
-			}
-		}
-	}
+	
 
 	private int contactsMenuView() {
 		int menuSize = 6;
@@ -211,22 +154,78 @@ public class PhoneBookManager {
 		}
 	}
 
-	// private void createContactsBook() {
-	// 	String phoneBookName = PhoneHelper
-	// 		.getUserStringInput("Enter a name for the phoneBook");
-	// 	System.out.println(phoneBookName);
-	// 	String result = PhoneHelper.validateName(phoneBookName);
-	// 	// while (!result.equals(Constants.SUCCESS)) {
-	// 	// 	System.out.println("""
-	// 	// 	Enter a name which consists of a single word, 
-	// 	// 	no special characters and starts with a letter.""");
-	// 	// 	phoneBookName = PhoneHelper
-	// 	// 	.getUserStringInput("Enter a name for the phoneBook");
-	// 	// 	result = PhoneHelper.validateName(phoneBookName);
-	// 	// }
-	// 	Logger.getInstance().log("Validation Success, Creating phonebook " + phoneBookName);
-	// 	System.out.println(phoneBookService.createContactsBook(phoneBookName));
-	// }
+	private int listContactsMenuView() {
+		int menuSize = 5;
+		System.out.println("""
+			\n\tList Contacts Menu
+			*********************************\n
+			Press [1] to list contacts by alphabetical listing by name
+			Press [2] to list contacts by alphabetical ordering of tags
+			Press [3] to list contacts by created date
+			Press [4] to list contacts by string length 
+			Press [5] to go back
+			\n*********************************
+			Enter choice\f""");		
+		return menuSize;				
+	}
+
+	private void listContactsController() {
+		int choice = 0;
+		while (choice != 5) {
+			int menuSize = listContactsMenuView();
+			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
+			switch (choice) {
+				case 1: // Adding a contact menu 
+					System.out.println("\f");
+					Logger.getInstance().log("Adding contact");
+					//showsAddContactMenu();
+					choice = 0;
+					break;
+				case 2:
+					// Edit contact Menu
+					Logger.getInstance().log("Editing contact");
+					//showsEditContactMenu();
+					choice = 0;
+					break;
+				case 3:
+					Logger.getInstance().log("removing contact");
+					//showsRemoveContactMenu();
+					choice = 0;
+					break;
+				case 4:
+					// List Contact Menu 
+					//showsListContactMenu();
+					choice = 0;
+					break;
+				case 5:
+					System.out.println("Going back to Main Menu");
+					break;
+				default:
+					System.out.println("Kindly enter choice between 1 and 5\n");
+					break;
+			}
+		}
+	}
+
+	void createContactsBook() {
+		String phoneBookName = "";
+		String validity = Constants.FAILURE;
+		while (!validity.equals(Constants.SUCCESS)) {
+			phoneBookName = PhoneHelper
+			.getUserStringInput("Enter a name for the phoneBook");
+			// Input Validation
+			validity = PhoneHelper.validateContactsBookName(phoneBookName);
+			// Business Validation - no duplicates
+			if (phoneBookService.phoneBookExists(phoneBookName)) {
+				validity = "Phone book " + phoneBookName + " already exists, use a different name ";
+			}
+			System.out.println(validity);
+		}
+		Logger.getInstance().log("Validation Success, Creating phonebook " + phoneBookName);
+		String message = phoneBookService.createContactsBook(phoneBookName);
+		System.out.println(message);
+		Logger.getInstance().log(message);
+	}
 
 	// private void showsSearchContactMenu() {
 	// 	/*

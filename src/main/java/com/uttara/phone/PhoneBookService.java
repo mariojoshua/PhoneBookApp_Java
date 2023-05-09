@@ -60,9 +60,9 @@ public class PhoneBookService {
 		// check if contact exists, if no then create
 		//if yes return message that it already exists	
 		if (ioService.createContactBook(phoneBookName) == true) {
-			return phoneBookName + "phone book successfully created";
+			return phoneBookName + " phone book successfully created";
 		} else {
-			return phoneBookName + "phone book could not be created";
+			return phoneBookName + " phone book could not be created";
 		}		
 	}
 
