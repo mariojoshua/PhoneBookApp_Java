@@ -50,18 +50,19 @@ public class PhoneBookManager {
 	private void mainMenuController () {
 		int choice = 0;
 		while (choice != 6) {
+			String phoneBookName = "";
 			int menuSize = mainMenuView();
 			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
 			switch (choice) {
 				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					createContactsBook();
-					contactsMenuController();
+					phoneBookName = createContactsController();
+					contactsMenuController(phoneBookName);
 					choice = 0;
 					break;
 				case 2: // Loads Contacts Book Name from file
-				//	phoneBookService.loadsConta6ctsBook();
 					System.out.println("Contact book loaded");
-					contactsMenuController();
+					phoneBookName = loadContactsController();
+					contactsMenuController(phoneBookName);
 					choice = 0;
 					break;
 				case 3:
@@ -92,6 +93,25 @@ public class PhoneBookManager {
 
 	
 
+	private String loadContactsController() {
+		//check if phonebook exists
+		String phoneBookName = "";
+		String validity = Constants.FAILURE;
+		while (!validity.equals(Constants.SUCCESS)) {
+			phoneBookName = PhoneHelper
+			.getUserStringInput("Enter a name for the phoneBook");
+			// Input Validation
+			validity = PhoneHelper.validateContactsBookName(phoneBookName);
+			// Business Validation - no duplicates
+			if (phoneBookService.phoneBookExists(phoneBookName)) {
+				Logger.getInstance().log("Phone book " + phoneBookName + " exists.");
+				validity = Constants.SUCCESS;
+			}
+			System.out.println("Opening PhoneBook" + phoneBookName);
+		}
+		return phoneBookName;
+	}
+
 	private int contactsMenuView() {
 		int menuSize = 6;
 		System.out.println("""
@@ -108,7 +128,7 @@ public class PhoneBookManager {
 		return menuSize;		
 	}
 
-	public void contactsMenuController() {
+	public void contactsMenuController(String phoneBookName) {
 		int choice = 0;
 		while (choice != 6) {
 			int menuSize = contactsMenuView();
@@ -169,7 +189,7 @@ public class PhoneBookManager {
 		return menuSize;				
 	}
 
-	private void listContactsController() {
+	void listContactsController() {
 		int choice = 0;
 		while (choice != 5) {
 			int menuSize = listContactsMenuView();
@@ -207,7 +227,7 @@ public class PhoneBookManager {
 		}
 	}
 
-	void createContactsBook() {
+	String createContactsController() {
 		String phoneBookName = "";
 		String validity = Constants.FAILURE;
 		while (!validity.equals(Constants.SUCCESS)) {
@@ -225,6 +245,7 @@ public class PhoneBookManager {
 		String message = phoneBookService.createContactsBook(phoneBookName);
 		System.out.println(message);
 		Logger.getInstance().log(message);
+		return phoneBookName;
 	}
 
 	// private void showsSearchContactMenu() {
