@@ -1,5 +1,7 @@
 package com.uttara.phone;
 
+import com.uttara.phone.manager.MainMenuManager;
+
 /**
  * This class is used to start the app , 
  * it contains the main method of the app.
@@ -12,7 +14,7 @@ package com.uttara.phone;
 
 public class PhoneBookApp {
     public static void main(String[] args) {
-        PhoneBookManager phoneBookManager = new PhoneBookManager();
-        phoneBookManager.run();
+        MainMenuManager mainMenuManager = new MainMenuManager();
+        mainMenuManager.run();
     }
 }
