@@ -37,9 +37,6 @@ public class PhoneBookService {
 	/*
 	 * BUSINESS LOGIC
 	 */
-
-	
-
 	public IOService getIOService() {
 		/* 
 		 * Change Persistence method here if needed, options
@@ -76,17 +73,16 @@ public class PhoneBookService {
 		return ioService.contactExists(new ContactBean(phoneBookName, new Name(fullName))) ;
 	}
 
-	
-
-	
-
-
 	public List<ContactBean> listContacts(String phoneBook) {
 
 		List<ContactBean> contactArray = new ArrayList<ContactBean>();
 
 		return contactArray;
 
+	}
+
+	public String createContact(String phoneBookName2) {
+		return "";
 	}
 
 	
