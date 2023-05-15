@@ -1,5 +1,10 @@
 package com.uttara.phone.manager;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import com.uttara.phone.Constants;
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
 import com.uttara.phone.Name;
@@ -93,10 +98,10 @@ public class ContactsMenuManager {
 
     private void addContactController(String phoneBookName) {
 		// take all inputs after validation
-		Enum gender = Gender.valueOf();// use this in meth to return enum
-		String fullName = "";
-		String petName = "";
-		Name name = new Name(null, fullName, petName);
+		Gender gender = getGenderInput(); 
+		String fullName = getFullNameInput();
+		String petName = getPetNameInput();
+		Name name = new Name(gender, fullName, petName);
 		List<String> phoneNumbers = null;
 		String address = null;
 		List<String> tags = null;
@@ -110,4 +115,30 @@ public class ContactsMenuManager {
 		System.out.println(message);
 		Logger.getInstance().log(message);
     }
+
+
+	private Gender getGenderInput() {
+		String validity = Constants.FAILURE;
+		String gender = "";
+		while (!validity.equals(Constants.SUCCESS)) {
+			gender = PhoneHelper.getUserStringInput("""
+				Enter a gender for the contact
+					m for Male
+					f for Female
+					o for others """);
+			// Input Validation
+			validity = PhoneHelper.validateGender(gender);
+			Logger.getInstance().log(validity);
+			System.out.println(validity);
+		}
+		return Gender.valueOf(gender);
+	}
+
+	private String getPetNameInput() {
+		return null;
+	}
+
+	private String getFullNameInput() {
+		return null;
+	}
 }

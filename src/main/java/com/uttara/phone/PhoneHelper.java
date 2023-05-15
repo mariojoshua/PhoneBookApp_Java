@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -23,6 +24,52 @@ public class PhoneHelper {
 	// constructor set to private so that it cannot be instantiated
 	// and only a single instance will be used
 	private PhoneHelper() {
+	}
+
+	public static int getUserNumberInput(String prompt) {
+		int choice = 0;
+		try {
+			choice = Integer.parseInt(getUserStringInput(prompt));
+		} catch (NumberFormatException ne) {
+			getUserNumberInput(prompt);
+		}
+		return choice;
+	}
+	
+	public static String getUserStringInput(String prompt) {
+		String result = "";
+		try {
+			while (result.isBlank()) {
+				System.out.print(prompt +  ": ");
+				result = bufferedReader.readLine().trim();
+				Logger.getInstance().log(prompt + " : " + result);
+			}	
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return result;
+	}
+
+	public static void bufferedReaderCloser() {
+		if (bufferedReader != null) {
+			try {
+				bufferedReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static int choiceInputandValidation(int choice, int upperLimit) {
+		while ( choice < 1 || choice > upperLimit) {
+			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+			Logger.getInstance().log("mainMenu choice = " + choice);
+		}
+		return choice;	
+	}
+
+	public static void closeResources() {
+		bufferedReaderCloser();
 	}
 
 	
@@ -77,6 +124,13 @@ Business Validation:
 		return Constants.SUCCESS;
 	}
 
+	private static String specialCharactersPresent(String word, String characterTokens) {
+		if (!Pattern.matches("[" + characterTokens +"]", word)) {
+			return "Name should not contain special characters except for " + characterTokens;
+		}
+		return Constants.SUCCESS;
+	}
+
 
 	private static String wordCount(String name, int expectedLength) {
 		String[] splitName = name.split(name);
@@ -92,7 +146,16 @@ Business Validation:
 	 * words or special chars. If7 yes, it returns an error message else it returns constant
 	 * string success!
 	 */
-	public static String validateName(String n) {
+	/*
+	Input Validation:
+    1. spl characters ',-
+    2. start with letter
+    3. alphanumeric
+    4. spl character not allowed =:
+	*/
+	public static String validateName(String name) {
+		String message = Constants.SUCCESS;
+		message = specialCharactersPresent(name, "'/-")
 		// if (n == null || n.trim().equals(""))
 		// 	throw new IllegalArgumentException("name cannot be null");
 
@@ -109,37 +172,6 @@ Business Validation:
 		return Constants.SUCCESS;
 	}
 
-	public static int choiceInputandValidation(int choice, int upperLimit) {
-		while ( choice < 1 || choice > upperLimit) {
-			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
-			Logger.getInstance().log("mainMenu choice = " + choice);
-		}
-		return choice;	
-	}
-	
-	public static int getUserNumberInput(String prompt) {
-		int choice = 0;
-		try {
-			choice = Integer.parseInt(getUserStringInput(prompt));
-		} catch (NumberFormatException ne) {
-			getUserNumberInput(prompt);
-		}
-		return choice;
-	}
-	
-	public static String getUserStringInput(String prompt) {
-		String result = "";
-		try {
-			while (result.isBlank()) {
-				System.out.print(prompt +  ": ");
-				result = bufferedReader.readLine().trim();
-				Logger.getInstance().log(prompt + " : " + result);
-			}	
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		return result;
-	}
 	public static String validateDate(String date) {
 		//Check if input date is before current date
 		//To validate current date and time
@@ -176,38 +208,14 @@ Business Validation:
 		return Constants.SUCCESS;
 	}
 
-
-	static String validatePincode(String pincode) {
-		return Constants.SUCCESS;
-	}
-
-
-	static String validateCity(String city) {
-		return Constants.SUCCESS;
-	}
-
-
-	static String validateState(String state) {
-		return Constants.SUCCESS;
-	}
-
-
-	static String validateCountry(String country) {
-		return Constants.SUCCESS;
-	}
-
-    public static void closeResources() {
-		bufferedReaderCloser();
-	}
-
-	public static void bufferedReaderCloser() {
-		if (bufferedReader != null) {
-			try {
-				bufferedReader.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+	// Validation equal to m/M, f/F, o/O
+	public static String validateGender(String gender) {
+		for (String option: List.of("m","f","o")) {
+			if (option.equalsIgnoreCase(gender.trim())) {
+				return Constants.SUCCESS;
 			}
 		}
+		return "Kindly enter only m, f or o as gender";
 	}
 	
 	

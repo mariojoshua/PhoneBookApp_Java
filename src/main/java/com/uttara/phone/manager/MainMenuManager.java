@@ -84,7 +84,7 @@ public class MainMenuManager {
 				case 4:
 					System.out.println("listing phone book...");
 				//	System.out.println(phoneBookService.listContacts(phoneBookName));
-					listContactsController();
+					listMenuManager.listContactsController();
 					choice = 0;
 					break;
 				case 5:

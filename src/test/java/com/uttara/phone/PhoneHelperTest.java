@@ -84,4 +84,12 @@ public class PhoneHelperTest {
     void testValidateTags() {
 
     }
+
+    @Test 
+    void testValidateGender() {
+        assertEquals(Constants.SUCCESS, PhoneHelper.validateGender("m"));
+        assertEquals(Constants.SUCCESS, PhoneHelper.validateGender("F"));
+        assertEquals(Constants.SUCCESS, PhoneHelper.validateGender(" o"));
+        assertEquals("Kindly enter only m, f or o as gender", PhoneHelper.validateGender(" ma "));
+    }
 }
