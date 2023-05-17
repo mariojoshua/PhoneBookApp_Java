@@ -81,8 +81,15 @@ public class PhoneBookService {
 
 	}
 
-	public String createContact(String phoneBookName2) {
-		return "";
+	public String createContact(ContactBean contactBean) {
+		String message = Constants.FAILURE;
+		Logger.getInstance().log("Writing contact " 
+			+ contactBean.name().getFullName() 
+			+ " to " + contactBean.phoneBookName());
+		if (ioService.writeContacts(contactBean)) {
+			message = Constants.SUCCESS;
+		}
+		return message;
 	}
 
 	

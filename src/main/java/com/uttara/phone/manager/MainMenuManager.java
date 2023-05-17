@@ -68,13 +68,13 @@ public class MainMenuManager {
 			switch (choice) {
 				case 1: // Creates a Contacts Book file/entry on disk/sql 
 					phoneBookName = createContactsBookController();
-					contactsMenuManager.contactsMenuController(phoneBookName);
+					contactsMenuManager.run(phoneBookName);
 					choice = 0;
 					break;
 				case 2: // Loads Contacts Book Name from file
 					System.out.println("Contact book loaded");
 					phoneBookName = loadContactsController();
-					contactsMenuManager.contactsMenuController(phoneBookName);
+					contactsMenuManager.run(phoneBookName);
 					choice = 0;
 					break;
 				case 3:
@@ -96,7 +96,7 @@ public class MainMenuManager {
 					PhoneHelper.closeResources();
 					break;
 				default:
-					System.out.println("Kindly enter choice between 1 to 6\n");
+					System.out.println("Kindly enter choice between 1 to "+ menuSize + "\n");
 					break;
 
 			}

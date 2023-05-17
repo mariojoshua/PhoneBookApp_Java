@@ -67,7 +67,7 @@ public class ContactsMenuManager {
 				case 2:
 					// Edit contact Menu
 					Logger.getInstance().log("Editing contact");
-					//showsEditContactMenu();
+					editContactController();
 					choice = 0;
 					break;
 				case 3:
@@ -92,7 +92,7 @@ public class ContactsMenuManager {
 					System.out.println("Going back to Main Menu");
 					break;
 				default:
-					System.out.println("Kindly enter choice between 1 to 6\n");
+					System.out.println("Kindly enter choice between 1 to " + menuSize + "\n");
 					break;
 			}
 		}
@@ -100,10 +100,65 @@ public class ContactsMenuManager {
 
 	}
 
-    private void addContactController() {
+	/*
+	 * EDIT CONTACT METHODS
+	 */
+	int editContactsView() {
+		int menuSize = 3;
+		System.out.println("""
+			\n\tContacts Book Menu
+			*********************************\n
+			Press [1] to remove/change contact info
+			Press [2] to add new email/phone number
+			Press [3] to return to Contacts Menu	
+			\n*********************************
+			Enter choice\f""");		
+		return menuSize;	
+	}
+    private void editContactController() {
+		int choice = 0;
+		String fullName = getFullNameInput(phoneBookName);
+		while (choice != 3) {
+			int menuSize = editContactsView();
+			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
+			switch (choice) {
+				case 1: // Creates a Contacts Book file/entry on disk/sql 
+					editContactInfoController(fullName);
+					choice = 0;
+					break;
+				case 2: // Loads Contacts Book Name from file
+					System.out.println("Contact book loaded");
+					addEmailPhoneController(fullName);
+					choice = 0;
+					break;
+				case 3:
+					System.out.println("returning to Contacts Menu...");
+					choice = 0;
+					break;
+				default:
+					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
+					break;
+
+			}
+		}
+		
+	}
+
+	private void addEmailPhoneController(String fullName) {
+		System.out.println("Not yet Implemented");
+	}
+
+	private void editContactInfoController(String fullName) {
+		System.out.println("Not yet Implemented");
+	}
+
+	/*
+	 * ADD CONTACT METHODS
+	 */
+	private void addContactController() {
 		// take all inputs after validation
 		Gender gender = getGenderInput(); 
-		String fullName = getFullNameInput(phoneBookName);
+		String fullName = getFullNameInput(Constants.ABSENT);
 		String petName = getPetNameInput();
 		Name name = new Name(gender, fullName, petName);
 		String phoneNumber1 = getPhoneNumberInput("first");
@@ -122,23 +177,27 @@ public class ContactsMenuManager {
 			(phoneBookName, name, phoneNumbers, address,tags,email,dates);
 		// invoke service to add to io
 		String message = phoneBookService.createContact(contactBean);
-		System.out.println("Contact addition status: " + message);
+		System.out.println(message.equals(Constants.SUCCESS)
+					? "Contact " + fullName + " added Succesfully"
+					: "Failed to add contact "+ fullName + ", try Again");
 		Logger.getInstance().log("Contact addition status: " + message);
     }
 
-
+	// put format in message
+	// check validity
 	private LocalDateTime getDateInput() {
 		String validity = Constants.FAILURE;
 		String dateOfBirth = "";
 		while (!validity.equals(Constants.SUCCESS)) {
 			dateOfBirth = PhoneHelper
-			.getUserStringInput("Enter the Date of Birth for the contact");
+			.getUserStringInput("Enter the Date of Birth for the " 
+			+ "contact as dd/MM/yyyy eg. 27/05/1989");
 			// Input Validation
 			validity = PhoneHelper.validateDate(dateOfBirth);
 			Logger.getInstance().log(validity);
 			System.out.println(validity);
 		}
-		return LocalDate.parse(dateOfBirth.trim()).atStartOfDay();
+		return LocalDate.parse(dateOfBirth).atStartOfDay();
 	}
 
 	// 3 emails input
@@ -232,7 +291,7 @@ public class ContactsMenuManager {
 			Logger.getInstance().log(validity);
 			System.out.println(validity);
 		}
-		return Gender.valueOf(gender);
+		return Gender.valueOf(gender.toUpperCase());
 	}
 
 	/*
@@ -265,22 +324,53 @@ public class ContactsMenuManager {
 	* Business Validation:
     1. Unique fullname
 	 */
-	private String getFullNameInput(String phoneBookName) {
+	/**
+	 * Checks if the name exists or doesnt exist in a particular phonebook
+	 * exists == true takes input When name is present prints msg , validity success
+	 * exists == false takes input name is not present prints msg , validity success
+	 * @param exists
+	 * @return
+	 */
+	private String getFullNameInput(String presence) {
 		String validity = Constants.FAILURE;
 		String fullName = "";
 		while (!validity.equals(Constants.SUCCESS)) {
 			fullName = PhoneHelper
 			.getUserStringInput("Enter the full name for the contact");
 			// Input Validation
-			validity = PhoneHelper.validateGender(fullName);
+			validity = PhoneHelper.validateName(fullName);
 			// Business Validation
-			if (phoneBookService.contactNameExists(phoneBookName, fullName)) {
-				Logger.getInstance().log("Phone book " + phoneBookName + " exists.");
-				validity = Constants.SUCCESS;
-			}
-			Logger.getInstance().log(validity);
+			validity = validateNameExistence(fullName, presence);
+			Logger.getInstance().log("checking for " + presence + "message: " + validity);
 			System.out.println(validity);
 		}
-		return fullName;
+	return fullName;
 	}
+	// check if name exists
+	// if checking for existence print one message
+	// if checking for non existence print another message
+	private String validateNameExistence(String fullName, String presence) {
+		String message = Constants.FAILURE;
+		Boolean contactExists = phoneBookService.contactNameExists(phoneBookName, fullName);
+		if (presence.equals(Constants.PRESENT)) {
+			if (contactExists) {
+				message = Constants.SUCCESS;
+			} else { // contact doesnt exist
+				message = fullName + " could not be found in " + phoneBookName 
+				+ " try a different name or go to the list option to see all names.";
+			}	
+		} else if (presence.equals(Constants.ABSENT)) {
+			if (contactExists) {
+				message = fullName + " exists in " + phoneBookName 
+				+ " , enter a different name";
+			} else { // contact doesnt exist
+				message = Constants.SUCCESS;
+			}
+		}
+		return message;
+	}
+
+	// get name after input validation
+	// check if present
+	// check if absent
 }

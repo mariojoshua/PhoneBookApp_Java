@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import com.mysql.cj.log.Log;
 
 /**
  * This class contains all the static utility methods used by 
@@ -154,8 +159,9 @@ Business Validation:
     4. spl character not allowed =:
 	*/
 	public static String validateName(String name) {
+		System.out.println("Not yet Implemented");
 		String message = Constants.SUCCESS;
-		message = specialCharactersPresent(name, "'/-")
+		message = specialCharactersPresent(name, "'/-");
 		// if (n == null || n.trim().equals(""))
 		// 	throw new IllegalArgumentException("name cannot be null");
 
@@ -173,19 +179,17 @@ Business Validation:
 	}
 
 	public static String validateDate(String date) {
-		//Check if input date is before current date
-		//To validate current date and time
-//		Date d = new Date;
-//		d.validateTime();
-//
-//		//To convert String to date
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//		Date dt = sdf.parse(String date);
-//
-//		//to convert data to String
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
-//		String plDt = sdf.format(d);
-		return Constants.SUCCESS;
+//To convert String to date
+		String message = Constants.SUCCESS;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");	
+		try  {
+			sdf.parse(date);
+		} catch (ParseException pe) {
+			Logger.getInstance().log(pe.getStackTrace().toString());
+			message = "Date could not be parsed, " +
+				"kindly enter the date in dd/MM/yyyy format";
+		}
+		return message;
 		
 	}
 	public static String validateEmail(String email) {
@@ -195,7 +199,7 @@ Business Validation:
 		//Use Regex  or starts with to check if it begins with right numbers
 		return Constants.SUCCESS;
 	}
-	public static String validateTags(String tag) {
+	public static String validateTags(List<String> tagsList) {
 		return Constants.SUCCESS;
 	}
 	
@@ -216,6 +220,11 @@ Business Validation:
 			}
 		}
 		return "Kindly enter only m, f or o as gender";
+	}
+
+	public static String validateAddress(String address) {
+		System.out.println("Not yet Implemented");
+		return Constants.SUCCESS;
 	}
 	
 	

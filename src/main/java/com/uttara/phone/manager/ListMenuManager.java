@@ -67,7 +67,7 @@ public class ListMenuManager {
 					System.out.println("Going back to Main Menu");
 					break;
 				default:
-					System.out.println("Kindly enter choice between 1 and 5\n");
+					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
 					break;
 			}
 		}

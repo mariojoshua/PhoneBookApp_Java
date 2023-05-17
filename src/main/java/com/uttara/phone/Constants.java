@@ -18,4 +18,6 @@ public interface Constants {
 	String SUCCESS = "success";
 	String UNIQUE = "unique";
 	String FAILURE ="failure";
+	String PRESENT ="present";
+	String ABSENT ="absent";
 }
