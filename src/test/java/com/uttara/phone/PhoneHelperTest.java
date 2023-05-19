@@ -55,9 +55,17 @@ public class PhoneHelperTest {
 
     }
 
+    /*1. spl characters allowed',-
+        2. start with letter
+        3. alphanumeric
+        4. spl character not allowed =:
+     */
     @Test
     void testValidateName() {
-
+        assertEquals(Constants.SUCCESS, PhoneHelper.validateName("Mario D'souza - 1"));
+        assertEquals(,, PhoneHelper.validateName);
+        assertEquals(,, PhoneHelper.validateName);
+        assertEquals(,, PhoneHelper.validateName);
     }
 
     @Test
@@ -85,6 +93,10 @@ public class PhoneHelperTest {
 
     }
 
+    /*
+	 * Input Validation
+	 1. equaltoIgnoreCase m,f,o
+	 */
     @Test 
     void testValidateGender() {
         assertEquals(Constants.SUCCESS, PhoneHelper.validateGender("m"));

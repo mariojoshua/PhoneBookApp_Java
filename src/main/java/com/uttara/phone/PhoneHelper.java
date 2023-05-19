@@ -14,8 +14,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import com.mysql.cj.log.Log;
-
 /**
  * This class contains all the static utility methods used by 
  * multiple classes in the app by the app
@@ -129,9 +127,9 @@ Business Validation:
 		return Constants.SUCCESS;
 	}
 
-	private static String specialCharactersPresent(String word, String characterTokens) {
-		if (!Pattern.matches("[" + characterTokens +"]", word)) {
-			return "Name should not contain special characters except for " + characterTokens;
+	private static String specialCharactersPresent(String word, String allowedTokens) {
+		if (!Pattern.matches("[" + allowedTokens +"]", word)) {
+			return "Name should not contain special characters except for " + allowedTokens;
 		}
 		return Constants.SUCCESS;
 	}
@@ -161,6 +159,9 @@ Business Validation:
 	public static String validateName(String name) {
 		System.out.println("Not yet Implemented");
 		String message = Constants.SUCCESS;
+		if (!message.equals(Constants.SUCCESS)) {
+			return message;
+		}
 		message = specialCharactersPresent(name, "'/-");
 		// if (n == null || n.trim().equals(""))
 		// 	throw new IllegalArgumentException("name cannot be null");
