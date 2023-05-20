@@ -13,12 +13,13 @@ import com.uttara.phone.Logger;
 import com.uttara.phone.Name;
 import com.uttara.phone.Name.Gender;
 import com.uttara.phone.PhoneBookService;
-import com.uttara.phone.PhoneHelper;
+import com.uttara.phone.helper.PhoneHelper;
 
 public class ContactsMenuManager {
     private PhoneBookService phoneBookService = null;
-	private String result = null;
 	private String phoneBookName;
+	private EditContactMenuManager editContactMenuManager;
+	private AddContactMenuManager addContactMenuManager;
 
 	/**
 	 * These methods forms the View of the application these method will display the
@@ -29,6 +30,8 @@ public class ContactsMenuManager {
     public ContactsMenuManager() {
         Logger.getInstance().log("In ContactsMenuManager constructor");
 		this.phoneBookService = new PhoneBookService();
+		this.editContactMenuManager = new EditContactMenuManager();
+		this.addContactMenuManager = new AddContactMenuManager();
     }
 
 	public void run(String phoneBookName) {
@@ -67,7 +70,7 @@ public class ContactsMenuManager {
 				case 2:
 					// Edit contact Menu
 					Logger.getInstance().log("Editing contact");
-					editContactController();
+					editContactMenuManager.run(phoneBookName);
 					choice = 0;
 					break;
 				case 3:
@@ -101,239 +104,25 @@ public class ContactsMenuManager {
 	}
 
 	/*
-	 * EDIT CONTACT METHODS
-	 */
-	int editContactsView() {
-		int menuSize = 3;
-		System.out.println("""
-			\n\tContacts Book Menu
-			*********************************\n
-			Press [1] to remove/change contact info
-			Press [2] to add new email/phone number
-			Press [3] to return to Contacts Menu	
-			\n*********************************
-			Enter choice\f""");		
-		return menuSize;	
-	}
-    private void editContactController() {
-		int choice = 0;
-		// get fullname and check if contact exists in order to edit
-		String fullName = getFullNameInput(Constants.PRESENT);
-		while (choice != 3) {
-			int menuSize = editContactsView();
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					editContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 2: // Loads Contacts Book Name from file
-					System.out.println("Contact book loaded");
-					addEmailPhoneController(fullName);
-					choice = 0;
-					break;
-				case 3:
-					System.out.println("returning to Contacts Menu...");
-					choice = 0;
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
-					break;
-
-			}
-		}
-		
-	}
-
-	private int addEmailPhoneMenuView() {
-		int menuSize = 3;
-		System.out.println("""
-			\n\tAdd Email/Phone number Menu
-			*********************************\n
-			Press [1] to add new email
-			Press [2] to add new phone number
-			Press [3] to return to edit Contacts Menu	
-			\n*********************************
-			Enter choice\f""");		
-		return menuSize;
-	}
-
-	private void addEmailPhoneController(String fullName) {
-		int choice = 0;
-		while (choice != 3) {
-			int menuSize = editContactsView();
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					addNewEmail(fullName);
-					choice = 0;
-					break;
-				case 2: // Loads Contacts Book Name from file
-					System.out.println("Contact book loaded");
-					addNewPhoneNumber(fullName);
-					choice = 0;
-					break;
-				case 3:
-					System.out.println("returning to Contacts Menu...");
-					choice = 0;
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
-					break;
-
-			}
-		}
-	}	
-
-	private void addNewPhoneNumber(String fullName) {
-		// Take phone num input after validation
-		// if < 2 phonenumbers are present
-		// add phonenumber
-		// if 2 phonenumbers are present,  display phonenumbers
-		// and give option to overwrite any num
-		System.out.println("Not yet implemented");
-
-	}
-
-	private void addNewEmail(String fullName) {
-		// Take email input after validation
-		// if < 3 emails are present
-		// add email
-		// if 3 emails are present, display email id's and
-		// give option to overwrite any email
-		System.out.println("Not yet implemented");
-	}
-
-	private int editContactInfoView() {
-		int menuSize = 3;
-		System.out.println("""
-			\n\tAdd Email/Phone number Menu
-			*********************************\n
-			Press [1] to remove contact Info
-			Press [2] to change contact Info
-			Press [3] to return to edit Contacts Menu	
-			\n*********************************
-			Enter choice\f""");		
-		return menuSize;
-	}
-
-	private void editContactInfoController(String fullName) {
-		int choice = 0;
-		while (choice != 3) {
-			int menuSize = editContactInfoView();
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					removeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 2: // Loads Contacts Book Name from file
-					System.out.println();
-					changeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 3:
-					System.out.println("returning to Contacts Menu...");
-					choice = 0;
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
-					break;
-
-			}
-		}
-	}
-
-	private int chooseContactInfoMenuView(String action) {
-		int menuSize = 5;
-		System.out.println("\n\tContact Info "+ action +" Menu"
-		 + "\n*********************************" 
-		 +	"\nChoose contact info to " + action);
-		System.out.println("""
-				Press [1] for gender
-				Press [2] for petname
-				Press [3] for dateOfBirth
-				Press [4] for Address
-				Press [5] to go back to previous menu
-			\n*********************************
-			Enter choice\f""");		
-		return menuSize;
-	}
-
-	private void changeContactInfoController(String fullName) {
-		int choice = 0;
-		while (choice != 3) {
-			int menuSize = chooseContactInfoMenuView("Change");
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					removeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 2: // Loads Contacts Book Name from file
-					System.out.println();
-					changeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 3:
-					System.out.println("returning to Contacts Menu...");
-					choice = 0;
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
-					break;
-
-			}
-		}
-	}
-
-	private void removeContactInfoController(String fullName) {
-		int choice = 0;
-		while (choice != 3) {
-			int menuSize = chooseContactInfoMenuView("Remove");
-			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
-			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					removeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 2: // Loads Contacts Book Name from file
-					System.out.println();
-					changeContactInfoController(fullName);
-					choice = 0;
-					break;
-				case 3:
-					System.out.println("returning to Contacts Menu...");
-					choice = 0;
-					break;
-				default:
-					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
-					break;
-
-			}
-		}
-	}
-
-	/*
 	 * ADD CONTACT METHODS
 	 */
 	private void addContactController() {
 		// take all inputs after validation
-		Gender gender = getGenderInput(); 
-		String fullName = getFullNameInput(Constants.ABSENT);
-		String petName = getPetNameInput();
+		Gender gender = PhoneHelper.getGenderInput(); 
+		String fullName = PhoneHelper.getFullNameInput(phoneBookName, Constants.ABSENT);
+		String petName = PhoneHelper.getPetNameInput();
 		Name name = new Name(gender, fullName, petName);
-		String phoneNumber1 = getPhoneNumberInput("first");
-		String phoneNumber2 = getPhoneNumberInput("second");
+		String phoneNumber1 = PhoneHelper.getPhoneNumberInput("first");
+		String phoneNumber2 = PhoneHelper.getPhoneNumberInput("second");
 		List<String> phoneNumbers = List.of(phoneNumber1, phoneNumber2);
-		String address = getAddressInput();
-		List<String> tags = getTagsInputs();
-		String email1 = getEmailInput("first");
-		String email2 = getEmailInput("second");
-		String email3 = getEmailInput("third");
+		String address = PhoneHelper.getAddressInput();
+		List<String> tags = PhoneHelper.getTagsInputs();
+		String email1 = PhoneHelper.getEmailInput("first");
+		String email2 = PhoneHelper.getEmailInput("second");
+		String email3 = PhoneHelper.getEmailInput("third");
 		List<String> email = List.of(email1, email2, email3);
 		Map<String, LocalDateTime> dates = 
-		Map.of("dateOfBirth", getDateInput());
+		Map.of("dateOfBirth", PhoneHelper.getDateInput());
 		// add to contactbean
 		ContactBean contactBean = new ContactBean
 			(phoneBookName, name, phoneNumbers, address,tags,email,dates);
@@ -345,194 +134,4 @@ public class ContactsMenuManager {
 		Logger.getInstance().log("Contact addition status: " + message);
     }
 
-	// put format in message
-	// check validity
-	private LocalDateTime getDateInput() {
-		String validity = Constants.FAILURE;
-		String dateOfBirth = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			dateOfBirth = PhoneHelper
-			.getUserStringInput("Enter the Date of Birth for the " 
-			+ "contact as dd/MM/yyyy eg. 27/05/1989");
-			// Input Validation
-			validity = PhoneHelper.validateDate(dateOfBirth);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return LocalDate.parse(dateOfBirth).atStartOfDay();
-	}
-
-	// 3 emails input
-	private String getEmailInput(String index) {
-		String validity = Constants.FAILURE;
-		String email = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			email = PhoneHelper
-			.getUserStringInput("Enter the "+ index + " email id for the contact");
-			// Input Validation
-			validity = PhoneHelper.validateEmail(email);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return email;
-	}
-
-	// Input validation - alphanumeric, comma allowed
-	private List<String> getTagsInputs() {
-		String validity = Constants.FAILURE;
-		String tags = "";
-		List<String> tagsList = new LinkedList<>();
-		while (!validity.equals(Constants.SUCCESS)) {
-			tags = PhoneHelper
-			.getUserStringInput("""
-				Enter comma seperated tags for the contact
-				eg. home,walkingGroup,club""");
-			// validate tags
-			validity = PhoneHelper.validateTags(tagsList);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		// separate tags
-		tagsList = separateTags(tags);
-		return tagsList;
-	}
-
-	private List<String> separateTags(String tags) {
-		// split and trim
-		String[] tagArray = tags.split(",");
-		for (int i = 0; i < tagArray.length; i++) {
-			tagArray[i] = tagArray[i].trim();
-		}
-		return Arrays.asList(tagArray);
-	}
-
-	private String getAddressInput() {
-		String validity = Constants.FAILURE;
-		String address = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			address = PhoneHelper
-			.getUserStringInput("Enter the Address for the contact");
-			// Input Validation
-			validity = PhoneHelper.validateAddress(address);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return address;
-	}
-
-	// 2 phoneinputs
-	private String getPhoneNumberInput(String index) {
-		String validity = Constants.FAILURE;
-		String phoneNumber = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			phoneNumber = PhoneHelper
-			.getUserStringInput("Enter the "+ index + " phone number for the contact");
-			// Input Validation
-			validity = PhoneHelper.validatePhoneNumber(phoneNumber);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return phoneNumber;
-	}
-
-	/*
-	 * Input Validation
-	 1. equaltoIgnoreCase m,f,o
-	 */
-	private Gender getGenderInput() {
-		String validity = Constants.FAILURE;
-		String gender = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			gender = PhoneHelper.getUserStringInput("""
-				Enter a gender for the contact
-					m for Male
-					f for Female
-					o for others """);
-			// Input Validation
-			validity = PhoneHelper.validateGender(gender);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return Gender.valueOf(gender.toUpperCase());
-	}
-
-	/*
-	 * Input Validation:
-    1. spl characters allowed ',-
-    2. start with letter
-    3. alphanumeric
-    4. spl character not allowed =:
-	 */
-	private String getPetNameInput() {
-		String validity = Constants.FAILURE;
-		String petName = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			petName = PhoneHelper
-			.getUserStringInput("Enter a petname for the contact");
-			// Input Validation
-			validity = PhoneHelper.validateName(petName);
-			Logger.getInstance().log(validity);
-			System.out.println(validity);
-		}
-		return petName;
-	}
-
-	/*
-	 * Input Validation:
-    1. spl characters allowed',-
-    2. start with letter
-    3. alphanumeric
-    4. spl character not allowed =:
-	* Business Validation:
-    1. Unique fullname
-	 */
-	/**
-	 * Checks if the name exists or doesnt exist in a particular phonebook
-	 * exists == true takes input When name is present prints msg , validity success
-	 * exists == false takes input name is not present prints msg , validity success
-	 * @param exists
-	 * @return
-	 */
-	private String getFullNameInput(String presence) {
-		String validity = Constants.FAILURE;
-		String fullName = "";
-		while (!validity.equals(Constants.SUCCESS)) {
-			fullName = PhoneHelper
-			.getUserStringInput("Enter the full name for the contact");
-			// Input Validation
-			validity = PhoneHelper.validateName(fullName);
-			// Business Validation
-			validity = validateNameExistence(fullName, presence);
-			Logger.getInstance().log("checking for " + presence + "message: " + validity);
-			System.out.println(validity);
-		}
-	return fullName;
-	}
-	// check if name exists
-	// if checking for existence print one message
-	// if checking for non existence print another message
-	private String validateNameExistence(String fullName, String presence) {
-		String message = Constants.FAILURE;
-		Boolean contactExists = phoneBookService.contactNameExists(phoneBookName, fullName);
-		if (presence.equals(Constants.PRESENT)) {
-			if (contactExists) {
-				message = Constants.SUCCESS;
-			} else { // contact doesnt exist
-				message = fullName + " could not be found in " + phoneBookName 
-				+ " try a different name or go to the list option to see all names.";
-			}	
-		} else if (presence.equals(Constants.ABSENT)) {
-			if (contactExists) {
-				message = fullName + " exists in " + phoneBookName 
-				+ " , enter a different name";
-			} else { // contact doesnt exist
-				message = Constants.SUCCESS;
-			}
-		}
-		return message;
-	}
-
-	// get name after input validation
-	// check if present
-	// check if absent
 }

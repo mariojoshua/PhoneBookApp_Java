@@ -2,7 +2,7 @@ package com.uttara.phone.manager;
 
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
-import com.uttara.phone.PhoneHelper;
+import com.uttara.phone.helper.PhoneHelper;
 
 public class ListMenuManager {
     private PhoneBookService phoneBookService = null;
@@ -14,6 +14,10 @@ public class ListMenuManager {
 	 * menu, accept the inputs, display success/error messages to the user and
 	 * invoke the methods of model!
 	 */
+    public void run(String phoneBookName) {
+		this.phoneBookName = phoneBookName;
+		listContactsController();	
+	} 
 
     public ListMenuManager() {
         Logger.getInstance().log("In ContactsMenuManager constructor");

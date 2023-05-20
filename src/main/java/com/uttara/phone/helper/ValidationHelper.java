@@ -1,82 +1,15 @@
-package com.uttara.phone;
+package com.uttara.phone.helper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
-/**
- * This class contains all the static utility methods used by 
- * multiple classes in the app by the app
- */
+import com.uttara.phone.Constants;
+import com.uttara.phone.Logger;
 
-public class PhoneHelper { 
-
-	// early instantiation
-	private static BufferedReader bufferedReader 
-	  = new BufferedReader(new InputStreamReader(System.in));
-	// constructor set to private so that it cannot be instantiated
-	// and only a single instance will be used
-	private PhoneHelper() {
-	}
-
-	public static int getUserNumberInput(String prompt) {
-		int choice = 0;
-		try {
-			choice = Integer.parseInt(getUserStringInput(prompt));
-		} catch (NumberFormatException ne) {
-			getUserNumberInput(prompt);
-		}
-		return choice;
-	}
-	
-	public static String getUserStringInput(String prompt) {
-		String result = "";
-		try {
-			while (result.isBlank()) {
-				System.out.print(prompt +  ": ");
-				result = bufferedReader.readLine().trim();
-				Logger.getInstance().log(prompt + " : " + result);
-			}	
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		return result;
-	}
-
-	public static void bufferedReaderCloser() {
-		if (bufferedReader != null) {
-			try {
-				bufferedReader.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public static int choiceInputandValidation(int choice, int upperLimit) {
-		while ( choice < 1 || choice > upperLimit) {
-			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
-			Logger.getInstance().log("mainMenu choice = " + choice);
-		}
-		return choice;	
-	}
-
-	public static void closeResources() {
-		bufferedReaderCloser();
-	}
-
-	
-	/*
+class ValidationHelper {
+    /*
 	 * Input Validation:
     1. 1 word
 	2. no spaces
@@ -227,26 +160,5 @@ Business Validation:
 		System.out.println("Not yet Implemented");
 		return Constants.SUCCESS;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

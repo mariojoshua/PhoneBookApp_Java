@@ -6,6 +6,7 @@ import com.uttara.phone.Constants;
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
 import com.uttara.phone.PhoneHelper;
+import com.uttara.phone.manager.contactMenu.ContactsMenuManager;
 
 /**
  * This class will hold the view and the controller in flavor 1 of MVC(Desktop
@@ -49,7 +50,7 @@ public class MainMenuManager {
 			\n\tContacts Book Menu
 			*********************************\n
 			Press [1] to Create Contacts Book
-			Press [2] to Load Contact Books
+			Press [2] to Load Contacts Book
 			Press [3] to Search contacts
 			Press [4] to List contacts
 			Press [5] for Birthday reminders
