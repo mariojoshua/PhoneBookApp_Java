@@ -8,59 +8,32 @@ import java.util.regex.Pattern;
 import com.uttara.phone.Constants;
 import com.uttara.phone.Logger;
 
-class ValidationHelper {
-    /*
-	 * Input Validation:
-    1. 1 word
-	2. no spaces
-    3. no spl character ~ only alphanumeric
-    4. start with letter
-Business Validation:
-    1. No duplicates
-	 */
-	public static String validateContactsBookName(String word) {
-		String message = Constants.SUCCESS;
-		message = wordCount(word, 1);
-		if (!message.equals(Constants.SUCCESS)) {
-			return message;
-		}
-		message = specialCharactersPresent(word);
-		if (!message.equals(Constants.SUCCESS)) {
-			return message;
-		}
-		message = startsWithLetter(word);
-		if (!message.equals(Constants.SUCCESS)) {
-			return message;
-		}
-		message = whiteSpacesPresent(word);
-		if (!message.equals(Constants.SUCCESS)) {
-			return message;
-		}
-		return Constants.SUCCESS;
-	}
+public class ValidationHelper {
+
 	
-	private static String whiteSpacesPresent(String word) {
+	
+	static String whiteSpacesPresent(String word) {
 		if (Pattern.matches("\\s+", word)) {
 			return "Name should not have whitespaces!";
 		}
 		return Constants.SUCCESS;
 	}
 
-	private static String startsWithLetter(String word) {
+	static String startsWithLetter(String word) {
 		if (!Character.isLetter(word.charAt(0))) {
 			return "Name should start with a letter";
 		}
 		return Constants.SUCCESS;
 	}
 
-	private static String specialCharactersPresent(String word) {
+	static String specialCharactersPresent(String word) {
 		if (!Pattern.matches("^[a-zA-Z0-9]+$", word)) {
 			return "Name should not contain special characters!";
 		}
 		return Constants.SUCCESS;
 	}
 
-	private static String specialCharactersPresent(String word, String allowedTokens) {
+	static String specialCharactersPresent(String word, String allowedTokens) {
 		if (!Pattern.matches("[" + allowedTokens +"]", word)) {
 			return "Name should not contain special characters except for " + allowedTokens;
 		}
@@ -68,7 +41,7 @@ Business Validation:
 	}
 
 
-	private static String wordCount(String name, int expectedLength) {
+	static String wordCount(String name, int expectedLength) {
 		String[] splitName = name.split(name);
 		if (splitName.length > expectedLength) {
 			return "Name length permitted " + expectedLength;
@@ -148,11 +121,15 @@ Business Validation:
 
 	// Validation equal to m/M, f/F, o/O
 	public static String validateGender(String gender) {
-		for (String option: List.of("m","f","o")) {
-			if (option.equalsIgnoreCase(gender.trim())) {
-				return Constants.SUCCESS;
-			}
+		// [] - matches any single characters insdie square brackets
+		if(Pattern.matches("[MmFfOo]", gender)) {
+			return Constants.SUCCESS;
 		}
+		// for (String option: List.of("m","f","o")) {
+		// 	if (option.equalsIgnoreCase(gender.trim())) {
+		// 		return Constants.SUCCESS;
+		// 	}
+		// }
 		return "Kindly enter only m, f or o as gender";
 	}
 
