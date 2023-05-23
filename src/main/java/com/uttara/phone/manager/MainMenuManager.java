@@ -1,11 +1,9 @@
 package com.uttara.phone.manager;
 
-import java.util.List;
-
 import com.uttara.phone.Constants;
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
-import com.uttara.phone.PhoneHelper;
+import com.uttara.phone.helper.PhoneHelper;
 import com.uttara.phone.manager.contactMenu.ContactsMenuManager;
 
 /**
@@ -21,8 +19,8 @@ import com.uttara.phone.manager.contactMenu.ContactsMenuManager;
 public class MainMenuManager {
 
 	private PhoneBookService phoneBookService = null;
-	private String result = null;
-	private String phoneBookName;
+	// private String result = null;
+	// private String phoneBookName;
 	private ContactsMenuManager contactsMenuManager;
 	private ListMenuManager listMenuManager;
 

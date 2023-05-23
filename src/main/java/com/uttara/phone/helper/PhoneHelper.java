@@ -2,22 +2,12 @@ package com.uttara.phone.helper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
-
 import com.uttara.phone.Constants;
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
@@ -278,4 +268,38 @@ public class PhoneHelper {
 	// check if present
 	// check if absent
 
+
+// Validation methods
+
+    /*
+	 * Input Validation:
+    1. 1 word
+	2. no spaces
+    3. no spl character ~ only alphanumeric
+    4. start with letter
+Business Validation:
+    1. No duplicates
+	 */
+	public static String validateContactsBookName(String word) {
+		String message = Constants.SUCCESS;
+		message = ValidationHelper.wordCount(word, 1);
+		if (!message.equals(Constants.SUCCESS)) {
+			return message;
+		}
+		message = ValidationHelper.specialCharactersPresent(word);
+		if (!message.equals(Constants.SUCCESS)) {
+			return message;
+		}
+		message = ValidationHelper.startsWithLetter(word);
+		if (!message.equals(Constants.SUCCESS)) {
+			return message;
+		}
+		message = ValidationHelper.whiteSpacesPresent(word);
+		if (!message.equals(Constants.SUCCESS)) {
+			return message;
+		}
+		return Constants.SUCCESS;
+	}
 }
+
+
