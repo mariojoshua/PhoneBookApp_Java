@@ -3,6 +3,7 @@ package com.uttara.phone.helper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.uttara.phone.Constants;
@@ -13,7 +14,9 @@ public class ValidationHelper {
 	
 	
 	static String whiteSpacesPresent(String word) {
-		if (Pattern.matches("\\s+", word)) {
+		Pattern pattern = Pattern.compile("\s");
+		Matcher matcher = pattern.matcher(word);
+		if (matcher.find()) {
 			return "Name should not have whitespaces!";
 		}
 		return Constants.SUCCESS;
@@ -64,11 +67,10 @@ public class ValidationHelper {
 	*/
 	public static String validateName(String name) {
 		System.out.println("Not yet Implemented");
-		String message = Constants.SUCCESS;
-		if (!message.equals(Constants.SUCCESS)) {
+		String message = Constants.FAILURE;
+		if (Pattern.matches("[MmFfOo]", name)) {
 			return message;
 		}
-		message = specialCharactersPresent(name, "'/-");
 		// if (n == null || n.trim().equals(""))
 		// 	throw new IllegalArgumentException("name cannot be null");
 
@@ -121,8 +123,8 @@ public class ValidationHelper {
 
 	// Validation equal to m/M, f/F, o/O
 	public static String validateGender(String gender) {
-		// [] - matches any single characters insdie square brackets
-		if(Pattern.matches("[MmFfOo]", gender)) {
+		// [] - matches any single characters inside square brackets
+		if (Pattern.matches("[MmFfOo]", gender)) {
 			return Constants.SUCCESS;
 		}
 		// for (String option: List.of("m","f","o")) {

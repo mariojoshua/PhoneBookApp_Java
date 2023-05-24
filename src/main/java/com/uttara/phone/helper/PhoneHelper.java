@@ -132,7 +132,7 @@ public class PhoneHelper {
 		// split and trim
 		String[] tagArray = tags.split(",");
 		for (int i = 0; i < tagArray.length; i++) {
-			tagArray[i] = tagArray[i].trim();
+			tagArray[i] = tagArray[i];
 		}
 		return Arrays.asList(tagArray);
 	}
