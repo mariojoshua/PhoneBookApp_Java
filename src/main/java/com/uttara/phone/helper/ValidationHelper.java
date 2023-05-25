@@ -23,21 +23,23 @@ public class ValidationHelper {
 	}
 
 	static String startsWithLetter(String word) {
-		if (!Character.isLetter(word.charAt(0))) {
+		if (!Pattern.matches("^[a-zA-Z]+", word)) {
 			return "Name should start with a letter";
 		}
 		return Constants.SUCCESS;
 	}
 
-	static String specialCharactersPresent(String word) {
-		if (!Pattern.matches("^[a-zA-Z0-9]+$", word)) {
-			return "Name should not contain special characters!";
+	static String onlyAlphanumeric(String word) {
+		if (!Pattern.matches("[a-zA-Z0-9]+", word)) {
+			return "Name should only contain alphanumeric characters i.e A-Z, a-z and 0-9!";
 		}
 		return Constants.SUCCESS;
 	}
 
 	static String specialCharactersPresent(String word, String allowedTokens) {
-		if (!Pattern.matches("[" + allowedTokens +"]", word)) {
+		Pattern pattern = Pattern.compile("[" + allowedTokens +"]+");
+		Matcher matcher = pattern.matcher(word);
+		if (!matcher.find()) {
 			return "Name should not contain special characters except for " + allowedTokens;
 		}
 		return Constants.SUCCESS;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -90,7 +91,8 @@ public class PhoneHelper {
 			Logger.getInstance().log(validity);
 			System.out.println(validity);
 		}
-		return LocalDate.parse(dateOfBirth).atStartOfDay();
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		return LocalDate.parse(dateOfBirth, dateTimeFormatter).atStartOfDay();
 	}
 
 	// 3 emails input
@@ -282,19 +284,16 @@ Business Validation:
 	 */
 	public static String validateContactsBookName(String word) {
 		String message = Constants.SUCCESS;
-		message = ValidationHelper.wordCount(word, 1);
+		// no spaces ~ 1 word
+		message = ValidationHelper.whiteSpacesPresent(word);
 		if (!message.equals(Constants.SUCCESS)) {
 			return message;
 		}
-		message = ValidationHelper.specialCharactersPresent(word);
+		message = ValidationHelper.onlyAlphanumeric(word);
 		if (!message.equals(Constants.SUCCESS)) {
 			return message;
 		}
 		message = ValidationHelper.startsWithLetter(word);
-		if (!message.equals(Constants.SUCCESS)) {
-			return message;
-		}
-		message = ValidationHelper.whiteSpacesPresent(word);
 		if (!message.equals(Constants.SUCCESS)) {
 			return message;
 		}
