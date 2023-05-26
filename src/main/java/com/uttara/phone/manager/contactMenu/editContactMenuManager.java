@@ -1,8 +1,11 @@
 package com.uttara.phone.manager.contactMenu;
 
+import java.time.LocalDateTime;
+
 import com.uttara.phone.Constants;
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
+import com.uttara.phone.Name.Gender;
 import com.uttara.phone.helper.PhoneHelper;
 
 public class EditContactMenuManager {
@@ -31,7 +34,7 @@ public class EditContactMenuManager {
 	int editContactsView() {
 		int menuSize = 3;
 		System.out.println("""
-			\n\tContacts Book Menu
+			\n\tEdit Contact Menu
 			*********************************\n
 			Press [1] to remove/change contact info
 			Press [2] to add new email/phone number
@@ -113,6 +116,7 @@ public class EditContactMenuManager {
 
 	private void addNewPhoneNumber(String fullName) {
 		// Take phone num input after validation
+		String phoneNumber = PhoneHelper.getPhoneNumberInput(" ");
 		// if < 2 phonenumbers are present
 		// add phonenumber
 		// if 2 phonenumbers are present,  display phonenumbers
@@ -123,6 +127,7 @@ public class EditContactMenuManager {
 
 	private void addNewEmail(String fullName) {
 		// Take email input after validation
+		String email = PhoneHelper.getEmailInput(" ");
 		// if < 3 emails are present
 		// add email
 		// if 3 emails are present, display email id's and
@@ -133,7 +138,7 @@ public class EditContactMenuManager {
 	private int editContactInfoView() {
 		int menuSize = 3;
 		System.out.println("""
-			\n\tAdd Email/Phone number Menu
+			\n\tEdit Contact Info Menu
 			*********************************\n
 			Press [1] to remove contact Info
 			Press [2] to change contact Info
@@ -192,19 +197,31 @@ public class EditContactMenuManager {
 			int menuSize = chooseContactInfoMenuView("Change");
 			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
 			switch (choice) {
-				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					removeContactInfoController(fullName);
+				case 1: 
+					Gender gender = PhoneHelper.getGenderInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
-				case 2: // Loads Contacts Book Name from file
+				case 2: 
 					System.out.println();
-					changeContactInfoController(fullName);
+					String petName = PhoneHelper.getPetNameInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
 				case 3:
-					System.out.println("returning to Contacts Menu...");
+					LocalDateTime date = PhoneHelper.getDateInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
+				case 4:
+					String address = PhoneHelper.getAddressInput();
+					System.out.println("Not yet Implemented");
+					choice = 0;
+					break;
+				case 5: 
+					System.out.println("returning to previous Menu...");
+					choice = 0;
+					break;		
 				default:
 					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
 					break;
@@ -220,18 +237,29 @@ public class EditContactMenuManager {
 			choice = PhoneHelper.choiceInputandValidation(choice, menuSize);
 			switch (choice) {
 				case 1: // Creates a Contacts Book file/entry on disk/sql 
-					removeContactInfoController(fullName);
+					Gender gender = PhoneHelper.getGenderInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
 				case 2: // Loads Contacts Book Name from file
-					System.out.println();
-					changeContactInfoController(fullName);
+					String petName = PhoneHelper.getPetNameInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
 				case 3:
-					System.out.println("returning to Contacts Menu...");
+					LocalDateTime date =  PhoneHelper.getDateInput();
+					System.out.println("Not yet Implemented");
 					choice = 0;
 					break;
+				case 4:
+					String address = PhoneHelper.getAddressInput();
+					System.out.println("Not yet Implemented");
+					choice = 0;
+					break;
+				case 5: 
+					System.out.println("returning to Contacts Menu...");
+					choice = 0;
+					break;		
 				default:
 					System.out.println("Kindly enter choice between 1 to "+ menuSize+"\n");
 					break;

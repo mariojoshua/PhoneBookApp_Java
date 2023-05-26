@@ -81,6 +81,19 @@ public class PhoneBookService {
 		return message;
 	}
 
+	public String removeContact(ContactBean contactBean) {
+		String message = Constants.FAILURE;
+		String phoneBookName = contactBean.phoneBookName(); 
+		String fullName = contactBean.name().getFullName();
+		Logger.getInstance().log("Removing contact " 
+			+ fullName 
+			+ " from " + phoneBookName);
+		if (ioService.deleteContact(phoneBookName, fullName)) {
+			message = Constants.SUCCESS;
+		}
+		return message;
+	}
+
 	
 
 	/*

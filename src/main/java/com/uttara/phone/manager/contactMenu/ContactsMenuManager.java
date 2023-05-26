@@ -76,7 +76,7 @@ public class ContactsMenuManager {
 					* return success message or else Display"Unable to remove"
 					*/
 					Logger.getInstance().log("removing contact");
-					//showsRemoveContactMenu();
+					removeContactController();
 					choice = 0;
 					break;
 				case 4:
@@ -98,6 +98,19 @@ public class ContactsMenuManager {
 		}
 
 
+	}
+
+	private void removeContactController() {
+		// ask for full name, checking if contact present
+		String fullName = PhoneHelper.getFullNameInput(phoneBookName, Constants.PRESENT);
+		//remove
+		ContactBean contactBean = new ContactBean(phoneBookName, new Name(fullName));
+		String message = phoneBookService.removeContact(contactBean);
+		// return sucess/failure message
+		System.out.println(message.equals(Constants.SUCCESS)
+					? "Contact " + fullName + " removed Succesfully"
+					: "Failed to remove contact "+ fullName + ", try Again");
+		Logger.getInstance().log("Contact removal status: " + message);
 	}
 
 	/*
