@@ -5,6 +5,7 @@ import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
 import com.uttara.phone.helper.PhoneHelper;
 import com.uttara.phone.manager.contactMenu.ContactsMenuManager;
+import com.uttara.phone.manager.contactMenu.ListContactMenuManager;
 
 /**
  * This class will hold the view and the controller in flavor 1 of MVC(Desktop
@@ -82,8 +83,8 @@ public class MainMenuManager {
 					break;
 				case 4:
 					System.out.println("listing phone book...");
-				//	System.out.println(phoneBookService.listContacts(phoneBookName));
-					listMenuManager.listContactsController();
+					System.out.println("Not yet Implemented");
+					new ListContactMenuManager().run("%");
 					choice = 0;
 					break;
 				case 5:

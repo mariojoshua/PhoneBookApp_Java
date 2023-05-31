@@ -62,11 +62,9 @@ public class PhoneBookService {
 		return ioService.contactExists(new ContactBean(phoneBookName, new Name(fullName))) ;
 	}
 
-	public List<ContactBean> listContacts(String phoneBook) {
-
-		List<ContactBean> contactArray = new ArrayList<ContactBean>();
-
-		return contactArray;
+	public List<ContactBean> listContacts(String phoneBookName) {
+		Logger.getInstance().log("PhoneBookService: Listing contacts from " + phoneBookName);
+		return ioService.readContact(phoneBookName);
 
 	}
 

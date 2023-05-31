@@ -45,7 +45,7 @@ class MySqlContactReader {
         //get individual data/list using streams  
         // When scaling, test both approaches using sqlfiddle.com  
         List<ContactBean> contactBeanList = new LinkedList<>();
-        List<HashMap<String, Object>> allDataForPhonebook = getAllData(phoneBookName);
+        List<HashMap<String, Object>> allDataForPhonebook = getAllData(phoneBookName.toUpperCase());
         List<Name> nameObjects = extractNames(allDataForPhonebook);
         for(Name name: nameObjects) {
             // Name name = new Name(gender, phoneBookName, phoneBookName);
@@ -77,10 +77,11 @@ class MySqlContactReader {
                 ON ct.id = ctt.contacts_ID
                 JOIN contactApp.tags as tg
                 ON ctt.tag_ID = tg.ID
-                WHERE pm.name = ?;""");
+                WHERE pm.name LIKE ?;""");
             ps1.setString(1, phoneBookName);
             //boolean returnValue = ps1.executeQuery().next();
             resultSet = ps1.executeQuery();
+            System.out.println(resultSet.toString());
             System.out.println(connection.getTypeMap());
             //Logger.getInstance().log("contactExists method executeQuery() return value = " + resultSet.);
             return getResultSetData(resultSet);

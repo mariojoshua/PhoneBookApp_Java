@@ -188,7 +188,7 @@ public class MySqlService extends IOService {
     @Override
     public List<ContactBean> readContact(String phoneBookName) {
         //see if phone number exists
-        MySqlContactReader mySqlContactReader= new MySqlContactReader();
+        MySqlContactReader mySqlContactReader = new MySqlContactReader();
         return mySqlContactReader.read(phoneBookName);
     }
 

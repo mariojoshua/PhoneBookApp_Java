@@ -67,7 +67,7 @@ public class PhoneHelper {
 
 	public static int choiceInputandValidation(int choice, int upperLimit) {
 		while ( choice < 1 || choice > upperLimit) {
-			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and 6");
+			choice = PhoneHelper.getUserNumberInput("Enter a choice between 1 and " + upperLimit);
 			Logger.getInstance().log("mainMenu choice = " + choice);
 		}
 		return choice;	

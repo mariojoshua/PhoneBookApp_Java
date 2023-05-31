@@ -15,8 +15,6 @@ import com.uttara.phone.helper.PhoneHelper;
 public class ContactsMenuManager {
     private PhoneBookService phoneBookService = null;
 	private String phoneBookName;
-	private EditContactMenuManager editContactMenuManager;
-	private AddContactMenuManager addContactMenuManager;
 
 	/**
 	 * These methods forms the View of the application these method will display the
@@ -27,8 +25,6 @@ public class ContactsMenuManager {
     public ContactsMenuManager() {
         Logger.getInstance().log("In ContactsMenuManager constructor");
 		this.phoneBookService = new PhoneBookService();
-		this.editContactMenuManager = new EditContactMenuManager();
-		this.addContactMenuManager = new AddContactMenuManager();
     }
 
 	public void run(String phoneBookName) {
@@ -67,7 +63,7 @@ public class ContactsMenuManager {
 				case 2:
 					// Edit contact Menu
 					Logger.getInstance().log("Editing contact");
-					editContactMenuManager.run(phoneBookName);
+					new EditContactMenuManager().run(phoneBookName);
 					choice = 0;
 					break;
 				case 3:
@@ -81,7 +77,8 @@ public class ContactsMenuManager {
 					break;
 				case 4:
 					// List Contact Menu 
-					//showsListContactMenu();
+					Logger.getInstance().log("listing contacts");
+					new ListContactMenuManager().run(phoneBookName);
 					choice = 0;
 					break;
 				case 5:
@@ -99,6 +96,8 @@ public class ContactsMenuManager {
 
 
 	}
+
+
 
 	private void removeContactController() {
 		// ask for full name, checking if contact present

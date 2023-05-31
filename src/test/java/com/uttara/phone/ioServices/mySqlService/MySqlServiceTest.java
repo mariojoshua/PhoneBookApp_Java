@@ -48,8 +48,8 @@ public class MySqlServiceTest {
             new Name(Gender.M, "Vallavan Vandiyathevan", "Vandi"), 
             List.of("1429532666", "5324266691"), 
             "No 49, Beach palace road, Naagaipattinam, India - 503205", 
-            List.of("army","asia" ,"prince", "chola"), 
-            List.of("Aditha.Karikalan@ymail.com", "Karikalan_Adi@hotmail.com"), 
+            List.of("army","asia" ,"vassal", "chola"), 
+            List.of("Vallavan.Vandiyathevan@ymail.com", "Vandiyathevan_Vallavan@hotmail.com"), 
             Map.of("dateOfBirth",
             LocalDate.of(1622, 2, 14).atStartOfDay()));    
         contactBean4 = new ContactBean(
@@ -184,7 +184,7 @@ public class MySqlServiceTest {
 
     @Test
     public void testUpdateContacts() {
-        //fail("Not yet Implemented");
+
     }
 
     @Test
