@@ -141,5 +141,9 @@ public class ValidationHelper {
 		System.out.println("Not yet Implemented");
 		return Constants.SUCCESS;
 	}
+
+    public static String validateAnyContactDetail(String input) {
+        return Constants.SUCCESS;
+    }
 	
 }

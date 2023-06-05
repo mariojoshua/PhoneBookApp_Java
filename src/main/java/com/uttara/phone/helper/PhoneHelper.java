@@ -110,6 +110,20 @@ public class PhoneHelper {
 		return email;
 	}
 
+	public static String getAnyContactInput() {
+		String validity = Constants.FAILURE;
+		String input = "";
+		while (!validity.equals(Constants.SUCCESS)) {
+			input = PhoneHelper
+			.getUserStringInput("Enter the contact detail to search for");
+			// Input Validation
+			validity = ValidationHelper.validateAnyContactDetail(input);
+			Logger.getInstance().log(validity);
+			System.out.println(validity);
+		}
+		return input;
+	}
+
 	// Input validation - alphanumeric, comma allowed
 	public static List<String> getTagsInputs() {
 		String validity = Constants.FAILURE;

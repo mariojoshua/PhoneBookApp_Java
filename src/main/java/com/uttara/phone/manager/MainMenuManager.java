@@ -1,11 +1,21 @@
 package com.uttara.phone.manager;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.uttara.phone.Constants;
+import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
 import com.uttara.phone.PhoneBookService;
 import com.uttara.phone.helper.PhoneHelper;
 import com.uttara.phone.manager.contactMenu.ContactsMenuManager;
 import com.uttara.phone.manager.contactMenu.ListContactMenuManager;
+import com.uttara.phone.manager.contactMenu.SearchContactMenuManager;
 
 /**
  * This class will hold the view and the controller in flavor 1 of MVC(Desktop
@@ -79,16 +89,18 @@ public class MainMenuManager {
 					break;
 				case 3:
 					System.out.println("searching phone book...");
+					new SearchContactMenuManager().run("%");
 					choice = 0;
 					break;
 				case 4:
 					System.out.println("listing phone book...");
-					System.out.println("Not yet Implemented");
+					// System.out.println("Not yet Implemented");
 					new ListContactMenuManager().run("%");
 					choice = 0;
 					break;
 				case 5:
 					System.out.println("listing birthday reminders...");
+					listBirthdayReminders();
 					choice = 0;
 					break;
 				case 6:
@@ -104,6 +116,26 @@ public class MainMenuManager {
 	}
 
 	
+
+	private void listBirthdayReminders() {
+		System.out.println("\n\n==============================");
+        System.out.println("\tBirthday Reminders");
+        System.out.println("==============================\n");
+		List<ContactBean> contactsList = phoneBookService.listContacts("%");
+		List<String> birthdayList = contactsList.stream()
+					.filter(cb -> cb.dates().get("dateOfBirth").getMonth().equals(LocalDate.now().getMonth()))
+					.map(cb -> cb.name().getFullName() + "\t" + cb.dates().get("dateOfBirth")
+																		  .toLocalDate()
+																		  .format(DateTimeFormatter.ofPattern("dd-MMMM")))
+					.collect(Collectors.toList());
+		if (birthdayList.size() == 0) {
+			System.out.println("No Birthday's occuring this month");
+		} else {
+			birthdayList.forEach(System.out::println);
+		}
+		System.out.println("______________________________\n");			
+		
+	}
 
 	private String loadContactsController() {
 		//check if phonebook exists

@@ -81,8 +81,8 @@ class MySqlContactReader {
             ps1.setString(1, phoneBookName);
             //boolean returnValue = ps1.executeQuery().next();
             resultSet = ps1.executeQuery();
-            System.out.println(resultSet.toString());
-            System.out.println(connection.getTypeMap());
+            // System.out.println(resultSet.toString());
+            // System.out.println(connection.getTypeMap());
             //Logger.getInstance().log("contactExists method executeQuery() return value = " + resultSet.);
             return getResultSetData(resultSet);
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ class MySqlContactReader {
             hashMap = new HashMap<String, Object>();
             for(String key: columnLabelkeys) {
                 hashMap.put(key, resultSet.getObject(key,  typeMap));
-                System.out.println(hashMap + "\n");
+                //System.out.println(hashMap + "\n");
             }
             queryList.add(hashMap);   
         }

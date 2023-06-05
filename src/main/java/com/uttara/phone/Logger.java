@@ -18,7 +18,7 @@ import java.util.Date;
 public class Logger {
 
 	private static final Logger logger = null;
-	private boolean debugMode = true;	
+	private boolean debugMode = false;	
 	private Path myPath = null;
 	
 	private Logger() {

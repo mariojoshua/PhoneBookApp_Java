@@ -83,6 +83,7 @@ public class ContactsMenuManager {
 					break;
 				case 5:
 					//showsSearchContactMenu();
+					new SearchContactMenuManager().run(phoneBookName);
 					choice = 0;
 					break;
 				case 6:
@@ -128,8 +129,8 @@ public class ContactsMenuManager {
 		List<String> tags = PhoneHelper.getTagsInputs();
 		String email1 = PhoneHelper.getEmailInput("first");
 		String email2 = PhoneHelper.getEmailInput("second");
-		String email3 = PhoneHelper.getEmailInput("third");
-		List<String> email = List.of(email1, email2, email3);
+		// String email3 = PhoneHelper.getEmailInput("third");
+		List<String> email = List.of(email1, email2);
 		Map<String, LocalDateTime> dates = 
 		Map.of("dateOfBirth", PhoneHelper.getDateInput());
 		// add to contactbean

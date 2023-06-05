@@ -19,7 +19,7 @@ public class ListContactMenuManager {
 	 * invoke the methods of model!
 	 */
 
-     public ListContactMenuManager() {
+    public ListContactMenuManager() {
         Logger.getInstance().log("In ContactsMenuManager constructor");
 		phoneBookService = new PhoneBookService();
     }
@@ -52,7 +52,7 @@ public class ListContactMenuManager {
         //int menuSize = 0;
         Comparator<ContactBean> comparator = null;
         List<ContactBean> allContacts = phoneBookService.listContacts(phoneBookName);
-		System.out.println(allContacts);
+		// System.out.println(allContacts);
 		while (choice != 5) {
 			int menuSize = listContactsView();
             if (allContacts.size() == 0) {

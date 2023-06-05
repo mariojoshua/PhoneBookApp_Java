@@ -162,7 +162,7 @@ public class MySqlContactWriter {
             connection.setAutoCommit(false); 
             int rowsAffected = 0;
             for (int tag_ID: tagIDList) {
-                System.out.println(tag_ID);
+                // System.out.println(tag_ID);
                 ps3 = connection.prepareStatement
                     ("""
                     INSERT INTO contactApp.contacts_tags
