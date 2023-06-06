@@ -35,14 +35,14 @@ public class ListContactMenuManager {
 	int listContactsView() {
 		int menuSize = 5;
 		System.out.println("""
-			\n\tList Contact Menu
-			*********************************\n
+			\n\t\033[1mList Contact Menu\033[0m
+			*********************************
 			Press [1] to list contacts by alphabetical listing by name
             Press [2] to list contacts by alphabetical ordering of tags
             Press [3] to list contacts by created date
             Press [4] to list contacts by string length
 			Press [5] to return to Contacts Menu	
-			\n*********************************
+			*********************************
 			Enter choice\f""");		
 		return menuSize;	
 	}

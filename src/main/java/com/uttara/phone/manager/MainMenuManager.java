@@ -2,12 +2,8 @@ package com.uttara.phone.manager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.uttara.phone.Constants;
 import com.uttara.phone.ContactBean;
 import com.uttara.phone.Logger;
@@ -33,11 +29,9 @@ public class MainMenuManager {
 	// private String result = null;
 	// private String phoneBookName;
 	private ContactsMenuManager contactsMenuManager;
-	private ListMenuManager listMenuManager;
-
 	public MainMenuManager() {
 		this.contactsMenuManager = new ContactsMenuManager();
-		this.listMenuManager = new ListMenuManager();
+		new ListContactMenuManager();
 	}
 
 	/**
@@ -53,10 +47,11 @@ public class MainMenuManager {
 		mainMenuController();	
 	} 
 
+	// to make syso output bold put "\033[1m<text here>\033[0m"
 	private int mainMenuView() {
 		int menuSize = 6;
 		System.out.println("""
-			\n\tContacts Book Menu
+			\n\t\033[1mContacts Book Menu\033[0m
 			*********************************\n
 			Press [1] to Create Contacts Book
 			Press [2] to Load Contacts Book
@@ -114,8 +109,6 @@ public class MainMenuManager {
 			}
 		}
 	}
-
-	
 
 	private void listBirthdayReminders() {
 		System.out.println("\n\n==============================");

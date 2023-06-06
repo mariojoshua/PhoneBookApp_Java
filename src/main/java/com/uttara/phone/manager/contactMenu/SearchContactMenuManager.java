@@ -1,9 +1,7 @@
 package com.uttara.phone.manager.contactMenu;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,10 +30,10 @@ public class SearchContactMenuManager {
         // get all contact details
         List<ContactBean> contactsList = phoneBookService.listContacts(phoneBookName);
         // find occurences everywhere
-        List<String>totalList = contactsList.stream()
-                                .map(cb -> cb.toString())
-                                .filter(line -> line.contains(searchInput))
-                                .collect(Collectors.toList());
+        // List<String>totalList = contactsList.stream()
+        //                         .map(cb -> cb.toString())
+        //                         .filter(line -> line.contains(searchInput))
+        //                         .collect(Collectors.toList());
         // find occurences in email
         List<String> emailList = findEmailOccurences(contactsList, searchInput);
         // find occurences in phonenumber
@@ -46,8 +44,7 @@ public class SearchContactMenuManager {
                                 .map(cb ->cb.name().getFullName() + "\t" + cb.tags().toString())
                                 .collect(Collectors.toList());
         //menu
-        Map<String,List<String>> occurenceMap = Map.of("total",totalList,
-                                                "email", emailList,
+        Map<String,List<String>> occurenceMap = Map.of("email", emailList,
                                                 "phoneNumber", phoneList,
                                                 "tags", tagsList);
         searchContactView(occurenceMap);
@@ -82,7 +79,9 @@ public class SearchContactMenuManager {
 
     private void searchContactView(Map<String, List<String>> occurenceMap) {
         System.out.println("\n\n==========================");
-        System.out.println("Total number of occurences: " + occurenceMap.get("total").size());
+        System.out.println("\033[1mTotal number of occurences:\033[0m" + (occurenceMap.get("email").size() 
+                                                          + occurenceMap.get("phoneNumber").size() 
+                                                          + occurenceMap.get("tags").size()));
         System.out.println("==========================");
         System.out.println("Number of occurences in email: " + occurenceMap.get("email").size());
         System.out.println("Matches found:");
