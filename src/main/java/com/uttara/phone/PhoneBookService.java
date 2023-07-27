@@ -1,7 +1,6 @@
 package com.uttara.phone;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.uttara.phone.ioServices.IOService;
@@ -16,10 +15,6 @@ import com.uttara.phone.ioServices.IOServiceFactory.IOServiceName;
  */
 public class PhoneBookService {
 
-	private Date date;
-	private String modifiedDate;
-	private SimpleDateFormat simpleDateFormat;
-	private String phoneBookName;
 	private IOService ioService = null;
 
 

@@ -1,5 +1,10 @@
 package com.uttara.phone;
 
+/**
+ * @hidden
+ * @deprecated
+ */
+
 public class Email {
     EmailType emailType;
     String emailID;

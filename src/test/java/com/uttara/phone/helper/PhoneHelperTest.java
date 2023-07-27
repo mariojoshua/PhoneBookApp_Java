@@ -1,11 +1,6 @@
 package com.uttara.phone.helper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
-
-import com.uttara.phone.helper.PhoneHelper;
-import com.uttara.phone.helper.ValidationHelper;
 
 public class PhoneHelperTest {
 
